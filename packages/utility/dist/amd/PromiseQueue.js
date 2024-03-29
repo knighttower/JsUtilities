@@ -245,7 +245,9 @@ define(['exports'], (function (exports) { 'use strict';
                     !(Array.isArray(promise) && promise.every((item) => item instanceof Promise));
 
                 if (!isValid) {
-                    throw new Error('promisePool: The first argument must be a promise or an array of promises.');
+                    throw new Error(
+                        'promisePool: The first argument must be a promise or an array of promises.'
+                    );
                 }
                 const $this = this;
                 const promiseCollection = makeArray(promise);
@@ -432,14 +434,18 @@ define(['exports'], (function (exports) { 'use strict';
         if (typeof fn !== 'function') {
             throw new Error('doPoll: The first argument must be a function.');
         }
-        const { interval = 200, timeout = 1000 } = options;
+        const {
+            interval = 200,
+            timeout = 1000,
+            timeoutMsg = '===> doPoll: cancelled or timed out.',
+        } = options;
         let timeoutId, intervalId;
         let resolvePromise, rejectPromise;
         let stopped = false;
 
         const stop = () => {
             clearTimers();
-            rejectPromise(console.info('===> doPoll: cancelled or timed out.'));
+            rejectPromise(console.info(timeoutMsg));
         };
 
         const done = (result) => {

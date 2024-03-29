@@ -27,7 +27,13 @@ const {
     wildCardStringSearch,
 } = require('./dist/cjs/PowerHelpers.cjs');
 // Single Modules and Aliases from: PromiseQueue
-const { PromisePool, PromiseQueue, doPoll, promisePool, promiseQueue } = require('./dist/cjs/PromiseQueue.cjs');
+const {
+    PromisePool,
+    PromiseQueue,
+    doPoll,
+    promisePool,
+    promiseQueue,
+} = require('./dist/cjs/PromiseQueue.cjs');
 // Single Modules and Aliases from: ProxyClass
 const { ProxyClass, proxyClass } = require('./dist/cjs/ProxyClass.cjs');
 // Single Modules and Aliases from: ProxyObject

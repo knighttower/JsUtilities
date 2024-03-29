@@ -34,7 +34,13 @@ import {
 // Default Module from: PowerHelpers
 import powerHelper from './dist/esm/PowerHelpers.mjs';
 // Single Modules and Aliases from: PromiseQueue
-import { PromisePool, PromiseQueue, doPoll, promisePool, promiseQueue } from './dist/esm/PromiseQueue.mjs';
+import {
+    PromisePool,
+    PromiseQueue,
+    doPoll,
+    promisePool,
+    promiseQueue,
+} from './dist/esm/PromiseQueue.mjs';
 // Single Modules and Aliases from: ProxyClass
 import { ProxyClass } from './dist/esm/ProxyClass.mjs';
 // Default Module from: ProxyClass
