@@ -5,6 +5,7 @@
 **Refactoring and Updates:**
 
 ---- 2024 ----
+-   Consolidated functions into a single class. No need to initialize the class anymore.
 -   Distribution files are now in the root of the project
 -   Distribution builds to support node / browser / module and other environments
 -   Available via NPM (@knighttower/event-bus) && JsDelivr (https://cdn.jsdelivr.net/npm/@knighttower/event-bus@latest/dist/browser/eventBus.min.js)
@@ -49,12 +50,13 @@ yarn add @knighttower/event-bus
 
 This library was built so you can use it in any JS application like Node.js apps, browser apps etc. The API is always the same.
 
-### Importing in Node.js application
+### Importing in Build or Node.js application
 
 If you want to use it in your Node.js apps you can import the library like this:
 
 ```js
-import EventBus from '@knighttower/event-bus';
+import { eventBus } from '@knighttower/event-bus';
+//Tip: in node JS you can use the global instance=> eventBus().global();
 ```
 
 ### Importing in browser application
@@ -67,12 +69,9 @@ If you want to use it in your Browser apps you can import the library like this:
 
     <script src=" https://cdn.jsdelivr.net/npm/@knighttower/event-bus@latest/dist/browser/eventBus.min.js "></script>
     <script>
-        _eventBus(); // global instance
+        // global instance
         // or if you want to use it with scope as 
-        const EventBus = new EventBus();
-        
-        // global and named scoped 
-        const eventBus = _eventBus();
+        eventBus().global();
         // then you can use it
         window.eventBus.on('my-event', function () {
             console.log('Inside `my-event`');
