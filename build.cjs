@@ -5,7 +5,6 @@ const { runCommand, readJson, writeJson } = require('./packages/utility/nodeUtil
 const workingDir = process.cwd();
 const webpackConfig = `${workingDir}/packages/utility/nodeUtils/webpack.config.cjs`;
 const rollupConfig = `${workingDir}/packages/utility/nodeUtils/rollup.config.cjs`;
-const minify = `${workingDir}/packages/utility/nodeUtils/Minify.js`;
 const buildExports = `${workingDir}/packages/utility/nodeUtils/BuildExports.js`;
 const bumpVersion = `${workingDir}/packages/utility/nodeUtils/BumpVersion.cjs`;
 const pretty = `${workingDir}/.prettierrc.json`;
@@ -17,8 +16,7 @@ const eventBus = () => {
         `\
     cd ./packages/event-bus \
     && npx rollup -c "${rollupConfig}" \
-    && npx webpack --config "${webpackConfig}" \
-    && node "${minify}" \
+    && npx webpack --mode production --config "${webpackConfig}" \
     && npm run test \
     && node "${bumpVersion}" --exe \
     && npm publish --access public

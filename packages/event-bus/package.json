@@ -1,6 +1,6 @@
 {
   "name": "@knighttower/event-bus",
-  "version": "4.0.1",
+  "version": "5.0.1",
   "type": "module",
   "description": "Event bus for your Javascript applications",
   "homepage": "https://github.com/knighttower/JsUtility",

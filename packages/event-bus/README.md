@@ -61,23 +61,25 @@ import { eventBus } from '@knighttower/event-bus';
 
 ### Importing in browser application
 
-If you want to use it in your Browser apps you can import the library like this:
+If you want to use it in your Browser apps you can import the library (browser or iife) like this:
 
 ```html
-<body>
-    <div>Put your content here</div>
-
     <script src=" https://cdn.jsdelivr.net/npm/@knighttower/event-bus@latest/dist/browser/eventBus.min.js "></script>
     <script>
         // global instance
-        // or if you want to use it with scope as 
-        eventBus().global();
+        eventBus.default().global();
         // then you can use it
         window.eventBus.on('my-event', function () {
             console.log('Inside `my-event`');
         });
+
+        // or if you want to use it with scope as 
+        const ev = eventBus.default();
+        // then you can use it
+        ev.on('my-event', function () {
+            console.log('Inside `my-event`');
+        });
     </script>
-</body>
 ```
 
 ### Api of the library

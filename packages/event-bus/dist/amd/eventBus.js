@@ -191,15 +191,13 @@ define(['exports'], (function (exports) { 'use strict';
             global() {
                 // support for browser
                 if (typeof window !== 'undefined') {
-                    if (!window.eventBus) {
-                        window.eventBus = eventBus();
-                    }
+                    window.eventBus = eventBus();
+
                     return window.eventBus;
                 }
                 if (typeof global !== 'undefined') {
-                    if (!global.eventBus) {
-                        global.eventBus = eventBus();
-                    }
+                    global.eventBus = eventBus();
+
                     return global.eventBus;
                 }
                 // if none of the above is available, return a new instance
@@ -208,12 +206,7 @@ define(['exports'], (function (exports) { 'use strict';
         })();
     }
 
-    function _eventBus() {
-        console.error('______this has been deprecated. use eventBus().global()______');
-        return eventBus().global();
-    }
-
-    exports._eventBus = _eventBus;
+    exports.EventBus = eventBus;
     exports.default = eventBus;
     exports.eventBus = eventBus;
 

@@ -189,15 +189,13 @@ function eventBus() {
         global() {
             // support for browser
             if (typeof window !== 'undefined') {
-                if (!window.eventBus) {
-                    window.eventBus = eventBus();
-                }
+                window.eventBus = eventBus();
+
                 return window.eventBus;
             }
             if (typeof global !== 'undefined') {
-                if (!global.eventBus) {
-                    global.eventBus = eventBus();
-                }
+                global.eventBus = eventBus();
+
                 return global.eventBus;
             }
             // if none of the above is available, return a new instance
@@ -206,9 +204,4 @@ function eventBus() {
     })();
 }
 
-function _eventBus() {
-    console.error('______this has been deprecated. use eventBus().global()______');
-    return eventBus().global();
-}
-
-export { _eventBus, eventBus as default, eventBus };
+export { eventBus as EventBus, eventBus as default, eventBus };

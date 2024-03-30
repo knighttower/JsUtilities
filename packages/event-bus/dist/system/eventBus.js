@@ -4,7 +4,7 @@ System.register('eventBus', [], (function (exports) {
         execute: (function () {
 
             exports({
-                _eventBus: _eventBus,
+                EventBus: eventBus,
                 default: eventBus,
                 eventBus: eventBus
             });
@@ -200,26 +200,19 @@ System.register('eventBus', [], (function (exports) {
                     global() {
                         // support for browser
                         if (typeof window !== 'undefined') {
-                            if (!window.eventBus) {
-                                window.eventBus = eventBus();
-                            }
+                            window.eventBus = eventBus();
+
                             return window.eventBus;
                         }
                         if (typeof global !== 'undefined') {
-                            if (!global.eventBus) {
-                                global.eventBus = eventBus();
-                            }
+                            global.eventBus = eventBus();
+
                             return global.eventBus;
                         }
                         // if none of the above is available, return a new instance
                         return eventBus();
                     }
                 })();
-            }
-
-            function _eventBus() {
-                console.error('______this has been deprecated. use eventBus().global()______');
-                return eventBus().global();
             }
 
         })
