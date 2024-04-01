@@ -57,6 +57,7 @@ You can see the src with github and explore the functions by using the "symbols 
   startAndEndWith: "looks for a string that starts and ends with a given pattern",
   setWildCardString: "sets a wildcard at the beginning, end, or middle of a string",
   wildCardStringSearch: "searches for a string using wildcards"
+  getObjectFromPath: "gets an object from a path",
 }
 
 ```

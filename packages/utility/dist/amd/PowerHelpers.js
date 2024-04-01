@@ -408,6 +408,21 @@ define(['exports'], (function (exports) { 'use strict';
     }
 
     /**
+     * Get an object from a path
+     * @function getObjectFromPath
+     * @param {String} path - The path to the object
+     * @param {Object} source - The source object to search in
+     * @return {Object} - The object found at the path
+     * @example getObjectFromPath('a.b.c', {a: {b: {c: 'value'}}}) // 'value'
+     * @example getObjectFromPath('a.b.c') // 'value'
+     * @example getObjectFromPath('a.b.c', window) // value
+     * @example getObjectFromPath('a.b.c', source) // value
+     */
+    function getObjectFromPath(path, source = window) {
+        return path.split('.').reduce((acc, part) => acc && acc[part], source);
+    }
+
+    /**
      * Converts strings formats into objects or arrays
      * Note: quoted strings are not supported, use getDirectiveFromString instead
      * @param {string} strExp
@@ -537,7 +552,9 @@ define(['exports'], (function (exports) { 'use strict';
                     // regexFunctionString
                     // eslint-disable-next-line
                     const directive = str.split('(')[0].trim();
-                    return results('idOrClassWithDirective', { [directive]: getMatchInBetween(str, '(', ')') });
+                    return results('idOrClassWithDirective', {
+                        [directive]: getMatchInBetween(str, '(', ')'),
+                    });
                 case !!str.match(regexDotObjectString):
                     // Matches object-style strings: directive.tablet(...values) OR directive[expression](...values)
                     // OR directive.breakdown|breakdown2(...values) OR directive.tablet(...values)&&directive.mobile(...values)
@@ -703,7 +720,9 @@ define(['exports'], (function (exports) { 'use strict';
             return exp
                 .split('')
                 .map((char) =>
-                    ['$', '^', '.', '*', '+', '?', '(', ')', '[', ']', '{', '}', '|', '\\'].includes(char)
+                    ['$', '^', '.', '*', '+', '?', '(', ')', '[', ']', '{', '}', '|', '\\'].includes(
+                        char
+                    )
                         ? `\\${char}`
                         : char
                 )
@@ -819,6 +838,7 @@ define(['exports'], (function (exports) { 'use strict';
         getDirectivesFromString,
         getMatchBlock,
         getMatchInBetween,
+        getObjectFromPath,
         removeQuotes,
         startAndEndWith,
         setExpString,
@@ -840,6 +860,7 @@ define(['exports'], (function (exports) { 'use strict';
     exports.getDirectivesFromString = getDirectivesFromString;
     exports.getMatchBlock = getMatchBlock;
     exports.getMatchInBetween = getMatchInBetween;
+    exports.getObjectFromPath = getObjectFromPath;
     exports.powerHelper = powerHelper;
     exports.removeQuotes = removeQuotes;
     exports.setExpString = setExpString;

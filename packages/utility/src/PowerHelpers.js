@@ -2,7 +2,14 @@
 // MIT License
 // Copyright (c) [2022] [Knighttower] https://github.com/knighttower
 
-import { emptyOrValue, convertToBool, getRandomId, isEmpty, typeOf, convertToNumber } from './Utility.js';
+import {
+    emptyOrValue,
+    convertToBool,
+    getRandomId,
+    isEmpty,
+    typeOf,
+    convertToNumber,
+} from './Utility.js';
 
 // @private
 function _removeBrackets(strExp) {
@@ -162,6 +169,21 @@ export function fixQuotes(str, q = '"') {
 }
 
 /**
+ * Get an object from a path
+ * @function getObjectFromPath
+ * @param {String} path - The path to the object
+ * @param {Object} source - The source object to search in
+ * @return {Object} - The object found at the path
+ * @example getObjectFromPath('a.b.c', {a: {b: {c: 'value'}}}) // 'value'
+ * @example getObjectFromPath('a.b.c') // 'value'
+ * @example getObjectFromPath('a.b.c', window) // value
+ * @example getObjectFromPath('a.b.c', source) // value
+ */
+export function getObjectFromPath(path, source = window) {
+    return path.split('.').reduce((acc, part) => acc && acc[part], source);
+}
+
+/**
  * Converts strings formats into objects or arrays
  * Note: quoted strings are not supported, use getDirectiveFromString instead
  * @param {string} strExp
@@ -291,7 +313,9 @@ export function getDirectivesFromString(stringDirective) {
                 // regexFunctionString
                 // eslint-disable-next-line
                 const directive = str.split('(')[0].trim();
-                return results('idOrClassWithDirective', { [directive]: getMatchInBetween(str, '(', ')') });
+                return results('idOrClassWithDirective', {
+                    [directive]: getMatchInBetween(str, '(', ')'),
+                });
             case !!str.match(regexDotObjectString):
                 // Matches object-style strings: directive.tablet(...values) OR directive[expression](...values)
                 // OR directive.breakdown|breakdown2(...values) OR directive.tablet(...values)&&directive.mobile(...values)
@@ -457,7 +481,9 @@ export function setExpString(exp) {
         return exp
             .split('')
             .map((char) =>
-                ['$', '^', '.', '*', '+', '?', '(', ')', '[', ']', '{', '}', '|', '\\'].includes(char)
+                ['$', '^', '.', '*', '+', '?', '(', ')', '[', ']', '{', '}', '|', '\\'].includes(
+                    char
+                )
                     ? `\\${char}`
                     : char
             )
@@ -573,6 +599,7 @@ export const powerHelper = {
     getDirectivesFromString,
     getMatchBlock,
     getMatchInBetween,
+    getObjectFromPath,
     removeQuotes,
     startAndEndWith,
     setExpString,

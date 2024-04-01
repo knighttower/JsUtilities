@@ -1,6 +1,6 @@
 {
   "name": "knighttower",
-  "version": "6.2.2",
+  "version": "6.2.3",
   "type": "commonjs",
   "engines": {
     "node": ">=20.10.0"
@@ -142,7 +142,7 @@
     "rollup": "^4.13.2",
     "sass": "^1.72.0",
     "sass-loader": "^14.1.1",
-    "terser": "^5.30.0",
+    "terser": "^5.30.1",
     "vitest": "^1.4.0",
     "vue": "^3.4.21",
     "vue-loader": "^17.4.2",
