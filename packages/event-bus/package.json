@@ -1,11 +1,11 @@
 {
   "name": "@knighttower/event-bus",
-  "version": "5.0.1",
+  "version": "5.0.3",
   "type": "module",
   "description": "Event bus for your Javascript applications",
   "homepage": "https://github.com/knighttower/JsUtility",
   "main": "src/eventBus.js",
-  "module": "dist/esm/eventBus.mjs",
+  "module": "dist/esm/eventBus.js",
   "jsdeliver": "dist/browser/eventBus.js",
   "browser": "dist/browser/eventBus.js",
   "license": "MIT",
@@ -18,7 +18,7 @@
   },
   "exports": {
     ".": {
-      "import": "./dist/esm/eventBus.mjs",
+      "import": "./dist/esm/eventBus.js",
       "require": "./dist/cjs/eventBus.cjs"
     },
     "./dist/*": "./dist/*",

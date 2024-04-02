@@ -509,7 +509,9 @@ define(['exports'], (function (exports) { 'use strict';
             return exp
                 .split('')
                 .map((char) =>
-                    ['$', '^', '.', '*', '+', '?', '(', ')', '[', ']', '{', '}', '|', '\\'].includes(char)
+                    ['$', '^', '.', '*', '+', '?', '(', ')', '[', ']', '{', '}', '|', '\\'].includes(
+                        char
+                    )
                         ? `\\${char}`
                         : char
                 )

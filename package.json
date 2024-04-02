@@ -1,6 +1,6 @@
 {
   "name": "knighttower",
-  "version": "6.3.1",
+  "version": "6.3.5",
   "type": "commonjs",
   "engines": {
     "node": ">=20.10.0"
@@ -32,19 +32,19 @@
     },
     "./utility/proxyObject": {
       "import": "./packages/utility/dist/esm/ProxyObject.js",
-      "require": "./packages/utility/dist/cjs/ProxyObject.js"
+      "require": "./packages/utility/dist/cjs/ProxyObject.cjs"
     },
     "./utility/proxyClass": {
       "import": "./packages/utility/dist/esm/ProxyClass.js",
-      "require": "./packages/utility/dist/cjs/ProxyClass.js"
+      "require": "./packages/utility/dist/cjs/ProxyClass.cjs"
     },
     "./utility/powerHelpers": {
       "import": "./packages/utility/dist/esm/PowerHelpers.js",
-      "require": "./packages/utility/dist/cjs/PowerHelpers.js"
+      "require": "./packages/utility/dist/cjs/PowerHelpers.cjs"
     },
     "./utility/promiseQueue": {
       "import": "./packages/utility/dist/esm/PromiseQueue.js",
-      "require": "./packages/utility/dist/cjs/PromiseQueue.js"
+      "require": "./packages/utility/dist/cjs/PromiseQueue.cjs"
     },
     "./packages/utility": {
       "import": "./packages/utility/index.js",
@@ -79,11 +79,11 @@
     "./packages/type-check/dist/*": "./packages/type-check/dist/*",
     "./packages/type-check/src/*": "./packages/type-check/src/*",
     "./event-bus": {
-      "import": "./packages/event-bus/dist/esm/eventBus.mjs",
+      "import": "./packages/event-bus/dist/esm/eventBus.js",
       "require": "./packages/event-bus/dist/cjs/eventBus.cjs"
     },
     "./packages/event-bus": {
-      "import": "./packages/event-bus/dist/esm/eventBus.mjs",
+      "import": "./packages/event-bus/dist/esm/eventBus.js",
       "require": "./packages/event-bus/dist/cjs/eventBus.cjs"
     },
     "./event-bus/dist/*": "./packages/event-bus/dist/*",

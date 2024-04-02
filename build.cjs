@@ -51,7 +51,7 @@ const typeCheck = () => {
     && npx webpack --mode production --config "${webpackConfig}" \
     && npx rollup -c "${rollupConfig}" \
     && node "${buildExports}" --file ./dist/cjs/TypeCheck.cjs --type=cjs \
-    && node "${buildExports}" --file ./dist/esm/TypeCheck.mjs --type=esm \
+    && node "${buildExports}" --file ./dist/esm/TypeCheck.js --type=esm \
     && prettier --config "${pretty}" --write ./index.js \
     && prettier --config "${pretty}" --write ./index.cjs \
     && npm run test \

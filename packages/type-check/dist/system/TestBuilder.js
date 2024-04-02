@@ -517,7 +517,9 @@ System.register('TestBuilder', [], (function (exports) {
                     return exp
                         .split('')
                         .map((char) =>
-                            ['$', '^', '.', '*', '+', '?', '(', ')', '[', ']', '{', '}', '|', '\\'].includes(char)
+                            ['$', '^', '.', '*', '+', '?', '(', ')', '[', ']', '{', '}', '|', '\\'].includes(
+                                char
+                            )
                                 ? `\\${char}`
                                 : char
                         )

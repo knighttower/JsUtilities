@@ -112,7 +112,11 @@ exports.commandExistsSync = (command) => {
  * const files = getAllFilesByExtension('src', ['.js', '.mjs', '.cjs']);
  */
 
-exports.getAllFilesByExtension = function (dirPath, extensions = ['.js', '.mjs', '.cjs'], files = []) {
+exports.getAllFilesByExtension = function (
+    dirPath,
+    extensions = ['.js', '.mjs', '.cjs'],
+    files = []
+) {
     const filesInDirectory = fs.readdirSync(dirPath);
 
     for (const file of filesInDirectory) {
@@ -158,7 +162,11 @@ exports.getFileByName = function (fileName, dirPath = process.cwd()) {
  * @param {string[]} [files=[]] - Accumulator array for found file paths.
  * @returns {string[]} An array of paths for the found files.
  */
-exports.getAllFilesByName = function (fileNames = ['index.js'], dirPath = process.cwd(), files = []) {
+exports.getAllFilesByName = function (
+    fileNames = ['index.js'],
+    dirPath = process.cwd(),
+    files = []
+) {
     const filesInDirectory = fs.readdirSync(dirPath);
 
     for (const file of filesInDirectory) {
