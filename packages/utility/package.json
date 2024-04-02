@@ -1,6 +1,6 @@
 {
   "name": "@knighttower/utility",
-  "version": "4.2.21",
+  "version": "4.3.2",
   "type": "module",
   "main": "index.cjs",
   "module": "index.js",
@@ -27,7 +27,23 @@
     "./dist/*": "./dist/*",
     "./node/*": "./nodeUtils/*",
     "./nodeUtils/*": "./nodeUtils/*",
-    "./nodeUtils": "./nodeUtils/index.cjs"
+    "./nodeUtils": "./nodeUtils/index.cjs",
+    "./proxyObject": {
+      "import": "./dist/esm/ProxyObject.js",
+      "require": "./dist/cjs/ProxyObject.js"
+    },
+    "./proxyClass": {
+      "import": "./dist/esm/ProxyClass.js",
+      "require": "./dist/cjs/ProxyClass.js"
+    },
+    "./powerHelpers": {
+      "import": "./dist/esm/PowerHelpers.js",
+      "require": "./dist/cjs/PowerHelpers.js"
+    },
+    "./promiseQueue": {
+      "import": "./dist/esm/PromiseQueue.js",
+      "require": "./dist/cjs/PromiseQueue.js"
+    }
   },
   "bin": {
     "buildExports": "./nodeUtils/BuildExports.js",

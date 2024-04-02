@@ -1,6 +1,6 @@
 {
   "name": "knighttower",
-  "version": "6.2.4",
+  "version": "6.3.1",
   "type": "commonjs",
   "engines": {
     "node": ">=20.10.0"
@@ -29,6 +29,22 @@
     "./utility": {
       "import": "./packages/utility/index.js",
       "require": "./packages/utility/index.cjs"
+    },
+    "./utility/proxyObject": {
+      "import": "./packages/utility/dist/esm/ProxyObject.js",
+      "require": "./packages/utility/dist/cjs/ProxyObject.js"
+    },
+    "./utility/proxyClass": {
+      "import": "./packages/utility/dist/esm/ProxyClass.js",
+      "require": "./packages/utility/dist/cjs/ProxyClass.js"
+    },
+    "./utility/powerHelpers": {
+      "import": "./packages/utility/dist/esm/PowerHelpers.js",
+      "require": "./packages/utility/dist/cjs/PowerHelpers.js"
+    },
+    "./utility/promiseQueue": {
+      "import": "./packages/utility/dist/esm/PromiseQueue.js",
+      "require": "./packages/utility/dist/cjs/PromiseQueue.js"
     },
     "./packages/utility": {
       "import": "./packages/utility/index.js",

@@ -12,11 +12,11 @@ const targets = [
 
 const rollupFormats = [
     { type: 'amd', ext: 'js' },
-    { type: 'cjs', ext: 'cjs' },
+    { type: 'cjs', ext: 'js' },
     // { type: 'umd', ext: 'js' },
     { type: 'iife', ext: 'js' },
     { type: 'system', ext: 'js' },
-    { type: 'esm', ext: 'mjs' },
+    { type: 'esm', ext: 'js' },
 ];
 
 const webpackFormats = [
