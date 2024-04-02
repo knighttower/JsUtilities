@@ -222,6 +222,15 @@ function getDynamicId() {
  * status: Returns the overall status of the promise pool.
  * isDone: Returns true if the pool is done processing all promises.
  * clear: Clears all promises from the pool.
+ * @returns {Object} An instance of the promisePool class.
+ * @example
+ * const pool = promisePool();
+ * pool.add(fetch('https://jsonplaceholder.typicode.com/todos/1'));
+ * pool.add(fetch('https://jsonplaceholder.typicode.com/todos/2'));
+ * pool.status(); // 'in-progress'
+ * pool.on('completed', () => {});
+ * pool.on('rejected', (rejectedPromises) => {});
+ * pool.on('stats', ({ completed, rejected, pending, total }) => {});
  */
 const promisePool = () => {
     let _status = 'in-progress'; // 'in progress' or 'done'
@@ -330,6 +339,13 @@ const promisePool = () => {
  * add: Adds a promise to the queue and starts the queue processing if not already started.
  * clear: Clears the promise queue.
  * status: Returns the current status of all promises in the queue.
+ * @returns {Object} An instance of the PromiseQueue class.
+ * @example
+ * const queue = new PromiseQueue();
+ * queue.add(fetch('https://jsonplaceholder.typicode.com/todos/1'));
+ * queue.add(fetch('https://jsonplaceholder.typicode.com/todos/2'));
+ * queue.status(); // 'in-progress'
+ * queue.on('completed', () => {});
  */
 const PromiseQueue = class extends EventBus {
     constructor() {

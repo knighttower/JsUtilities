@@ -1,6 +1,6 @@
 {
   "name": "@knighttower/utility",
-  "version": "4.2.20",
+  "version": "4.2.21",
   "type": "module",
   "main": "index.cjs",
   "module": "index.js",
