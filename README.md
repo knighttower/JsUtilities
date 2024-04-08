@@ -7,6 +7,7 @@ It holds the following packages:
 - [**js-event-bus**](https://github.com/knighttower/JsUtility/tree/development/packages/event-bus): Simple Event Bus library built for any JavaScript application.
 - [**BootsTrap Mini**](https://github.com/knighttower/JsUtility/tree/development/packages/bootstrap-mini): Built on top of Bootstrap but modified to have only the basic utilities classes and the grid system.
 - [**Adaptive Js**](https://github.com/knighttower/JsUtility/tree/development/packages/adaptive): daptive.js: Enhancing Layout Adaptability Beyond CSS, Navigating the Complexities of Modern Web Development
+- [**Vue Utils**](https://github.com/knighttower/JsUtility/tree/development/packages/vue-utils): Vue utilities for Vue.js applications. 
 
 ### All pacckages are ESM and CJS compatible.
 

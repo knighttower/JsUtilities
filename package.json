@@ -1,6 +1,6 @@
 {
   "name": "knighttower",
-  "version": "6.3.8",
+  "version": "6.3.10",
   "type": "commonjs",
   "engines": {
     "node": ">=20.10.0"
@@ -17,7 +17,8 @@
     "./packages/type-check/*",
     "./packages/event-bus/*",
     "./packages/bootstrap-mini/*",
-    "./packages/adaptive/*"
+    "./packages/adaptive/*",
+    "./packages/vue-utils/*"
   ],
   "sass": "./packages/bootstrap-mini/src/bootstrap-mini.scss",
   "style": "./packages/bootstrap-mini/dist/bootstrap-mini.css",
@@ -121,7 +122,8 @@
     "./vue-utils/mixinInstaller": {
       "import": "./packages/vue-utils/src/mixinInstaller.js",
       "require": "./packages/vue-utils/dist/cjs/mixinInstaller.cjs"
-    }
+    },
+    "./vue-utils/dist/*": "./packages/vue-utils/dist/*"
   },
   "scripts": {
     "build": "node ./build.cjs",
