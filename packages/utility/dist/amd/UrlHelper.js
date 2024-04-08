@@ -5,7 +5,7 @@ define(['exports'], (function (exports) { 'use strict';
      *
      * @module urlHelper
      */
-    function UrlHelper(__u) {
+    const UrlHelper = (() => {
 
         /**
          * Reference to the global window object.
@@ -102,6 +102,8 @@ define(['exports'], (function (exports) { 'use strict';
 
             return cachedURLParams;
         };
+
+        const __u = {};
 
         /**
          * Get the current page name (Last part of the URL).
@@ -216,7 +218,9 @@ define(['exports'], (function (exports) { 'use strict';
         __u.host = HOST;
         __u.path = PATH;
         __u.readUrl = doc.URL;
-    }
+
+        return __u;
+    })();
 
     exports.UrlHelper = UrlHelper;
     exports.default = UrlHelper;

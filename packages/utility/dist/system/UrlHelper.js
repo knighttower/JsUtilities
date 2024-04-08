@@ -3,18 +3,12 @@ System.register('UrlHelper', [], (function (exports) {
     return {
         execute: (function () {
 
-            exports({
-                UrlHelper: UrlHelper,
-                default: UrlHelper,
-                urlHelper: UrlHelper
-            });
-
             /**
              * URL Object Class with public methods for URL functions and manipulation.
              *
              * @module urlHelper
              */
-            function UrlHelper(__u) {
+            const UrlHelper = (() => {
 
                 /**
                  * Reference to the global window object.
@@ -111,6 +105,8 @@ System.register('UrlHelper', [], (function (exports) {
 
                     return cachedURLParams;
                 };
+
+                const __u = {};
 
                 /**
                  * Get the current page name (Last part of the URL).
@@ -225,7 +221,9 @@ System.register('UrlHelper', [], (function (exports) {
                 __u.host = HOST;
                 __u.path = PATH;
                 __u.readUrl = doc.URL;
-            }
+
+                return __u;
+            })(); exports({ UrlHelper: UrlHelper, urlHelper: UrlHelper, default: UrlHelper });
 
         })
     };

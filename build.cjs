@@ -96,7 +96,24 @@ const mono = () => {
     );
 };
 
-runCommand('ncu -u && npm i');
+const vueUtils = () => {
+    runCommand(
+        `\
+    cd ./packages/vue-utils \
+    && eslint -c "${eslint}" --fix ./src --ext .js,.cjs,.mjs \
+    && npx webpack --mode production --config "${webpackConfig}" \
+    && npx rollup -c "${rollupConfig}" \
+    && node "${buildExports}" --dir ./dist/cjs --type=cjs \
+    && node "${buildExports}" --dir ./dist/esm --type=esm \
+    && prettier --config "${pretty}" --write ./index.js \
+    && prettier --config "${pretty}" --write ./index.cjs \
+    && node "${bumpVersion}" --exe \
+    && npm publish --access public
+    `
+    );
+};
+
+runCommand('ncu --interactive && npm i');
 
 const workspaces = {
     'bootstrap-mini': bootstrapMini,
@@ -104,6 +121,7 @@ const workspaces = {
     'type-check': typeCheck,
     utility,
     adaptive,
+    'vue-utils': vueUtils,
     mono,
     all: () => {
         bootstrapMini();
@@ -111,6 +129,7 @@ const workspaces = {
         typeCheck();
         utility();
         adaptive();
+        vueUtils();
         mono();
     },
 };

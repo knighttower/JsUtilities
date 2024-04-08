@@ -3,7 +3,7 @@
  *
  * @module urlHelper
  */
-function UrlHelper(__u) {
+const UrlHelper = (() => {
     'use strict';
 
     /**
@@ -101,6 +101,8 @@ function UrlHelper(__u) {
 
         return cachedURLParams;
     };
+
+    const __u = {};
 
     /**
      * Get the current page name (Last part of the URL).
@@ -215,6 +217,8 @@ function UrlHelper(__u) {
     __u.host = HOST;
     __u.path = PATH;
     __u.readUrl = doc.URL;
-}
+
+    return __u;
+})();
 
 export { UrlHelper, UrlHelper as urlHelper, UrlHelper as default };

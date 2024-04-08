@@ -1,0 +1,41 @@
+{
+  "name": "@knighttower/vue-utils",
+  "version": "1.0.3",
+  "license": "MIT",
+  "description": "Helps to install a mixin in Vue 2 or 3 for both options and composition API",
+  "homepage": "https://github.com/knighttower/JsUtility",
+  "author": "knighttower (https://github.com/knighttower)",
+  "keywords": [
+    "Utility",
+    "Vue",
+    "library",
+    "plugin",
+    "VueMixinInstaller",
+    "Installer",
+    "Vue 2",
+    "Vue 3",
+    "Vue 2 plugin",
+    "Vue 3 plugin",
+    "mixin"
+  ],
+  "exports": {
+    ".": {
+      "import": "./index.js",
+      "require": "./index.cjs"
+    },
+    "./mixinInstaller": {
+      "import": "./src/mixinInstaller.js",
+      "require": "./dist/cjs/mixinInstaller.cjs"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/knighttower/JsUtility.git"
+  },
+  "scripts": {},
+  "devDependencies": {},
+  "dependencies": {
+    "vue": "^2.7.0 || ^3.0.0",
+    "npm": "^8"
+  }
+}

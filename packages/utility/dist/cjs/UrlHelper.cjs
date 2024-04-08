@@ -7,7 +7,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
  *
  * @module urlHelper
  */
-function UrlHelper(__u) {
+const UrlHelper = (() => {
 
     /**
      * Reference to the global window object.
@@ -104,6 +104,8 @@ function UrlHelper(__u) {
 
         return cachedURLParams;
     };
+
+    const __u = {};
 
     /**
      * Get the current page name (Last part of the URL).
@@ -218,7 +220,9 @@ function UrlHelper(__u) {
     __u.host = HOST;
     __u.path = PATH;
     __u.readUrl = doc.URL;
-}
+
+    return __u;
+})();
 
 exports.UrlHelper = UrlHelper;
 exports.default = UrlHelper;

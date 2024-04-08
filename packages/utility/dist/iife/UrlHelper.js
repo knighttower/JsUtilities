@@ -6,7 +6,7 @@ var UrlHelper = (function (exports) {
      *
      * @module urlHelper
      */
-    function UrlHelper(__u) {
+    const UrlHelper = (() => {
 
         /**
          * Reference to the global window object.
@@ -103,6 +103,8 @@ var UrlHelper = (function (exports) {
 
             return cachedURLParams;
         };
+
+        const __u = {};
 
         /**
          * Get the current page name (Last part of the URL).
@@ -217,7 +219,9 @@ var UrlHelper = (function (exports) {
         __u.host = HOST;
         __u.path = PATH;
         __u.readUrl = doc.URL;
-    }
+
+        return __u;
+    })();
 
     exports.UrlHelper = UrlHelper;
     exports.default = UrlHelper;
