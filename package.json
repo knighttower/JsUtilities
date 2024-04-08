@@ -1,6 +1,6 @@
 {
   "name": "knighttower",
-  "version": "6.3.10",
+  "version": "6.3.11",
   "type": "commonjs",
   "engines": {
     "node": ">=20.10.0"
@@ -120,7 +120,7 @@
       "require": "./packages/vue-utils/index.cjs"
     },
     "./vue-utils/mixinInstaller": {
-      "import": "./packages/vue-utils/src/mixinInstaller.js",
+      "import": "./packages/vue-utils/dist/esm/mixinInstaller.js",
       "require": "./packages/vue-utils/dist/cjs/mixinInstaller.cjs"
     },
     "./vue-utils/dist/*": "./packages/vue-utils/dist/*"

@@ -55,6 +55,9 @@ define(['exports'], (function (exports) { 'use strict';
         };
     };
 
+    exports.default = installMixin;
     exports.installMixin = installMixin;
+
+    Object.defineProperty(exports, '__esModule', { value: true });
 
 }));

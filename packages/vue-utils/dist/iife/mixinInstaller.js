@@ -56,7 +56,10 @@ var mixinInstaller = (function (exports) {
         };
     };
 
+    exports.default = installMixin;
     exports.installMixin = installMixin;
+
+    Object.defineProperty(exports, '__esModule', { value: true });
 
     return exports;
 

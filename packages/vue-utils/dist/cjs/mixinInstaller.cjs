@@ -1,5 +1,7 @@
 'use strict';
 
+Object.defineProperty(exports, '__esModule', { value: true });
+
 // // -----------------------------------------
 // /**
 //  * @knighttower
@@ -55,4 +57,5 @@ const installMixin = function (object, name) {
     };
 };
 
+exports.default = installMixin;
 exports.installMixin = installMixin;

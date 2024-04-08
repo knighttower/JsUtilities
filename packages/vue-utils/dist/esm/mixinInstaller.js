@@ -53,4 +53,4 @@ const installMixin = function (object, name) {
     };
 };
 
-export { installMixin };
+export { installMixin as default, installMixin };

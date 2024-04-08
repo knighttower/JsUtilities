@@ -44,7 +44,7 @@ System.register('mixinInstaller', [], (function (exports) {
              *
              * @returns {Object} Registration instance used by VUE
              */
-            const installMixin = exports("installMixin", function (object, name) {
+            const installMixin = function (object, name) {
                 return {
                     install: (app, options) => {
                         // Support for Options API in Vue 2 and 3
@@ -56,7 +56,7 @@ System.register('mixinInstaller', [], (function (exports) {
                         app.provide(name, object);
                     },
                 };
-            });
+            }; exports({ installMixin: installMixin, default: installMixin });
 
         })
     };
