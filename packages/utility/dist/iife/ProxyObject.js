@@ -1,4 +1,4 @@
-var proxyObject = (function (exports) {
+var ProxyObject = (function (exports) {
     'use strict';
 
     // [2023] [Knighttower] https://github.com/knighttower
@@ -79,7 +79,11 @@ var proxyObject = (function (exports) {
         });
     }
 
+    exports.ProxyObject = proxyObject;
+    exports.default = proxyObject;
     exports.proxyObject = proxyObject;
+
+    Object.defineProperty(exports, '__esModule', { value: true });
 
     return exports;
 

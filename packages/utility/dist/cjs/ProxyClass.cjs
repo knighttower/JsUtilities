@@ -1,5 +1,7 @@
 'use strict';
 
+Object.defineProperty(exports, '__esModule', { value: true });
+
 /**
  * Enhances a class with proxy functionality to enforce access and mutation rules for its properties.
  * This approach utilizes a higher-order function to wrap the class with a Proxy.
@@ -103,4 +105,6 @@ function proxyClass(BaseClass) {
     });
 }
 
+exports.ProxyClass = proxyClass;
+exports.default = proxyClass;
 exports.proxyClass = proxyClass;

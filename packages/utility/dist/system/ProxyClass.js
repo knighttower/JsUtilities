@@ -1,9 +1,13 @@
-System.register('proxyClass', [], (function (exports) {
+System.register('ProxyClass', [], (function (exports) {
     'use strict';
     return {
         execute: (function () {
 
-            exports("proxyClass", proxyClass);
+            exports({
+                ProxyClass: proxyClass,
+                default: proxyClass,
+                proxyClass: proxyClass
+            });
 
             /**
              * Enhances a class with proxy functionality to enforce access and mutation rules for its properties.

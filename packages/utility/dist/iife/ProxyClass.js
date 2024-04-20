@@ -1,4 +1,4 @@
-var proxyClass = (function (exports) {
+var ProxyClass = (function (exports) {
     'use strict';
 
     /**
@@ -104,7 +104,11 @@ var proxyClass = (function (exports) {
         });
     }
 
+    exports.ProxyClass = proxyClass;
+    exports.default = proxyClass;
     exports.proxyClass = proxyClass;
+
+    Object.defineProperty(exports, '__esModule', { value: true });
 
     return exports;
 

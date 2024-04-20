@@ -76,4 +76,4 @@ function proxyObject(object) {
     });
 }
 
-export { proxyObject };
+export { proxyObject as ProxyObject, proxyObject as default, proxyObject };

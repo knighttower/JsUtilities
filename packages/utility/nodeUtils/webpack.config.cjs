@@ -17,7 +17,15 @@ const formats = webpackFormats ?? [
  * @param {string} ext - The file extension.
  * @returns {Object} - The Webpack configuration.
  */
-const getWebpackConfig = (fileSrc, fileName, libraryTarget, dir, ext, exportName) => ({
+const getWebpackConfig = (
+    fileSrc,
+    fileName,
+    libraryTarget,
+    dir,
+    ext,
+    exportName,
+    windowExport
+) => ({
     mode: 'production',
     entry: `${workingDir}/src/${fileSrc}`,
     resolve: {
@@ -52,7 +60,8 @@ function getAllConfigs() {
                     format.type,
                     format.dir,
                     format.ext,
-                    target.exportName ?? target.file.split('.')[0]
+                    target.exportName ?? target.file.split('.')[0],
+                    target.windowExport ?? ''
                 )
             );
         }

@@ -33,7 +33,7 @@
     console.log(instance.mutableProp);
     delete instance.privateProp;
  */
-export function proxyClass(BaseClass) {
+function proxyClass(BaseClass) {
     return new Proxy(BaseClass, {
         construct(target, args) {
             const instance = new target(...args);
@@ -100,3 +100,5 @@ export function proxyClass(BaseClass) {
         },
     });
 }
+
+export { proxyClass, proxyClass as default, proxyClass as ProxyClass };

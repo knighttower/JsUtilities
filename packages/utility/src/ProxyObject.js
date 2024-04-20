@@ -12,7 +12,7 @@
  * @usage _private: array(...) -> Cannot be accessed
  * @usage _mutable: array(...) -> Can be modified
  */
-export function proxyObject(object) {
+function proxyObject(object) {
     'use strict';
 
     // Initialize property access control sets
@@ -76,3 +76,5 @@ export function proxyObject(object) {
         },
     });
 }
+
+export { proxyObject, proxyObject as default, proxyObject as ProxyObject };
