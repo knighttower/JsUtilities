@@ -1,4 +1,4 @@
-System.register('ProxyClass', [], (function (exports) {
+System.register('proxyClass', [], (function (exports) {
     'use strict';
     return {
         execute: (function () {

@@ -35,10 +35,10 @@ const {
     promisePool,
     promiseQueue,
 } = require('./dist/cjs/PromiseQueue.cjs');
-// Single Modules and Aliases from: ProxyClass
-const { proxyClass } = require('./dist/cjs/ProxyClass.cjs');
-// Single Modules and Aliases from: ProxyObject
-const { proxyObject } = require('./dist/cjs/ProxyObject.cjs');
+// Single Modules and Aliases from: proxyClass
+const { proxyClass } = require('./dist/cjs/proxyClass.cjs');
+// Single Modules and Aliases from: proxyObject
+const { proxyObject } = require('./dist/cjs/proxyObject.cjs');
 // Single Modules and Aliases from: UrlHelper
 const { UrlHelper } = require('./dist/cjs/UrlHelper.cjs');
 // Single Modules and Aliases from: Utility

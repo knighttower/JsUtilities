@@ -1,6 +1,6 @@
 import { test } from 'vitest';
 import assert from 'assert';
-import { proxyObject } from '../src/ProxyObject';
+import { proxyObject } from '../src/proxyObject';
 
 test('Proxy object', () => {
     assert.equal(true, true);

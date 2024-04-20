@@ -1,4 +1,4 @@
-var ProxyClass = (function (exports) {
+var proxyClass = (function (exports) {
     'use strict';
 
     /**

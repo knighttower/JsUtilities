@@ -1,4 +1,4 @@
-var ProxyObject = (function (exports) {
+var proxyObject = (function (exports) {
     'use strict';
 
     // [2023] [Knighttower] https://github.com/knighttower

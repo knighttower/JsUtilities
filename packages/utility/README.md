@@ -123,7 +123,7 @@ Ex: convertToBool(value) converts a value to a boolean, accepts int, string and 
 Other libraries are also included in the dist folder, but they are not yet documented here.
 ProxyObject, UrlHelper, DomObserver, ElementHelper, NodeHelpers, ProxyClass
 See via Github explorer:
-[ProxyObject](https://github.com/knighttower/JsUtility/blob/development/src/ProxyObject.js)
+[ProxyObject](https://github.com/knighttower/JsUtility/blob/development/src/proxyObject.js)
 [UrlHelper](https://github.com/knighttower/JsUtility/blob/development/src/UrlHelper.js)
 [DomObserver](https://github.com/knighttower/JsUtility/blob/development/src/DomObserver.js)
 [ElementHelper](https://github.com/knighttower/JsUtility/blob/development/src/ElementHelper.js)
