@@ -1,7 +1,5 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', { value: true });
-
 /**
  * URL Object Class with public methods for URL functions and manipulation.
  *
@@ -225,5 +223,3 @@ const UrlHelper = (() => {
 })();
 
 exports.UrlHelper = UrlHelper;
-exports.default = UrlHelper;
-exports.urlHelper = UrlHelper;

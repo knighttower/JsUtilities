@@ -43,17 +43,11 @@ import {
     promiseQueue,
 } from './dist/esm/PromiseQueue.js';
 // Single Modules and Aliases from: ProxyClass
-import { ProxyClass } from './dist/esm/ProxyClass.js';
-// Default Module from: ProxyClass
-import proxyClass from './dist/esm/ProxyClass.js';
+import { proxyClass } from './dist/esm/ProxyClass.js';
 // Single Modules and Aliases from: ProxyObject
-import { ProxyObject } from './dist/esm/ProxyObject.js';
-// Default Module from: ProxyObject
-import proxyObject from './dist/esm/ProxyObject.js';
+import { proxyObject } from './dist/esm/ProxyObject.js';
 // Single Modules and Aliases from: UrlHelper
-import { urlHelper } from './dist/esm/UrlHelper.js';
-// Default Module from: UrlHelper
-import UrlHelper from './dist/esm/UrlHelper.js';
+import { UrlHelper } from './dist/esm/UrlHelper.js';
 // Single Modules and Aliases from: Utility
 import {
     convertToBool,
@@ -119,11 +113,8 @@ export {
     doPoll,
     promisePool,
     promiseQueue,
-    ProxyClass,
     proxyClass,
-    ProxyObject,
     proxyObject,
-    urlHelper,
     UrlHelper,
     convertToBool,
     convertToNumber,

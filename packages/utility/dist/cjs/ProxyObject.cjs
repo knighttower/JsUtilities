@@ -1,7 +1,5 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', { value: true });
-
 // [2023] [Knighttower] https://github.com/knighttower
 
 /**
@@ -80,6 +78,4 @@ function proxyObject(object) {
     });
 }
 
-exports.ProxyObject = proxyObject;
-exports.default = proxyObject;
 exports.proxyObject = proxyObject;

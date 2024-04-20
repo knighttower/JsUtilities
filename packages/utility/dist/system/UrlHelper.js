@@ -8,7 +8,7 @@ System.register('UrlHelper', [], (function (exports) {
              *
              * @module urlHelper
              */
-            const UrlHelper = (() => {
+            const UrlHelper = exports("UrlHelper", (() => {
 
                 /**
                  * Reference to the global window object.
@@ -223,7 +223,7 @@ System.register('UrlHelper', [], (function (exports) {
                 __u.readUrl = doc.URL;
 
                 return __u;
-            })(); exports({ UrlHelper: UrlHelper, urlHelper: UrlHelper, default: UrlHelper });
+            })());
 
         })
     };

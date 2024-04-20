@@ -220,4 +220,4 @@ const UrlHelper = (() => {
     return __u;
 })();
 
-export { UrlHelper, UrlHelper as default, UrlHelper as urlHelper };
+export { UrlHelper };

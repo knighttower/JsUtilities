@@ -3,11 +3,7 @@ System.register('ProxyObject', [], (function (exports) {
     return {
         execute: (function () {
 
-            exports({
-                ProxyObject: proxyObject,
-                default: proxyObject,
-                proxyObject: proxyObject
-            });
+            exports("proxyObject", proxyObject);
 
             // [2023] [Knighttower] https://github.com/knighttower
 

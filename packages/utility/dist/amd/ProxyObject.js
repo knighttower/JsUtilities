@@ -78,10 +78,6 @@ define(['exports'], (function (exports) { 'use strict';
         });
     }
 
-    exports.ProxyObject = proxyObject;
-    exports.default = proxyObject;
     exports.proxyObject = proxyObject;
-
-    Object.defineProperty(exports, '__esModule', { value: true });
 
 }));

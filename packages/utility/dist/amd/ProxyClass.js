@@ -103,10 +103,6 @@ define(['exports'], (function (exports) { 'use strict';
         });
     }
 
-    exports.ProxyClass = proxyClass;
-    exports.default = proxyClass;
     exports.proxyClass = proxyClass;
-
-    Object.defineProperty(exports, '__esModule', { value: true });
 
 }));
