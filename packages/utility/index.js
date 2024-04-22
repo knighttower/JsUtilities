@@ -51,7 +51,9 @@ import { ProxyObject } from './dist/esm/ProxyObject.js';
 // Default Module from: ProxyObject
 import proxyObject from './dist/esm/ProxyObject.js';
 // Single Modules and Aliases from: UrlHelper
-import { UrlHelper } from './dist/esm/UrlHelper.js';
+import { urlHelper } from './dist/esm/UrlHelper.js';
+// Default Module from: UrlHelper
+import UrlHelper from './dist/esm/UrlHelper.js';
 // Single Modules and Aliases from: Utility
 import {
     convertToBool,
@@ -121,6 +123,7 @@ export {
     proxyClass,
     ProxyObject,
     proxyObject,
+    urlHelper,
     UrlHelper,
     convertToBool,
     convertToNumber,

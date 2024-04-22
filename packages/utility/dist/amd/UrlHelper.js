@@ -223,5 +223,9 @@ define(['exports'], (function (exports) { 'use strict';
     })();
 
     exports.UrlHelper = UrlHelper;
+    exports.default = UrlHelper;
+    exports.urlHelper = UrlHelper;
+
+    Object.defineProperty(exports, '__esModule', { value: true });
 
 }));

@@ -17,17 +17,9 @@ const formats = webpackFormats ?? [
  * @param {string} ext - The file extension.
  * @returns {Object} - The Webpack configuration.
  */
-const getWebpackConfig = (
-    fileSrc,
-    fileName,
-    libraryTarget,
-    dir,
-    ext,
-    exportName,
-    windowExport
-) => ({
+const getWebpackConfig = (config) => ({
     mode: 'production',
-    entry: `${workingDir}/src/${fileSrc}`,
+    entry: `${workingDir}/src/${config.fileSrc}`,
     resolve: {
         modules: [
             'node_modules',
@@ -38,13 +30,36 @@ const getWebpackConfig = (
         extensions: ['.mjs', '.js', '.json', '.cjs'],
     },
     output: {
-        path: path.resolve(__dirname, `${workingDir}/dist/${dir}`),
-        filename: `${fileName}.${ext}`,
-        library: exportName,
-        libraryTarget: libraryTarget,
+        path: path.resolve(__dirname, `${workingDir}/dist/${config.dir}`),
+        filename: `${config.fileName}.${config.ext}`,
+        // library: config.exportName,
+        // libraryTarget: config.libraryTarget,
         umdNamedDefine: true,
+        // libraryExport: config.windowExport,
+        globalObject: 'this',
+        library: {
+            name: config.exportName,
+            type: config.libraryTarget,
+            export: config.windowExport,
+            umdNamedDefine: true,
+            export: config.windowExport,
+        },
     },
     stats: 'errors-only',
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: ['@babel/preset-env'],
+                    },
+                },
+            },
+        ],
+    },
 });
 
 // Generate multiple configurations
@@ -53,16 +68,17 @@ function getAllConfigs() {
     targets.forEach((target) => {
         // Generate multiple configurations
         for (const format of formats) {
+            const exportName = target.exportName ?? target.file.split('.')[0];
             configs.push(
-                getWebpackConfig(
-                    target.file,
-                    target.file.split('.')[0],
-                    format.type,
-                    format.dir,
-                    format.ext,
-                    target.exportName ?? target.file.split('.')[0],
-                    target.windowExport ?? ''
-                )
+                getWebpackConfig({
+                    fileSrc: target.file,
+                    fileName: target.file.split('.')[0],
+                    libraryTarget: format.type,
+                    dir: format.dir,
+                    ext: format.ext,
+                    exportName: exportName,
+                    windowExport: target.windowExport ?? undefined,
+                })
             );
         }
     });

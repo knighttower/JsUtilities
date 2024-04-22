@@ -1,10 +1,10 @@
 const targets = [
     { file: 'Utility.js', exportType: 'named' },
     { file: 'DomObserver.js', exportType: 'named' },
-    { file: 'UrlHelper.js', exportType: 'named' },
+    { file: 'UrlHelper.js', exportType: 'named', windowExport: 'default' },
     { file: 'ElementHelper.js', exportType: 'named' },
-    { file: 'ProxyObject.js', exportType: 'named' },
-    { file: 'ProxyClass.js', exportType: 'named' },
+    { file: 'ProxyObject.js', exportType: 'named', windowExport: 'default' },
+    { file: 'ProxyClass.js', exportType: 'named', windowExport: 'default' },
     { file: 'PowerHelpers.js', exportType: 'named' },
     { file: 'PromiseQueue.js', exportType: 'named' },
     { file: 'EventBus.js', exportType: 'named' },

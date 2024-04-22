@@ -40,7 +40,7 @@ const { ProxyClass, proxyClass } = require('./dist/cjs/ProxyClass.cjs');
 // Single Modules and Aliases from: ProxyObject
 const { ProxyObject, proxyObject } = require('./dist/cjs/ProxyObject.cjs');
 // Single Modules and Aliases from: UrlHelper
-const { UrlHelper } = require('./dist/cjs/UrlHelper.cjs');
+const { UrlHelper, urlHelper } = require('./dist/cjs/UrlHelper.cjs');
 // Single Modules and Aliases from: Utility
 const {
     convertToBool,
@@ -111,6 +111,7 @@ module.exports = {
     ProxyObject,
     proxyObject,
     UrlHelper,
+    urlHelper,
     convertToBool,
     convertToNumber,
     currencyToDecimal,

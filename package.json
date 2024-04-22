@@ -1,6 +1,6 @@
 {
   "name": "knighttower",
-  "version": "6.3.17",
+  "version": "6.3.18",
   "type": "commonjs",
   "engines": {
     "node": ">=20.10.0"
@@ -147,6 +147,7 @@
     "@rollup/plugin-terser": "^0.4.4",
     "@stylistic/eslint-plugin": "^1.7.0",
     "autoprefixer": "^10.4.19",
+    "babel-loader": "^9.1.3",
     "compression-webpack-plugin": "^11.1.0",
     "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
@@ -165,7 +166,7 @@
     "prettier": "^3.2.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "rollup": "^4.15.0",
+    "rollup": "^4.16.1",
     "sass": "^1.75.0",
     "sass-loader": "^14.2.1",
     "terser": "^5.30.3",

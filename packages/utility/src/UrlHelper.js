@@ -3,7 +3,7 @@
  *
  * @module urlHelper
  */
-export const UrlHelper = (() => {
+const UrlHelper = (() => {
     'use strict';
 
     /**
@@ -220,3 +220,5 @@ export const UrlHelper = (() => {
 
     return __u;
 })();
+
+export { UrlHelper, UrlHelper as default, UrlHelper as urlHelper };

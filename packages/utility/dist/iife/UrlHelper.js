@@ -224,6 +224,10 @@ var UrlHelper = (function (exports) {
     })();
 
     exports.UrlHelper = UrlHelper;
+    exports.default = UrlHelper;
+    exports.urlHelper = UrlHelper;
+
+    Object.defineProperty(exports, '__esModule', { value: true });
 
     return exports;
 

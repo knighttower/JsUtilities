@@ -25,8 +25,8 @@ const eventBus = () => {
 const utility = () => {
     runCommand(
         `cd ./packages/utility \
-    && npx webpack --config "${webpackConfig}" --watch
-    `
+        && npx webpack --config "${webpackConfig}" --watch
+        `
     );
 };
 
@@ -53,7 +53,7 @@ const adaptive = () => {
     runCommand(
         `\
     cd ./packages/adaptive \
-    && npx webpack --config "${webpackConfig}"  --watch
+    && npx webpack --config "${webpackConfig}" --watch
     `
     );
 };
