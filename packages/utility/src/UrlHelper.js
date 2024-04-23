@@ -22,7 +22,13 @@ const UrlHelper = (() => {
      * Reference to the global document object.
      * @type {Document}
      */
-    const doc = document;
+    const doc = (() => {
+        try {
+            return document;
+        } catch (e) {
+            return this['document'];
+        }
+    })();
 
     /**
      * Get the host value, check if template head has defined this variable.
