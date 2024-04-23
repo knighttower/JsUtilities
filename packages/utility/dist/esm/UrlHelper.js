@@ -16,7 +16,7 @@ var UrlHelper$1 = {exports: {}};
 	(function (global, factory) {
 	    if (module.exports) {
 	        // Node.js or CommonJS
-	        module.exports = factory();
+	        module.exports = factory;
 	    } else {
 	        // Browser globals (global is window)
 	        global.UrlHelper = factory();

@@ -8,7 +8,7 @@ define((function () { 'use strict';
     (function (global, factory) {
         if (typeof module === 'object' && module.exports) {
             // Node.js or CommonJS
-            module.exports = factory();
+            module.exports = factory;
         } else {
             // Browser globals (global is window)
             global.UrlHelper = factory();
