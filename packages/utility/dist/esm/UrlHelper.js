@@ -27,13 +27,13 @@ var UrlHelper$1 = {exports: {}};
 	     * The window object from the global scope.
 	     * @type {Window}
 	     */
-	    const win = window;
+	    const win = typeof window !== 'undefined' ? window : this;
 
 	    /**
 	     * The document object from the global scope.
 	     * @type {Document}
 	     */
-	    const doc = document;
+	    const doc = typeof document !== 'undefined' ? document : {};
 
 	    /**
 	     * Protocol part of the URL, without the colon.
