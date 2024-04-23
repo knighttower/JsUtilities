@@ -14,7 +14,13 @@ System.register('UrlHelper', [], (function (exports) {
                  * Reference to the global window object.
                  * @type {Window}
                  */
-                const win = window ?? globalThis ?? {};
+                const win = (() => {
+                    try {
+                        return window;
+                    } catch (e) {
+                        return undefined;
+                    }
+                })();
 
                 /**
                  * Reference to the global document object.

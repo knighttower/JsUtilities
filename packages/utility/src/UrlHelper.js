@@ -10,7 +10,13 @@ const UrlHelper = (() => {
      * Reference to the global window object.
      * @type {Window}
      */
-    const win = window ?? globalThis ?? {};
+    const win = (() => {
+        try {
+            return window;
+        } catch (e) {
+            return this;
+        }
+    })();
 
     /**
      * Reference to the global document object.
