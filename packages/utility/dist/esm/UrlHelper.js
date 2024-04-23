@@ -1,235 +1,257 @@
+var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
+function getDefaultExportFromCjs (x) {
+	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
+}
+
+var UrlHelper$1 = {exports: {}};
+
 /**
  * URL Object Class with public methods for URL functions and manipulation.
  *
  * @module urlHelper
  */
-const UrlHelper = (() => {
 
-    /**
-     * Reference to the global window object.
-     * @type {Window}
-     */
-    const win = (() => {
-        try {
-            return window;
-        } catch (e) {
-            return undefined;
-        }
-    })();
+(function (module) {
+	(function (root, factory) {
+	    if (module.exports) {
+	        // Node.js or CommonJS
+	        module.exports = factory();
+	    } else {
+	        // Browser globals (root is window)
+	        root.UrlHelper = factory();
+	    }
+	})(typeof self !== 'undefined' ? self : commonjsGlobal, function () {
 
-    /**
-     * Reference to the global document object.
-     * @type {Document}
-     */
-    const doc = (() => {
-        try {
-            return document;
-        } catch (e) {
-            return undefined['document'];
-        }
-    })();
+	    /**
+	     * Reference to the global window object.
+	     * @type {Window}
+	     */
+	    const win = (() => {
+	        try {
+	            return window;
+	        } catch (e) {
+	            return this;
+	        }
+	    })();
 
-    /**
-     * Get the host value, check if template head has defined this variable.
-     * @type {string|boolean}
-     */
-    const $H = win.$HOST || false;
+	    /**
+	     * Reference to the global document object.
+	     * @type {Document}
+	     */
+	    const doc = (() => {
+	        try {
+	            return document;
+	        } catch (e) {
+	            return this['document'];
+	        }
+	    })();
 
-    /**
-     * Get the template value, check if template head has defined this variable.
-     * @type {string|boolean}
-     */
-    const $TMP = win.$TEMPLATE || false;
+	    /**
+	     * Get the host value, check if template head has defined this variable.
+	     * @type {string|boolean}
+	     */
+	    const $H = win.$HOST || false;
 
-    /**
-     * Server Protocol.
-     * @type {string}
-     */
-    const PROTOCOL = win.location.protocol.replace(':', '');
+	    /**
+	     * Get the template value, check if template head has defined this variable.
+	     * @type {string|boolean}
+	     */
+	    const $TMP = win.$TEMPLATE || false;
 
-    /**
-     * Hostname.
-     * @type {string}
-     */
-    const HOST = $H || win.location.host;
+	    /**
+	     * Server Protocol.
+	     * @type {string}
+	     */
+	    const PROTOCOL = win.location.protocol.replace(':', '');
 
-    /**
-     * Template URL.
-     * @type {string}
-     */
-    const TEMPLATE = $TMP || '';
+	    /**
+	     * Hostname.
+	     * @type {string}
+	     */
+	    const HOST = $H || win.location.host;
 
-    /**
-     * Current Pathname.
-     * @type {string}
-     */
-    const PATH = location.pathname;
+	    /**
+	     * Template URL.
+	     * @type {string}
+	     */
+	    const TEMPLATE = $TMP || '';
 
-    /**
-     * Site URL.
-     * @type {string}
-     */
-    const SITE_URL = $H ? $H : `${PROTOCOL}://${HOST}`;
+	    /**
+	     * Current Pathname.
+	     * @type {string}
+	     */
+	    const PATH = location.pathname;
 
-    /**
-     * Full URL.
-     * @type {string}
-     */
-    const FULL_URL = $H ? `${$H}${PATH}` : `${PROTOCOL}://${HOST}${PATH}`;
+	    /**
+	     * Site URL.
+	     * @type {string}
+	     */
+	    const SITE_URL = $H ? $H : `${PROTOCOL}://${HOST}`;
 
-    /**
-     * Cached URL parameters.
-     * @type {Object|null}
-     */
-    let cachedURLParams = null;
+	    /**
+	     * Full URL.
+	     * @type {string}
+	     */
+	    const FULL_URL = $H ? `${$H}${PATH}` : `${PROTOCOL}://${HOST}${PATH}`;
 
-    /**
-     * Parse and return URL parameters.
-     *
-     * @return {Object} with params, queryString, search, keys, values, and collection.
-     * @private
-     */
-    const parseURLParams = () => {
-        if (cachedURLParams) {
-            return cachedURLParams;
-        }
+	    /**
+	     * Cached URL parameters.
+	     * @type {Object|null}
+	     */
+	    let cachedURLParams = null;
 
-        const params = new URLSearchParams(win.location.search);
-        const vars = {};
+	    /**
+	     * Parse and return URL parameters.
+	     *
+	     * @return {Object} with params, queryString, search, keys, values, and collection.
+	     * @private
+	     */
+	    const parseURLParams = () => {
+	        if (cachedURLParams) {
+	            return cachedURLParams;
+	        }
 
-        for (const [key, value] of params.entries()) {
-            vars[key] = value;
-        }
+	        const params = new URLSearchParams(win.location.search);
+	        const vars = {};
 
-        cachedURLParams = {
-            params,
-            queryString: params.toString(),
-            search: win.location.search,
-            keys: Array.from(params.keys()),
-            values: Array.from(params.values()),
-            collection: vars,
-        };
+	        for (const [key, value] of params.entries()) {
+	            vars[key] = value;
+	        }
 
-        return cachedURLParams;
-    };
+	        cachedURLParams = {
+	            params,
+	            queryString: params.toString(),
+	            search: win.location.search,
+	            keys: Array.from(params.keys()),
+	            values: Array.from(params.values()),
+	            collection: vars,
+	        };
 
-    const __u = {};
+	        return cachedURLParams;
+	    };
 
-    /**
-     * Get the current page name (Last part of the URL).
-     *
-     * @return {string} Current page name.
-     */
-    __u.getPage = () => {
-        const cURL = doc.location.toString().toLowerCase();
-        const page = cURL.split('/').pop().split('.')[0];
-        return page || 'index'; // assuming 'index' as the default page name
-    };
+	    const __u = {};
 
-    /**
-     * Get the query object info from the current URL.
-     *
-     * @return {Object} with params, queryString, search, keys, values, and collection.
-     */
-    __u.getParams = () => {
-        return parseURLParams();
-    };
+	    /**
+	     * Get the current page name (Last part of the URL).
+	     *
+	     * @return {string} Current page name.
+	     */
+	    __u.getPage = () => {
+	        const cURL = doc.location.toString().toLowerCase();
+	        const page = cURL.split('/').pop().split('.')[0];
+	        return page || 'index'; // assuming 'index' as the default page name
+	    };
 
-    /**
-     * Get the query string from the current URL.
-     *
-     * @return {string} Query string.
-     */
-    __u.getQuery = () => {
-        return parseURLParams().queryString;
-    };
+	    /**
+	     * Get the query object info from the current URL.
+	     *
+	     * @return {Object} with params, queryString, search, keys, values, and collection.
+	     */
+	    __u.getParams = () => {
+	        return parseURLParams();
+	    };
 
-    /**
-     * Add params to the current query string from the current URL.
-     *
-     * @param {Object} query - The query object to add.
-     * @return {Object} with collection and queryString.
-     */
-    __u.addToQuery = (query) => {
-        const currentQuery = parseURLParams().collection;
-        Object.assign(currentQuery, query);
-        const qString = Object.entries(currentQuery)
-            .map(([key, value]) => `${key}=${value}`)
-            .join('&');
+	    /**
+	     * Get the query string from the current URL.
+	     *
+	     * @return {string} Query string.
+	     */
+	    __u.getQuery = () => {
+	        return parseURLParams().queryString;
+	    };
 
-        return {
-            collection: currentQuery,
-            queryString: qString,
-        };
-    };
+	    /**
+	     * Add params to the current query string from the current URL.
+	     *
+	     * @param {Object} query - The query object to add.
+	     * @return {Object} with collection and queryString.
+	     */
+	    __u.addToQuery = (query) => {
+	        const currentQuery = parseURLParams().collection;
+	        Object.assign(currentQuery, query);
+	        const qString = Object.entries(currentQuery)
+	            .map(([key, value]) => `${key}=${value}`)
+	            .join('&');
 
-    /**
-     * Get only the URL hash.
-     *
-     * @return {string} Current hash.
-     */
-    __u.getHash = () => win.location.hash.substring(1);
+	        return {
+	            collection: currentQuery,
+	            queryString: qString,
+	        };
+	    };
 
-    /**
-     * Set the URL hash.
-     *
-     * @param {string} h - The hash to set.
-     */
-    __u.setHash = (h) => {
-        doc.location.hash = h;
-    };
+	    /**
+	     * Get only the URL hash.
+	     *
+	     * @return {string} Current hash.
+	     */
+	    __u.getHash = () => win.location.hash.substring(1);
 
-    /**
-     * Remove the URL hash.
-     */
-    __u.deleteHash = () => {
-        history.pushState('', doc.title, win.location.pathname);
-    };
+	    /**
+	     * Set the URL hash.
+	     *
+	     * @param {string} h - The hash to set.
+	     */
+	    __u.setHash = (h) => {
+	        doc.location.hash = h;
+	    };
 
-    /**
-     * Go to a specific URL on the same page.
-     *
-     * @param {string} url - The URL to go to.
-     * @return {boolean} Always returns false to prevent browser default behavior.
-     */
-    __u.goTo = (url) => {
-        win.location.href = url;
-        return false;
-    };
+	    /**
+	     * Remove the URL hash.
+	     */
+	    __u.deleteHash = () => {
+	        history.pushState('', doc.title, win.location.pathname);
+	    };
 
-    /**
-     * Open a URL in the browser.
-     *
-     * @param {string} url - The URL to open.
-     * @param {string} [name='_blank'] - The name attribute for the new window.
-     * @param {string} [params=''] - The window parameters.
-     * @return {Window} The window object of the opened URL.
-     */
-    __u.open = (url, name = '_blank', params = '') => {
-        return win.open(url, name, params);
-    };
+	    /**
+	     * Go to a specific URL on the same page.
+	     *
+	     * @param {string} url - The URL to go to.
+	     * @return {boolean} Always returns false to prevent browser default behavior.
+	     */
+	    __u.goTo = (url) => {
+	        win.location.href = url;
+	        return false;
+	    };
 
-    /**
-     * Execute a function if the current URL changes.
-     *
-     * @param {function} callback - The callback function to execute.
-     */
-    __u.onChange = (callback) => {
-        if (typeof callback === 'function') {
-            win.addEventListener('hashchange', callback);
-        }
-    };
+	    /**
+	     * Open a URL in the browser.
+	     *
+	     * @param {string} url - The URL to open.
+	     * @param {string} [name='_blank'] - The name attribute for the new window.
+	     * @param {string} [params=''] - The window parameters.
+	     * @return {Window} The window object of the opened URL.
+	     */
+	    __u.open = (url, name = '_blank', params = '') => {
+	        return win.open(url, name, params);
+	    };
 
-    // Expose constants
-    __u.fullUrl = FULL_URL;
-    __u.siteUrl = SITE_URL;
-    __u.template = TEMPLATE;
-    __u.protocol = PROTOCOL;
-    __u.host = HOST;
-    __u.path = PATH;
-    __u.readUrl = doc.URL;
+	    /**
+	     * Execute a function if the current URL changes.
+	     *
+	     * @param {function} callback - The callback function to execute.
+	     */
+	    __u.onChange = (callback) => {
+	        if (typeof callback === 'function') {
+	            win.addEventListener('hashchange', callback);
+	        }
+	    };
 
-    return __u;
-})();
+	    // Expose constants
+	    __u.fullUrl = FULL_URL;
+	    __u.siteUrl = SITE_URL;
+	    __u.template = TEMPLATE;
+	    __u.protocol = PROTOCOL;
+	    __u.host = HOST;
+	    __u.path = PATH;
+	    __u.readUrl = doc.URL;
 
-export { UrlHelper, UrlHelper as default, UrlHelper as urlHelper };
+	    return __u;
+	}); 
+} (UrlHelper$1));
+
+var UrlHelperExports = UrlHelper$1.exports;
+var UrlHelper = /*@__PURE__*/getDefaultExportFromCjs(UrlHelperExports);
+
+export { UrlHelper as default };

@@ -1,13 +1,22 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', { value: true });
-
 /**
  * URL Object Class with public methods for URL functions and manipulation.
  *
  * @module urlHelper
  */
-const UrlHelper = (() => {
+(function (root, factory) {
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define([], factory);
+    } else if (typeof module === 'object' && module.exports) {
+        // Node.js or CommonJS
+        module.exports = factory();
+    } else {
+        // Browser globals (root is window)
+        root.UrlHelper = factory();
+    }
+})(typeof self !== 'undefined' ? self : undefined, function () {
 
     /**
      * Reference to the global window object.
@@ -17,7 +26,7 @@ const UrlHelper = (() => {
         try {
             return window;
         } catch (e) {
-            return undefined;
+            return this;
         }
     })();
 
@@ -29,7 +38,7 @@ const UrlHelper = (() => {
         try {
             return document;
         } catch (e) {
-            return undefined['document'];
+            return this['document'];
         }
     })();
 
@@ -234,8 +243,4 @@ const UrlHelper = (() => {
     __u.readUrl = doc.URL;
 
     return __u;
-})();
-
-exports.UrlHelper = UrlHelper;
-exports.default = UrlHelper;
-exports.urlHelper = UrlHelper;
+});

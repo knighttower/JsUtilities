@@ -1,4 +1,4 @@
-System.register('UrlHelper', [], (function (exports) {
+System.register('UrlHelper', [], (function () {
     'use strict';
     return {
         execute: (function () {
@@ -8,7 +8,18 @@ System.register('UrlHelper', [], (function (exports) {
              *
              * @module urlHelper
              */
-            const UrlHelper = (() => {
+            (function (root, factory) {
+                if (typeof define === 'function' && define.amd) {
+                    // AMD. Register as an anonymous module.
+                    define([], factory);
+                } else if (typeof module === 'object' && module.exports) {
+                    // Node.js or CommonJS
+                    module.exports = factory();
+                } else {
+                    // Browser globals (root is window)
+                    root.UrlHelper = factory();
+                }
+            })(typeof self !== 'undefined' ? self : undefined, function () {
 
                 /**
                  * Reference to the global window object.
@@ -18,7 +29,7 @@ System.register('UrlHelper', [], (function (exports) {
                     try {
                         return window;
                     } catch (e) {
-                        return undefined;
+                        return this;
                     }
                 })();
 
@@ -30,7 +41,7 @@ System.register('UrlHelper', [], (function (exports) {
                     try {
                         return document;
                     } catch (e) {
-                        return undefined['document'];
+                        return this['document'];
                     }
                 })();
 
@@ -235,7 +246,7 @@ System.register('UrlHelper', [], (function (exports) {
                 __u.readUrl = doc.URL;
 
                 return __u;
-            })(); exports({ UrlHelper: UrlHelper, default: UrlHelper, urlHelper: UrlHelper });
+            });
 
         })
     };

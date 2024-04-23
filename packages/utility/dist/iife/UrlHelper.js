@@ -1,4 +1,4 @@
-var UrlHelper = (function (exports) {
+(function () {
     'use strict';
 
     /**
@@ -6,7 +6,18 @@ var UrlHelper = (function (exports) {
      *
      * @module urlHelper
      */
-    const UrlHelper = (() => {
+    (function (root, factory) {
+        if (typeof define === 'function' && define.amd) {
+            // AMD. Register as an anonymous module.
+            define([], factory);
+        } else if (typeof module === 'object' && module.exports) {
+            // Node.js or CommonJS
+            module.exports = factory();
+        } else {
+            // Browser globals (root is window)
+            root.UrlHelper = factory();
+        }
+    })(typeof self !== 'undefined' ? self : undefined, function () {
 
         /**
          * Reference to the global window object.
@@ -16,7 +27,7 @@ var UrlHelper = (function (exports) {
             try {
                 return window;
             } catch (e) {
-                return undefined;
+                return this;
             }
         })();
 
@@ -28,7 +39,7 @@ var UrlHelper = (function (exports) {
             try {
                 return document;
             } catch (e) {
-                return undefined['document'];
+                return this['document'];
             }
         })();
 
@@ -233,14 +244,6 @@ var UrlHelper = (function (exports) {
         __u.readUrl = doc.URL;
 
         return __u;
-    })();
+    });
 
-    exports.UrlHelper = UrlHelper;
-    exports.default = UrlHelper;
-    exports.urlHelper = UrlHelper;
-
-    Object.defineProperty(exports, '__esModule', { value: true });
-
-    return exports;
-
-})({});
+})();
