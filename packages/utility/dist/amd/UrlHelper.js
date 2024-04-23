@@ -11,7 +11,7 @@ define(['exports'], (function (exports) { 'use strict';
          * Reference to the global window object.
          * @type {Window}
          */
-        const win = window;
+        const win = window ?? globalThis ?? {};
 
         /**
          * Reference to the global document object.
