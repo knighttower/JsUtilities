@@ -17,25 +17,28 @@ const UrlHelper = (() => {
      */
     const doc = typeof document !== 'undefined' ? document : {};
 
-    const location = win.location || {};
+    const LOCATION = win?.location;
+    let hash = LOCATION?.hash;
+    let HREF = LOCATION?.href;
+    const SEARCH = LOCATION?.search;
 
     /**
      * Protocol part of the URL, without the colon.
      * @type {string}
      */
-    const PROTOCOL = location.protocol?.replace(':', '');
+    const PROTOCOL = LOCATION?.protocol?.replace(':', '');
 
     /**
      * Host part of the URL, including hostname and port.
      * @type {string}
      */
-    const HOST = location.host || '';
+    const HOST = LOCATION?.host;
 
     /**
      * Pathname part of the URL.
      * @type {string}
      */
-    const PATH = location.pathname || '';
+    const PATH = LOCATION?.pathname;
 
     /**
      * Base site URL, constructed from protocol and host.
@@ -59,7 +62,7 @@ const UrlHelper = (() => {
             return cachedURLParams;
         }
 
-        const params = new URLSearchParams(location.search);
+        const params = new URLSearchParams(SEARCH);
         const vars = {};
 
         for (const [key, value] of params.entries()) {
@@ -69,7 +72,7 @@ const UrlHelper = (() => {
         cachedURLParams = {
             params,
             queryString: params.toString(),
-            search: location.search,
+            search: SEARCH,
             keys: Array.from(params.keys()),
             values: Array.from(params.values()),
             collection: vars,
@@ -94,7 +97,7 @@ const UrlHelper = (() => {
          * @return {string} The current page name or 'index' if none is found.
          */
         getPage: () => {
-            const cURL = location.href?.toLowerCase();
+            const cURL = HREF?.toLowerCase();
             const page = cURL.split('/').pop().split('.')[0];
             return page || 'index';
         },
@@ -133,21 +136,21 @@ const UrlHelper = (() => {
          * Retrieves the hash part of the URL, without the '#' symbol.
          * @return {string} The current hash value.
          */
-        getHash: () => location.hash?.substring(1),
+        getHash: () => hash?.substring(1),
 
         /**
          * Sets the hash part of the URL.
          * @param {string} h The hash to set.
          */
         setHash: (h) => {
-            location.hash = h;
+            hash = h;
         },
 
         /**
          * Removes the hash part of the URL.
          */
         deleteHash: () => {
-            history.pushState('', doc.title, location.pathname + location.search);
+            history.pushState('', doc.title, PATH + SEARCH);
         },
 
         /**
@@ -156,7 +159,7 @@ const UrlHelper = (() => {
          * @return {boolean} Always returns false to prevent default browser behavior.
          */
         goTo: (url) => {
-            location.href = url;
+            HREF = url;
             return false;
         },
 
@@ -185,7 +188,7 @@ const UrlHelper = (() => {
         protocol: PROTOCOL,
         host: HOST,
         path: PATH,
-        readUrl: location.href,
+        readUrl: HREF,
     };
 
     if (typeof window !== 'undefined' && typeof module !== 'object') {
