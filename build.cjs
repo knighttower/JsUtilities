@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
-const { input, select, rawlist } = require('@inquirer/prompts');
-const { runCommand, readJson, writeJson } = require('./packages/utility/nodeUtils');
+const { input, select, confirm } = require('@inquirer/prompts');
+const { runCommand, getFlagValue } = require('./packages/utility/nodeUtils');
 const workingDir = process.cwd();
 const webpackConfig = `${workingDir}/packages/utility/nodeUtils/webpack.config.cjs`;
 const rollupConfig = `${workingDir}/packages/utility/nodeUtils/rollup.config.cjs`;
@@ -10,6 +10,7 @@ const bumpVersion = `${workingDir}/packages/utility/nodeUtils/BumpVersion.cjs`;
 const pretty = `${workingDir}/.prettierrc.json`;
 const eslint = `${workingDir}/.eslintrc.js`;
 
+const local = getFlagValue('local');
 // Event Bus
 const eventBus = () => {
     runCommand(
@@ -37,8 +38,7 @@ const utility = () => {
     && prettier --config "${pretty}" --write ./index.cjs \
     && npm run test \
     && node "${bumpVersion}" --exe \
-    && npm publish --access public
-    `
+    ` + (local ? '' : '&& npm publish --access public')
     );
 };
 
@@ -56,8 +56,7 @@ const typeCheck = () => {
     && prettier --config "${pretty}" --write ./index.cjs \
     && npm run test \
     && node "${bumpVersion}" --exe \
-    && npm publish --access public
-    `
+    ` + (local ? '' : '&& npm publish --access public')
     );
 };
 
@@ -67,8 +66,7 @@ const bootstrapMini = () => {
     cd ./packages/bootstrap-mini \
     && npx mix --production \
     && node "${bumpVersion}" --exe \
-    && npm publish --access public
-    `
+    ` + (local ? '' : '&& npm publish --access public')
     );
 };
 
@@ -82,8 +80,7 @@ const adaptive = () => {
     && prettier --config "${pretty}" --write ./index.js \
     && prettier --config "${pretty}" --write ./index.cjs \
     && node "${bumpVersion}" --exe \
-    && npm publish --access public
-    `
+    ` + (local ? '' : '&& npm publish --access public')
     );
 };
 
@@ -91,8 +88,7 @@ const mono = () => {
     runCommand(
         `\
     node "${bumpVersion}" --exe \
-    && npm publish --access public
-    `
+    ` + (local ? '' : '&& npm publish --access public')
     );
 };
 
@@ -108,12 +104,9 @@ const vueUtils = () => {
     && prettier --config "${pretty}" --write ./index.js \
     && prettier --config "${pretty}" --write ./index.cjs \
     && node "${bumpVersion}" --exe \
-    && npm publish --access public
-    `
+    ` + (local ? '' : '&& npm publish --access public')
     );
 };
-
-runCommand('ncu --interactive && npm i');
 
 const workspaces = {
     'bootstrap-mini': bootstrapMini,
@@ -134,19 +127,25 @@ const workspaces = {
     },
 };
 
-const choice = select({
-    message: 'what to build',
-    choices: Object.keys(workspaces).map((pkg) => {
-        return {
-            name: pkg,
-            value: pkg,
-        };
-    }),
-});
+const doUpdate = confirm({ message: 'Update?' });
 
-choice.then((choice) => {
-    workspaces[choice]();
-    if (choice !== 'mono') {
-        workspaces['mono']();
+doUpdate.then((doUpdate) => {
+    if (doUpdate) {
+        runCommand('ncu --interactive && npm i');
     }
+    const choice = select({
+        message: 'what to build',
+        choices: Object.keys(workspaces).map((pkg) => {
+            return {
+                name: pkg,
+                value: pkg,
+            };
+        }),
+    });
+    choice.then((choice) => {
+        workspaces[choice]();
+        if (choice !== 'mono') {
+            workspaces['mono']();
+        }
+    });
 });

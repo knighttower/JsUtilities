@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { input, select, rawlist } = require('@inquirer/prompts');
-const { runCommand, readJson, writeJson } = require('./packages/utility/nodeUtils/index.cjs');
+const { runCommand, getFlagValue } = require('./packages/utility/nodeUtils/index.cjs');
 const workingDir = process.cwd();
 const webpackConfig = `${workingDir}/packages/utility/nodeUtils/webpack.config.cjs`;
 const rollupConfig = `${workingDir}/packages/utility/nodeUtils/rollup.config.cjs`;
@@ -11,12 +11,14 @@ const bumpVersion = `${workingDir}/packages/utility/nodeUtils/BumpVersion.cjs`;
 const pretty = `${workingDir}/.prettierrc.json`;
 const eslint = `${workingDir}/.eslintrc.js`;
 
+const once = getFlagValue('once') ? '' : '--watch';
+
 // Event Bus
 const eventBus = () => {
     runCommand(
         `\
     cd ./packages/event-bus \
-    && npx webpack --config "${webpackConfig}" --watch
+    && npx webpack --config "${webpackConfig}" --mode=development ${once} --stats=minimal
     `
     );
 };
@@ -25,7 +27,7 @@ const eventBus = () => {
 const utility = () => {
     runCommand(
         `cd ./packages/utility \
-        && npx webpack --config "${webpackConfig}" --watch
+        && npx webpack --config "${webpackConfig}" --mode=development ${once} --stats=minimal
         `
     );
 };
@@ -35,7 +37,7 @@ const typeCheck = () => {
     runCommand(
         `\
     cd ./packages/type-check \
-    && npx webpack --config "${webpackConfig}"  --watch
+    && npx webpack --config "${webpackConfig}" --mode=development ${once} --stats=minimal
     `
     );
 };
@@ -44,7 +46,7 @@ const bootstrapMini = () => {
     runCommand(
         `\
     cd ./packages/bootstrap-mini \
-    && npx mix --watch
+    && npx mix ${once}
     `
     );
 };
@@ -53,7 +55,7 @@ const adaptive = () => {
     runCommand(
         `\
     cd ./packages/adaptive \
-    && npx webpack --config "${webpackConfig}" --watch
+    && npx webpack --config "${webpackConfig}" --mode=development ${once} --stats=minimal
     `
     );
 };

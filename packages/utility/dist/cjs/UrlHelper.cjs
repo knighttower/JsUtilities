@@ -1,25 +1,19 @@
 'use strict';
 
+Object.defineProperty(exports, '__esModule', { value: true });
+
 /**
  * URL Object Class with public methods for URL functions and manipulation.
  *
  * @module urlHelper
  */
-(function (global, factory) {
-    if (typeof module === 'object' && module.exports) {
-        // Node.js or CommonJS
-        module.exports = factory;
-    } else {
-        // Browser globals (global is window)
-        global.UrlHelper = factory();
-    }
-})(typeof window !== 'undefined' ? window : undefined, function () {
+const UrlHelper = (() => {
 
     /**
      * The window object from the global scope.
      * @type {Window}
      */
-    const win = typeof window !== 'undefined' ? window : this;
+    const win = typeof window !== 'undefined' ? window : undefined;
 
     /**
      * The document object from the global scope.
@@ -27,23 +21,25 @@
      */
     const doc = typeof document !== 'undefined' ? document : {};
 
+    const location = win.location || {};
+
     /**
      * Protocol part of the URL, without the colon.
      * @type {string}
      */
-    const PROTOCOL = win.location.protocol.replace(':', '');
+    const PROTOCOL = location.protocol?.replace(':', '');
 
     /**
      * Host part of the URL, including hostname and port.
      * @type {string}
      */
-    const HOST = win.location.host;
+    const HOST = location.host || '';
 
     /**
      * Pathname part of the URL.
      * @type {string}
      */
-    const PATH = win.location.pathname;
+    const PATH = location.pathname || '';
 
     /**
      * Base site URL, constructed from protocol and host.
@@ -67,7 +63,7 @@
             return cachedURLParams;
         }
 
-        const params = new URLSearchParams(win.location.search);
+        const params = new URLSearchParams(location.search);
         const vars = {};
 
         for (const [key, value] of params.entries()) {
@@ -77,7 +73,7 @@
         cachedURLParams = {
             params,
             queryString: params.toString(),
-            search: win.location.search,
+            search: location.search,
             keys: Array.from(params.keys()),
             values: Array.from(params.values()),
             collection: vars,
@@ -102,7 +98,7 @@
          * @return {string} The current page name or 'index' if none is found.
          */
         getPage: () => {
-            const cURL = win.location.href.toLowerCase();
+            const cURL = location.href?.toLowerCase();
             const page = cURL.split('/').pop().split('.')[0];
             return page || 'index';
         },
@@ -141,21 +137,21 @@
          * Retrieves the hash part of the URL, without the '#' symbol.
          * @return {string} The current hash value.
          */
-        getHash: () => win.location.hash.substring(1),
+        getHash: () => location.hash?.substring(1),
 
         /**
          * Sets the hash part of the URL.
          * @param {string} h The hash to set.
          */
         setHash: (h) => {
-            win.location.hash = h;
+            location.hash = h;
         },
 
         /**
          * Removes the hash part of the URL.
          */
         deleteHash: () => {
-            history.pushState('', doc.title, win.location.pathname + win.location.search);
+            history.pushState('', doc.title, location.pathname + location.search);
         },
 
         /**
@@ -164,7 +160,7 @@
          * @return {boolean} Always returns false to prevent default browser behavior.
          */
         goTo: (url) => {
-            win.location.href = url;
+            location.href = url;
             return false;
         },
 
@@ -193,8 +189,17 @@
         protocol: PROTOCOL,
         host: HOST,
         path: PATH,
-        readUrl: win.location.href,
+        readUrl: location.href,
     };
 
+    if (typeof window !== 'undefined' && typeof module !== 'object') {
+        return (window.UrlHelper = urlHelper);
+    } else if (typeof module === 'object') {
+        return () => urlHelper;
+    }
     return urlHelper;
-});
+})();
+
+exports.UrlHelper = UrlHelper;
+exports.default = UrlHelper;
+exports.urlHelper = UrlHelper;
