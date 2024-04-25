@@ -11,19 +11,7 @@ const pretty = `${workingDir}/.prettierrc.json`;
 const eslint = `${workingDir}/.eslintrc.js`;
 
 const local = getFlagValue('local');
-// Event Bus
-const eventBus = () => {
-    runCommand(
-        `\
-    cd ./packages/event-bus \
-    && npx rollup -c "${rollupConfig}" \
-    && npx webpack --mode production --config "${webpackConfig}" \
-    && npm run test \
-    && node "${bumpVersion}" --exe \
-    && npm publish --access public
-    `
-    );
-};
+const pkgOnly = getFlagValue('pkg');
 
 // Utility
 const utility = () => {
@@ -110,7 +98,6 @@ const vueUtils = () => {
 
 const workspaces = {
     'bootstrap-mini': bootstrapMini,
-    'event-bus': eventBus,
     'type-check': typeCheck,
     utility,
     adaptive,
@@ -118,7 +105,6 @@ const workspaces = {
     mono,
     all: () => {
         bootstrapMini();
-        eventBus();
         typeCheck();
         utility();
         adaptive();
@@ -144,7 +130,7 @@ doUpdate.then((doUpdate) => {
     });
     choice.then((choice) => {
         workspaces[choice]();
-        if (choice !== 'mono') {
+        if (choice !== 'mono' && !pkgOnly) {
             workspaces['mono']();
         }
     });

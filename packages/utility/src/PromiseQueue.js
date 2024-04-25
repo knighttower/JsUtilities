@@ -1,4 +1,4 @@
-import { EventBus } from './EventBus.js';
+import { EventBus } from './event-bus/EventBus.js';
 import { getDynamicId, makeArray } from './Utility.js';
 
 /**

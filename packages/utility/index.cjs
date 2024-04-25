@@ -3,7 +3,7 @@ const { DomObserver, domObserver } = require('./dist/cjs/DomObserver.cjs');
 // Single Modules and Aliases from: ElementHelper
 const { ElementHelper, elementHelper, selectElement } = require('./dist/cjs/ElementHelper.cjs');
 // Single Modules and Aliases from: EventBus
-const { EventBus, _eventBus } = require('./dist/cjs/EventBus.cjs');
+const { EventBus, _eventBus, eventBus } = require('./dist/cjs/EventBus.cjs');
 // Single Modules and Aliases from: PowerHelpers
 const {
     PowerHelper,
@@ -81,6 +81,7 @@ module.exports = {
     selectElement,
     EventBus,
     _eventBus,
+    eventBus,
     PowerHelper,
     addQuotes,
     cleanStr,

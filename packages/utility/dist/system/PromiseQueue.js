@@ -3,10 +3,11 @@ System.register('PromiseQueue', [], (function (exports) {
     return {
         execute: (function () {
 
+            let listeners = {};
             class EventBus {
                 constructor() {
-                    // Memory storage for all the events
-                    this.listeners = {};
+                    // cleanup
+                    listeners = {};
                 }
                 // creates an event that can be triggered any number of times
                 /**
@@ -49,7 +50,7 @@ System.register('PromiseQueue', [], (function (exports) {
                  * @example eventBus.off('event.name')
                  */
                 off(eventName) {
-                    delete this.listeners[eventName];
+                    delete listeners[eventName];
                 }
                 /**
                  * removes the given callback for the given event
@@ -60,12 +61,12 @@ System.register('PromiseQueue', [], (function (exports) {
                  * @example eventBus.detach('event.name', callback)
                  */
                 detach(eventName, callback) {
-                    const listeners = this.listeners[eventName] || [];
-                    const filteredListeners = listeners.filter(function (value) {
+                    const listenersRecords = listeners[eventName] || [];
+                    const filteredListeners = listenersRecords.filter(function (value) {
                         return value.callback !== callback;
                     });
-                    if (eventName in this.listeners) {
-                        this.listeners[eventName] = filteredListeners;
+                    if (eventName in listeners) {
+                        listeners[eventName] = filteredListeners;
                         return true; // Event was found and removed
                     }
                     return false; // Event was not found
@@ -86,45 +87,50 @@ System.register('PromiseQueue', [], (function (exports) {
                     const allArgs = this.extractContextFromArgs(args);
                     const context = allArgs[0];
                     args = allArgs[1];
+
                     // name exact match
                     if (this.hasListener(eventName)) {
-                        queueListeners = this.listeners[eventName];
+                        queueListeners = listeners[eventName];
                     } else {
                         // -----------------------------------------
                         // Wildcard support
                         if (eventName.includes('*')) {
                             // case 1, if the incoming string has * or ** in it
-                            // which will suppport emit("name*") or emit("name**") or emit("name.*name**")
-                            matches = this.patternSearch(eventName, Object.keys(this.listeners));
-                            if (matches) {
+                            // Matches the emit 'eventName' to the registered 'on' listeners
+                            matches = this.patternSearch(eventName, Object.keys(listeners));
+
+                            if (matches.length > 0) {
                                 matches.forEach((match) => {
-                                    queueListeners = queueListeners.concat(this.listeners[match]);
+                                    queueListeners = queueListeners.concat(listeners[match]);
                                 });
                             }
                         } else {
-                            // case 2, if the incoming string matches a registered pattern
-                            // which will support on("name*") | on("name**") | on("name.*name**")
-                            for (const key in this.listeners) {
-                                matches = this.patternSearch(key, [eventName]);
-                                if (matches) {
-                                    queueListeners = queueListeners.concat(this.listeners[key]);
+                            // case 2, if the incoming string does not have * or ** in it
+                            // get the patterns from the listeners (on method) and match them to the emit name
+                            for (const key in listeners) {
+                                if (key.includes('*')) {
+                                    matches = this.patternSearch(key, [eventName]);
+                                    if (matches) {
+                                        queueListeners = queueListeners.concat(listeners[key]);
+                                    }
                                 }
                             }
                         }
                     }
+
                     queueListeners.forEach((listener, k) => {
                         let callback = listener.callback;
                         if (context) {
                             callback = callback.bind(context);
                         }
-                        callback(...args);
                         if (listener.triggerCapacity !== undefined) {
                             listener.triggerCapacity--;
                             queueListeners[k].triggerCapacity = listener.triggerCapacity;
                         }
                         if (this.checkToRemoveListener(listener)) {
-                            this.listeners[eventName].splice(k, 1);
+                            listeners[eventName].splice(k, 1);
                         }
+                        callback(...args);
                     });
                 }
                 /**
@@ -139,20 +145,17 @@ System.register('PromiseQueue', [], (function (exports) {
                 patternSearch(pattern, list) {
                     let filteredList = [];
                     // console.log('__testLogHere__', pattern, this.setWildCardString(pattern));
-                    const regex = new RegExp(this.setWildCardString(pattern));
+                    const regex = new RegExp(this.setWildCardString(pattern), 'g');
+
                     filteredList = list.filter((item) => regex.test(item));
                     return filteredList.length === 0 ? null : filteredList;
                 }
                 setWildCardString(string) {
                     // eslint-disable-next-line
                     let regexStr = string.replace(/([.+?^${}()|\[\]\/\\])/g, '\\$&'); // escape all regex special chars
-                    regexStr = regexStr
-                        // eslint-disable-next-line
-                        .replace(/\*\*/g, '[_g_]') // Replace wildcard patterns with temporary markers
-                        // eslint-disable-next-line
-                        .replace(/\*/g, '(.*?)')
-                        .replace(/\[_g_\]/g, '.*');
-                    return `^${regexStr}$`;
+                    // eslint-disable-next-line
+                    regexStr = regexStr.replace(/\*/g, '(.*?)');
+                    return `^${regexStr}`;
                 }
                 /**
                  * Extract the context from the arguments
@@ -176,9 +179,9 @@ System.register('PromiseQueue', [], (function (exports) {
                 }
                 registerListener(eventName, callback, triggerCapacity) {
                     if (!this.hasListener(eventName)) {
-                        this.listeners[eventName] = [];
+                        listeners[eventName] = [];
                     }
-                    this.listeners[eventName].push({ callback, triggerCapacity });
+                    listeners[eventName].push({ callback, triggerCapacity });
                 }
                 checkToRemoveListener(eventInformation) {
                     if (eventInformation.triggerCapacity !== undefined) {
@@ -187,8 +190,29 @@ System.register('PromiseQueue', [], (function (exports) {
                     return false;
                 }
                 hasListener(eventName) {
-                    return eventName in this.listeners;
+                    return eventName in listeners;
                 }
+                global() {
+                    return _eventBus();
+                }
+            }
+
+            function _eventBus() {
+                // support for browser
+                if (typeof window !== 'undefined') {
+                    if (!window.eventBus) {
+                        window.eventBus = new EventBus();
+                    }
+                    return window.eventBus;
+                }
+                if (typeof global !== 'undefined') {
+                    if (!global.eventBus) {
+                        global.eventBus = new EventBus();
+                    }
+                    return global.eventBus;
+                }
+                // if none of the above is available, return a new instance
+                return new EventBus();
             }
 
             // // -----------------------------------------

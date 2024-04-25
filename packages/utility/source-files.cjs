@@ -7,7 +7,7 @@ const targets = [
     { file: 'ProxyClass.js', exportType: 'named', windowExport: 'default' },
     { file: 'PowerHelpers.js', exportType: 'named' },
     { file: 'PromiseQueue.js', exportType: 'named' },
-    { file: 'EventBus.js', exportType: 'named' },
+    { file: 'event-bus/EventBus.js', exportType: 'named' },
 ];
 
 const rollupFormats = [

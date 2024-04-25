@@ -3,6 +3,8 @@ const resolve = require('@rollup/plugin-node-resolve');
 const commonjs = require('@rollup/plugin-commonjs');
 const babel = require('@rollup/plugin-babel');
 const path = require('path');
+const { getFlagValue } = require('./NodeHelpers.cjs');
+const mode = getFlagValue('mode') ?? 'production';
 
 const workingDir = process.cwd();
 const { targets, rollupFormats } = require(`${workingDir}/source-files.cjs`);
@@ -27,12 +29,18 @@ const formats = rollupFormats ?? [
  * @param {string} [options.exportExt='js'] - The extension for the output file.
  * @returns {object} The configuration object for the rollup build process.
  */
-function buildConfig({ file, format, exportType = 'default', exportExt = 'js', transpile = false }) {
-    if (!file || !format) {
+function buildConfig({
+    file,
+    fileName,
+    format,
+    exportType = 'default',
+    exportExt = 'js',
+    transpile = false,
+}) {
+    if (!file || !format || !fileName) {
         throw new Error('Missing required parameters: file and format');
     }
 
-    const fileName = file.split('.')[0];
     const fileOutput = `${fileName}.${exportExt}`;
     const plugins = [resolve()];
 
@@ -62,14 +70,26 @@ function buildConfig({ file, format, exportType = 'default', exportExt = 'js', t
     };
 }
 
+/**
+ * Extracts the file name without extension from a path if it ends with '.js'.
+ * @param {string} path - The file path.
+ * @returns {string|null} The file name without extension or null if not a '.js' file.
+ */
+function extractFileName(path) {
+    const match = /([^\/]+)\.js$/.exec(path);
+    return match ? match[1] : path;
+}
+
 function getAllConfigs() {
     const configs = [];
     targets.forEach((target) => {
+        const fileName = extractFileName(target.file);
         // Generate multiple configurations
         for (const format of formats) {
             configs.push(
                 buildConfig({
                     file: target.file,
+                    fileName,
                     format: format.type,
                     exportType: target.exportType,
                     exportExt: format.ext,

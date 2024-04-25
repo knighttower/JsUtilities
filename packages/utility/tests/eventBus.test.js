@@ -1,6 +1,6 @@
 import { test } from 'vitest';
 import assert from 'assert';
-import { eventBus } from '../src/eventBus'; // Replace with your actual path
+import { eventBus } from '../src/event-bus/EventBus'; // Replace with your actual path
 
 test('should register an event and trigger it', () => {
     const _eventBus = eventBus();
@@ -152,7 +152,7 @@ test('greedy wildcard emit', async () => {
     _eventBus.on('my-event.a', () => {
         triggered++;
     });
-    _eventBus.emit('my-event.**');
+    _eventBus.emit('my-event.*');
     _eventBus.emit('my-event.a.name.b');
     _eventBus.emit('my-event.name.b');
     assert(triggered === 1);
@@ -170,7 +170,7 @@ test('nested wildcard and emit', async () => {
     assert(triggered === 1);
 });
 
-test('nested wildcard multi and emit', async () => {
+test('nested wildcard multi -- and emit', async () => {
     const _eventBus = eventBus();
     let triggered = 0;
     _eventBus.on('my-event.a.name-hello', () => {
@@ -197,7 +197,7 @@ test('nested wildcard and emit double wild', async () => {
 test('nested wildcard and emit with "on"', async () => {
     const _eventBus = eventBus();
     let triggered = 0;
-    _eventBus.on('my-event.x.**', () => {
+    _eventBus.on('my-event.x.*', () => {
         triggered++;
     });
     _eventBus.emit('my-event.x.name');
@@ -253,5 +253,6 @@ test('passing data object', async () => {
 test('global', async () => {
     const _eventBus = eventBus();
     _eventBus.global();
-    console.log(global);
+    console.log(global.eventBus);
+    assert(typeof global.eventBus === 'object');
 });

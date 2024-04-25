@@ -4,7 +4,7 @@ It holds the following packages:
 - [**TypeCheck JS**](https://github.com/knighttower/JsUtility/tree/development/packages/type-check): A simple type checker for JavaScript.
 - [**JS Utility**](https://github.com/knighttower/JsUtility/tree/development/packages/utility): Collection of libraries with classes and functions for JavaScript
 - [**Node Utils**](https://github.com/knighttower/JsUtility/tree/development/packages/utility/nodeUtils): Collection of libraries with classes and functions for node.js
-- [**js-event-bus**](https://github.com/knighttower/JsUtility/tree/development/packages/event-bus): Simple Event Bus library built for any JavaScript application.
+- [**js-event-bus**](https://github.com/knighttower/JsUtility/tree/development/packages/utility/src/event-bus): Simple Event Bus library built for any JavaScript application.
 - [**BootsTrap Mini**](https://github.com/knighttower/JsUtility/tree/development/packages/bootstrap-mini): Built on top of Bootstrap but modified to have only the basic utilities classes and the grid system.
 - [**Adaptive Js**](https://github.com/knighttower/JsUtility/tree/development/packages/adaptive): daptive.js: Enhancing Layout Adaptability Beyond CSS, Navigating the Complexities of Modern Web Development
 - [**Vue Utils**](https://github.com/knighttower/JsUtility/tree/development/packages/vue-utils): Vue utilities for Vue.js applications. 

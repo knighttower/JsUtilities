@@ -1,6 +1,6 @@
 {
   "name": "knighttower",
-  "version": "6.4.3",
+  "version": "7.0.1",
   "type": "commonjs",
   "engines": {
     "node": ">=20.10.0"
@@ -10,6 +10,7 @@
   ],
   "scripts": {
     "build": "node ./build.cjs",
+    "build:pkg": "node ./build.cjs --pkg",
     "build:local": "node ./build.cjs --local",
     "do:update": "ncu --interactive && npm i",
     "dev": "node ./dev.cjs",
@@ -22,7 +23,6 @@
   "files": [
     "./packages/utility/*",
     "./packages/type-check/*",
-    "./packages/event-bus/*",
     "./packages/bootstrap-mini/*",
     "./packages/adaptive/*",
     "./packages/vue-utils/*"
@@ -86,18 +86,11 @@
     "./type-check/src/*": "./packages/type-check/src/*",
     "./packages/type-check/dist/*": "./packages/type-check/dist/*",
     "./packages/type-check/src/*": "./packages/type-check/src/*",
-    "./event-bus": {
-      "import": "./packages/event-bus/dist/esm/eventBus.js",
-      "require": "./packages/event-bus/dist/cjs/eventBus.cjs"
+    "./event-bus": "./packages/utility/event-bus",
+    "./utility/event-bus": {
+      "import": "./packages/utility/dist/esm/EventBus.js",
+      "require": "./packages/utility/dist/cjs/EventBus.cjs"
     },
-    "./packages/event-bus": {
-      "import": "./packages/event-bus/dist/esm/eventBus.js",
-      "require": "./packages/event-bus/dist/cjs/eventBus.cjs"
-    },
-    "./event-bus/dist/*": "./packages/event-bus/dist/*",
-    "./packages/event-bus/dist/*": "./packages/event-bus/dist/*",
-    "./event-bus/src/*": "./packages/event-bus/src/*",
-    "./packages/event-bus/src/*": "./packages/event-bus/src/*",
     "./bootstrap-mini": {
       "import": "./packages/bootstrap-mini/index.js",
       "require": "./packages/bootstrap-mini/dist/bootstrap-mini.css"
@@ -173,6 +166,7 @@
     "sass": "^1.75.0",
     "sass-loader": "^14.2.1",
     "terser": "^5.30.4",
+    "terser-webpack-plugin": "^5.3.10",
     "vitest": "^1.5.1",
     "vue": "^3.4.25",
     "vue-loader": "^17.4.2",

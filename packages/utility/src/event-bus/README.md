@@ -1,6 +1,9 @@
+
+
 # EVENT BUS
 
 ### Simple Event Bus library built for any JavaScript application.
+
 
 **Refactoring and Updates:**
 
@@ -26,9 +29,9 @@
     -   eventBus.emit('event.name', arg1, arg2, {\_\_context: YourInstance}, ...otherArgs) //order is not important
 
 -   Fixes to the wild card event match. It now accepts correct wild card in the "on" or "emit" method:
-    -   eventBus.emit('event.name.\*\*') // matches on('event.name.hello') or on('event.name.hello.world')
+    -   eventBus.emit('event.name.\*') // matches on('event.name.hello') or on('event.name.hello.world')
     -   eventBus.emit('event.\*.string') // matches on('event.name.string') but not on('event.name.hello.world')
-    -   eventBus.on('event.\*.string.\*\*') // matches emit('event.name.string.emitter') or emit('event.name.string.hello.world')
+    -   eventBus.on('event.\*.string.\*') // matches emit('event.name.string.emitter') or emit('event.name.string.hello.world')
 
 (this is an updated and improved fork of [js-event-bus](https://github.com/bcerati/js-event-bus/tree/main) by [bcerati])
 
@@ -37,14 +40,9 @@
 ### Using npm
 
 ```
-npm i @knighttower/event-bus
+npm i @knighttower/utility
 ```
 
-### Using yarn
-
-```
-yarn add @knighttower/event-bus
-```
 
 ## Usage
 
@@ -55,7 +53,9 @@ This library was built so you can use it in any JS application like Node.js apps
 If you want to use it in your Node.js apps you can import the library like this:
 
 ```js
-import { eventBus } from '@knighttower/event-bus';
+import { EventBus } from '@knighttower/utility/EventBus'; // gets the class
+
+import { eventBus } from '@knighttower/utility/EventBus'; // gets the instance
 //Tip: in node JS you can use the global instance=> eventBus().global();
 ```
 
@@ -64,10 +64,10 @@ import { eventBus } from '@knighttower/event-bus';
 If you want to use it in your Browser apps you can import the library (browser or iife) like this:
 
 ```html
-    <script src=" https://cdn.jsdelivr.net/npm/@knighttower/event-bus@latest/dist/browser/eventBus.min.js "></script>
+    <script src=" https://cdn.jsdelivr.net/npm/@knighttower/utility/dist/browser/EventBus.min.js "></script>
     <script>
         // global instance
-        eventBus.default().global();
+        EventBus.default().global();
         // then you can use it
         window.eventBus.on('my-event', function () {
             console.log('Inside `my-event`');

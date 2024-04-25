@@ -13,16 +13,6 @@ const eslint = `${workingDir}/.eslintrc.js`;
 
 const once = getFlagValue('once') ? '' : '--watch';
 
-// Event Bus
-const eventBus = () => {
-    runCommand(
-        `\
-    cd ./packages/event-bus \
-    && npx webpack --config "${webpackConfig}" --mode=development ${once} --stats=minimal
-    `
-    );
-};
-
 // Utility
 const utility = () => {
     runCommand(
@@ -64,7 +54,6 @@ const adaptive = () => {
 
 const workspaces = {
     'bootstrap-mini': bootstrapMini,
-    'event-bus': eventBus,
     'type-check': typeCheck,
     utility,
     adaptive,

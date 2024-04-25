@@ -7,9 +7,9 @@ import { elementHelper, selectElement } from './dist/esm/ElementHelper.js';
 // Default Module from: ElementHelper
 import ElementHelper from './dist/esm/ElementHelper.js';
 // Single Modules and Aliases from: EventBus
-import { _eventBus } from './dist/esm/EventBus.js';
+import { EventBus, _eventBus } from './dist/esm/EventBus.js';
 // Default Module from: EventBus
-import EventBus from './dist/esm/EventBus.js';
+import eventBus from './dist/esm/EventBus.js';
 // Single Modules and Aliases from: PowerHelpers
 import {
     PowerHelper,
@@ -92,8 +92,9 @@ export {
     elementHelper,
     selectElement,
     ElementHelper,
-    _eventBus,
     EventBus,
+    _eventBus,
+    eventBus,
     PowerHelper,
     addQuotes,
     cleanStr,
