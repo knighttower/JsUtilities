@@ -1,6 +1,6 @@
 {
   "name": "@knighttower/utility",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "type": "module",
   "main": "index.cjs",
   "module": "index.js",
@@ -45,6 +45,10 @@
       "require": "./dist/cjs/PromiseQueue.cjs"
     },
     "./eventBus": {
+      "import": "./dist/esm/EventBus.js",
+      "require": "./dist/cjs/EventBus.cjs"
+    },
+    "./event-bus": {
       "import": "./dist/esm/EventBus.js",
       "require": "./dist/cjs/EventBus.cjs"
     }

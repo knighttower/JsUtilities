@@ -1,6 +1,6 @@
 {
   "name": "knighttower",
-  "version": "7.0.1",
+  "version": "7.0.2",
   "type": "commonjs",
   "engines": {
     "node": ">=20.10.0"
@@ -86,7 +86,11 @@
     "./type-check/src/*": "./packages/type-check/src/*",
     "./packages/type-check/dist/*": "./packages/type-check/dist/*",
     "./packages/type-check/src/*": "./packages/type-check/src/*",
-    "./event-bus": "./packages/utility/event-bus",
+    "./utils/*": "./packages/utility/*",
+    "./event-bus": {
+      "import": "./packages/utility/dist/esm/EventBus.js",
+      "require": "./packages/utility/dist/cjs/EventBus.cjs"
+    },
     "./utility/event-bus": {
       "import": "./packages/utility/dist/esm/EventBus.js",
       "require": "./packages/utility/dist/cjs/EventBus.cjs"
