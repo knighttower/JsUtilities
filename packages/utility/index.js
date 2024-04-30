@@ -42,12 +42,8 @@ import {
     promisePool,
     promiseQueue,
 } from './dist/esm/PromiseQueue.js';
-// Single Modules and Aliases from: ProxyClass
-import { ProxyClass } from './dist/esm/ProxyClass.js';
-// Default Module from: ProxyClass
-import proxyClass from './dist/esm/ProxyClass.js';
 // Single Modules and Aliases from: ProxyObject
-import { ProxyObject } from './dist/esm/ProxyObject.js';
+import { ProxyClass, ProxyObject, proxyClass } from './dist/esm/ProxyObject.js';
 // Default Module from: ProxyObject
 import proxyObject from './dist/esm/ProxyObject.js';
 // Single Modules and Aliases from: UrlHelper
@@ -121,8 +117,8 @@ export {
     promisePool,
     promiseQueue,
     ProxyClass,
-    proxyClass,
     ProxyObject,
+    proxyClass,
     proxyObject,
     urlHelper,
     UrlHelper,

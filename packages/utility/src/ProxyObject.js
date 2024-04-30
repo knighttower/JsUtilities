@@ -16,8 +16,8 @@ function proxyObject(object) {
     'use strict';
 
     // Initialize property access control sets
-    const _private = new Set(object._private || ['_private']);
-    const _protected = new Set([..._private, ...(object._protected || [])]);
+    const _private = new Set(['_private', ...(object._private || [])]);
+    const _protected = new Set(['_protected', ..._private, ...(object._protected || [])]);
     const _mutable = new Set(object._mutable || []);
 
     const canMutate = (prop) => {
@@ -77,4 +77,54 @@ function proxyObject(object) {
     });
 }
 
-export { proxyObject, proxyObject as default, proxyObject as ProxyObject };
+/**
+ * Enhances a class with proxy functionality to enforce access and mutation rules for its properties.
+ * This approach utilizes a higher-order function to wrap the class with a Proxy.
+ */
+
+/**
+ * Wraps a class with a Proxy to enforce private, protected, and mutable properties.
+ * @param {Function} BaseClass - The class to be wrapped.
+ * @returns {Proxy} A proxy-wrapped class enforcing the specified access controls.
+ * @usage
+ * // Example class to use with proxyClass
+    class MyClass {
+        constructor() {
+            this.publicProp = 'This can be accessed and modified.';
+            this.protectedProp = 'This cannot be modified.';
+            this.privateProp = 'This cannot be accessed or modified.';
+            this.mutableProp = 'This can be modified.';
+            this._protected = ['protectedProp'];
+            this._private = ['privateProp'];
+            this._mutable = ['mutableProp'];
+        }
+    }
+
+    // Enhanced class with proxyClass
+    const ProxyEnhancedMyClass = proxyClass(MyClass);
+
+    // Example usage
+    const instance = new ProxyEnhancedMyClass();
+    console.log(instance.publicProp); // Accessible
+    instance.publicProp = 'New value'; // Modifiable
+    console.log(instance.privateProp); // Attempt to access private property: privateProp
+    instance.mutableProp = 'Changed'; // Modifiable, even if protected
+    console.log(instance.mutableProp);
+    delete instance.privateProp;
+ */
+function proxyClass(BaseClass) {
+    return new Proxy(BaseClass, {
+        construct(target, args) {
+            const instance = new target(...args);
+            return proxyObject(instance);
+        },
+    });
+}
+
+export {
+    proxyObject,
+    proxyObject as default,
+    proxyObject as ProxyObject,
+    proxyClass,
+    proxyClass as ProxyClass,
+};

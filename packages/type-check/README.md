@@ -99,7 +99,7 @@ import { typeCheck } from '@knighttower/type-check';
 
 the API for the direct typeCheck function has changed to favor familiarity with Typed Methods where "Value:Type" order is used. That means that the old "typeCheck(Type, Value)" is now deprecated and from now on will be "typeCheck(Value, Type)".
 
-## Basic:
+## ⚡ quick start:
 
 ### typeCheck(valueToTest, testExpression);
 
@@ -115,54 +115,31 @@ the API for the direct typeCheck function has changed to favor familiarity with 
  */
 typeCheck(valueToTest, testExpression);
 ```
+<br/>
 
+## 👉 see possible patterns [here](#patterns)
+It can take a string representation of the type to test against or an actual object to test against.
+
+<br/>
+
+## ℹ Good to know:
+- conditional props in objects like "key?: type" or "key: type?" are optional and will not be tested if not present.
+- the "any" key in objects like "{any: type}" will test all keys that are not explicitly defined.
+- the "..." key in objects like "{key1: type, ...}" will test the key and ignore all other keys.
+- the "any" key in arrays like "[{any: type}]" will test all keys that are not explicitly defined.
 see possible patterns [here](#patterns)
+
 
 <br/><br/>
 
 # ⚡ Utility functions and advance usage:
 
-Note: notice the "\_" (underscore). This gives you more control for different cases.
-
-### \_typeCheck(valueToTest, testExpression, options);
-
-```javascript
-/**
- * @param {any} valueToTest
- * @param {string} testExpression (see below for patterns)
- * @param {function} callback optional
- * @return {object} TypeCheck Object with chainable methods
- * @see testUnit for more examples and test cases
- */
-_typeCheck(valueToTest, testExpression, options);
-
-// Methods:
-_typeCheck(..).test(); // returns true or false, helpful for if statements or other logic
-_typeCheck(..).bool; // same as 'test()', returns true or false, but more direct in the intent
-_typeCheck(..).log(); // logs the results, helpful for debugging
-_typeCheck(..).fail(); // throws exception if the test fails. Strict validation enforcement
-_typeCheck(..).return(); // returns the valueToTest (non chainable with 'test' method)
-
-//Chain methods
-_typeCheck(..).log().test(); // logs the results and returns true or false
-_typeCheck(..).fail().test(); // throws exception if the test fails and returns true or false
-_typeCheck(..).log().fail().return(); // returns the valueToTest and logs the results and throws exception if the test fails
-
-
-// Options
-{
-    log: true, // default false. Same as method log()
-    fail: true, // default false. Same as method fail()
-    callback: function, // default null. Only available in 'options'
-    error: string, // custom error message
-}
-```
-
-<br/><br/><br/>
+<br/>
 
 ### validType(valueToTest, testExpression, options);
 
 Alias function for \_typeCheck(valueToTest, testExpression, options);
+It does not do strict validation, but returns a boolean instead of throwing an exception.
 
 ```javascript
 function yourExistingFunction(valueToTest) {
@@ -236,6 +213,8 @@ yourCoolFunction(...).fail().return(); // if the test fails, it will throw excep
 
 <br />
 
+
+
 ### -- addTypeTest(name, testUnitFunction);
 
 -   Add custom type test to the library.
@@ -259,15 +238,49 @@ if (typeCheck([1], '[customTypeTest]').test()) {
 
 <br /><br />
 
+### \_typeCheck(valueToTest, testExpression, options);
+Note: notice the "\_" (underscore). This gives you more control for different cases.
+
+```javascript
+/**
+ * @param {any} valueToTest
+ * @param {string} testExpression (see below for patterns)
+ * @param {function} callback optional
+ * @return {object} TypeCheck Object with chainable methods
+ * @see testUnit for more examples and test cases
+ */
+_typeCheck(valueToTest, testExpression, options);
+
+// Methods:
+_typeCheck(..).test(); // returns true or false, helpful for if statements or other logic
+_typeCheck(..).bool; // same as 'test()', returns true or false, but more direct in the intent
+_typeCheck(..).log(); // logs the results, helpful for debugging
+_typeCheck(..).fail(); // throws exception if the test fails. Strict validation enforcement
+_typeCheck(..).return(); // returns the valueToTest (non chainable with 'test' method)
+
+//Chain methods
+_typeCheck(..).log().test(); // logs the results and returns true or false
+_typeCheck(..).fail().test(); // throws exception if the test fails and returns true or false
+_typeCheck(..).log().fail().return(); // returns the valueToTest and logs the results and throws exception if the test fails
+
+
+// Options
+{
+    log: true, // default false. Same as method log()
+    fail: true, // default false. Same as method fail()
+    callback: function, // default null. Only available in 'options'
+    error: string, // custom error message
+}
+```
+
+<br/><br/><br/>
+
 ## Examples
 
 You can perform type checks like this:
 
 ```javascript
-// Basic
-_typeCheck(1, 'number').test(); // true and returns a boolean
-_typeCheck('1', 'number').fail().test(); // false and throw exception
-_typeCheck('str', 'string').log().test(); // true and logs the test results
+
 // With optional arguments
 typeCheck(null, 'string?'); // true
 typeCheck(undefined, 'string?'); // true
@@ -310,6 +323,10 @@ _typeCheck({ x: 'string', y: 10 }, '{y: number, x: string}').log();
 
 //with fail function to stop execution if the type is not correct
 _typeCheck({ x: 'string', y: 10 }, '{y: number, x: string}').fail();
+// Basic
+_typeCheck(1, 'number').test(); // true and returns a boolean
+_typeCheck('1', 'number').fail().test(); // false and throw exception
+_typeCheck('str', 'string').log().test(); // true and logs the test results
 ```
 
 <br/>

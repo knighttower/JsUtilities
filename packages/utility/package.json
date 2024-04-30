@@ -1,6 +1,6 @@
 {
   "name": "@knighttower/utility",
-  "version": "5.0.2",
+  "version": "6.0.3",
   "type": "module",
   "main": "index.cjs",
   "module": "index.js",
@@ -33,8 +33,8 @@
       "require": "./dist/cjs/ProxyObject.cjs"
     },
     "./proxyClass": {
-      "import": "./dist/esm/ProxyClass.js",
-      "require": "./dist/cjs/ProxyClass.cjs"
+      "import": "./dist/esm/proxyObject.js",
+      "require": "./dist/cjs/proxyObject.cjs"
     },
     "./powerHelpers": {
       "import": "./dist/esm/PowerHelpers.js",
