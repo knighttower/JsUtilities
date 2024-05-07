@@ -379,7 +379,17 @@ var Utility = (function (exports) {
             return false;
         }
 
-        const instanceMapping = [Date, RegExp, Promise, Map, Set, WeakMap, WeakSet, ArrayBuffer, DataView];
+        const instanceMapping = [
+            Date,
+            RegExp,
+            Promise,
+            Map,
+            Set,
+            WeakMap,
+            WeakSet,
+            ArrayBuffer,
+            DataView,
+        ];
         let instTotal = instanceMapping.length;
         while (instTotal--) {
             if (input instanceof instanceMapping[instTotal]) {

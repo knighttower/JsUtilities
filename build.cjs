@@ -133,5 +133,6 @@ doUpdate.then((doUpdate) => {
         if (choice !== 'mono' && !pkgOnly) {
             workspaces['mono']();
         }
+        return;
     });
 });

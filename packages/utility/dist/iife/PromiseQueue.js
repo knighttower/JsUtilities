@@ -242,6 +242,63 @@ var PromiseQueue = (function (exports) {
     }
 
     /**
+     * Check the type of a variable, and get the correct type for it. It also accepts simple comparisons
+     * For more advance type checking see https://github.com/knighttower/JsTypeCheck
+     * @param {any} input - The variable to check
+     * @param {string} test - The types to check against, piped string
+     * @return {string|boolean} - The type of the variable
+     * @example typeOf('hello', 'string') // returns true
+     * @example typeOf('hello', 'number') // returns false
+     * @example typeOf('hello', 'string') // returns true
+     * @example typeOf('hello') // returns 'string'
+     * @example typeOf({}) // returns 'object'
+     */
+    function typeOf(input, test) {
+        // Special case for null since it can be treated as an object
+        if (input === null) {
+            if (test) {
+                return test === null || test === 'null' ? true : false;
+            }
+            return 'null';
+        }
+
+        let inputType;
+
+        switch (typeof input) {
+            case 'number':
+            case 'string':
+            case 'boolean':
+            case 'undefined':
+            case 'bigint':
+            case 'symbol':
+            case 'function':
+                inputType = typeof input;
+                break;
+            case 'object':
+                inputType = Array.isArray(input) ? 'array' : 'object';
+
+                break;
+            default:
+                inputType = 'unknown';
+        }
+
+        if (test) {
+            if (test.includes('|')) {
+                for (let type of test.split('|')) {
+                    if (inputType === type) {
+                        return type;
+                    }
+                }
+                return false;
+            }
+
+            return test === inputType;
+        }
+
+        return inputType;
+    }
+
+    /**
      * @class promisePool
      * @description Class to manage a pool of promises with status tracking.
      * @methods
@@ -273,16 +330,29 @@ var PromiseQueue = (function (exports) {
              * @param {Promise|Array} promise The promise to add to the pool.
              */
             add(promise) {
-                // console.log(promise instanceof Promise !== true, !Array.isArray(promise));
-                const isValid =
-                    promise instanceof Promise !== true ||
-                    !(Array.isArray(promise) && promise.every((item) => item instanceof Promise));
+                const isValidPromise = (() => {
+                    if (promise instanceof Promise) {
+                        return true;
+                    }
+                    if (Array.isArray(promise)) {
+                        return promise.length > 0 && promise.every((item) => item instanceof Promise);
+                    }
+                    return false;
+                })();
 
-                if (!isValid) {
-                    throw new Error(
-                        'promisePool: The first argument must be a promise or an array of promises.'
-                    );
+                if (!isValidPromise) {
+                    if (typeOf(promise, 'function')) {
+                        promise = new Promise(async (resolve) => {
+                            const fx = await promise();
+                            resolve(fx);
+                        });
+                    } else {
+                        console.error('---> Invalid promise added to the pool.');
+                        rejectedPromises.push(promise);
+                        return this.emit('fail', promise.toString());
+                    }
                 }
+
                 const $this = this;
                 const promiseCollection = makeArray(promise);
                 promiseCollection.forEach((promise) => {
@@ -334,15 +404,16 @@ var PromiseQueue = (function (exports) {
 
                 _status = statuses ? 'done' : 'in-progress';
 
-                this.emit('stats', {
+                const stats = {
                     completed: instances.filter((promise) => promise.status === 'completed').length,
                     rejected: rejectedPromises.length,
                     pending: instances.filter((promise) => promise.status === 'in-progress').length,
                     total: instances.length,
-                });
+                };
+                this.emit('stats', stats);
 
                 if (_status === 'done') {
-                    this.emit('completed');
+                    this.emit('completed', stats);
                     this.emit('rejected', rejectedPromises);
                     this.clear();
                 }
@@ -374,84 +445,108 @@ var PromiseQueue = (function (exports) {
      * queue.status(); // 'in-progress'
      * queue.on('completed', () => {});
      */
-    const PromiseQueue = class extends EventBus {
-        constructor() {
-            super();
-            this.queue = [];
-            this.inProgress = false;
-            this._timer = null;
-        }
-
-        /**
-         * Adds a promise to the queue and starts the queue processing if not already started.
-         * @param {Function} promiseFunction A function that returns a promise.
-         */
-        add(promises) {
-            makeArray(promises).forEach((promiseFunction) => {
-                this.queue.push({
-                    promiseFunction,
-                    status: 'pending', // 'pending', 'fulfilled', or 'rejected'
-                });
-            });
-
-            if (!this.inProgress) {
-                this._next();
-            }
-            this._setTimer();
-        }
-
-        /**
-         * Clears the promise queue.
-         */
-        clear() {
-            this.queue = [];
-        }
-
-        _setTimer() {
-            if (this._timer) {
-                clearInterval(this._timer);
-            }
-            this._timer = setInterval(() => {
-                if (this.status() === 'done') {
-                    this.emit('completed');
-                    clearInterval(this._timer);
-                    this._timer = null;
-                }
-            }, 10);
-        }
-
-        /**
-         * Processes the next promise in the queue, if any.
-         * @private
-         */
-        _next() {
-            if (this.queue.length === 0) {
+    const promiseQueue = () => {
+        return new (class extends EventBus {
+            constructor() {
+                super();
+                this.queue = [];
                 this.inProgress = false;
-                return;
+                this._timer = null;
             }
 
-            this.inProgress = true;
-            const { promiseFunction } = this.queue[0];
-            promiseFunction()
-                .then(() => {
-                    this.queue[0].status = 'fulfilled';
-                })
-                .catch(() => {
-                    this.queue[0].status = 'rejected';
-                })
-                .finally(() => {
-                    this.queue.shift(); // Remove the processed promise from the queue
-                    this._next(); // Process the next promise
-                });
-        }
+            /**
+             * Adds a promise to the queue and starts the queue processing if not already started.
+             * @param {Promise} promiseFunction A function that returns a promise.
+             */
+            add(promise) {
+                const isValidPromise = (() => {
+                    if (promise instanceof Promise) {
+                        return true;
+                    }
+                    if (Array.isArray(promise)) {
+                        return promise.length > 0 && promise.every((item) => item instanceof Promise);
+                    }
+                    return false;
+                })();
 
-        /**
-         * Returns the current status of all promises in the queue.
-         * @returns {Array<Object>} An array of objects with the status of each promise.
-         */
-        status() {
-            return this.queue.length === 0 ? 'done' : 'in-progress';
-        }
+                if (!isValidPromise) {
+                    if (typeOf(promise, 'function')) {
+                        promise = new Promise(async (resolve) => {
+                            const fx = await promise();
+                            return resolve(fx);
+                        });
+                    } else {
+                        console.error('---> Invalid promise added to the Queue:', promise.toString());
+                        return this.emit('fail', promise.toString());
+                    }
+                }
+
+                makeArray(promise).forEach((promiseFunction) => {
+                    this.queue.push({
+                        promiseFunction,
+                        status: 'pending', // 'pending', 'fulfilled', or 'rejected'
+                    });
+                });
+
+                if (!this.inProgress) {
+                    this._next();
+                }
+                this._setTimer();
+            }
+
+            /**
+             * Clears the promise queue.
+             */
+            clear() {
+                this.queue = [];
+            }
+
+            _setTimer() {
+                if (this._timer) {
+                    clearInterval(this._timer);
+                }
+                this._timer = setInterval(() => {
+                    if (this.status() === 'done') {
+                        this.emit('completed');
+                        clearInterval(this._timer);
+                        this._timer = null;
+                    }
+                }, 10);
+            }
+
+            /**
+             * Processes the next promise in the queue, if any.
+             * @private
+             */
+            _next() {
+                if (this.queue.length === 0) {
+                    this.inProgress = false;
+                    return;
+                }
+
+                this.inProgress = true;
+                const { promiseFunction } = this.queue[0];
+                promiseFunction
+                    .then(() => {
+                        this.queue[0].status = 'fulfilled';
+                    })
+                    .catch(() => {
+                        this.queue[0].status = 'rejected';
+                    })
+                    .finally(() => {
+                        this.queue.shift(); // Remove the processed promise from the queue
+                        this._next(); // Process the next promise
+                    });
+            }
+
+            /**
+             * Returns the current status of all promises in the queue.
+             * @returns {Array<Object>} An array of objects with the status of each promise.
+             */
+            status() {
+                return this.queue.length === 0 ? 'done' : 'in-progress';
+            }
+        })();
     };
 
     /**
@@ -541,10 +636,10 @@ var PromiseQueue = (function (exports) {
     };
 
     exports.PromisePool = promisePool;
-    exports.PromiseQueue = PromiseQueue;
+    exports.PromiseQueue = promiseQueue;
     exports.doPoll = doPoll;
     exports.promisePool = promisePool;
-    exports.promiseQueue = PromiseQueue;
+    exports.promiseQueue = promiseQueue;
 
     return exports;
 

@@ -70,5 +70,5 @@ const choice = select({
 });
 
 choice.then((choice) => {
-    workspaces[choice]();
+    return workspaces[choice]();
 });

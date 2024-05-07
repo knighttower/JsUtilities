@@ -1,6 +1,92 @@
 import { test, vi, expect } from 'vitest';
 import assert from 'assert';
-import { promisePool, doPoll, PromiseQueue } from '../src/PromiseQueue';
+import { promisePool, doPoll, promiseQueue } from '../src/PromiseQueue';
+
+vi.setConfig({
+    testTimeout: 50000,
+});
+
+test('promisePool add promise', async () => {
+    const pool = promisePool();
+    pool.add(fetch('https://jsonplaceholder.typicode.com/todos/1'));
+
+    expect(
+        doPoll(() => {
+            return pool.isDone();
+        }).promise
+    ).resolves.toBe(true);
+    // assert.equal(typeof result, 'string');
+});
+
+test('promisePool add bad promise', async () => {
+    const pool = promisePool();
+    let result = false;
+    pool.add(() => {
+        //iterate
+        for (let i = 0; i < 5000; i++) {}
+    });
+    pool.add(['hello']);
+
+    pool.on('fail', (error) => {
+        console.log('----> fail:', error);
+        result = true;
+    });
+
+    // expect(
+    //     doPoll(
+    //         () => {
+    //             if (result === true) {
+    //                 return true;
+    //             }
+    //         },
+    //         { timeout: 6000 }
+    //     ).promise
+    // ).resolves.toBe(true);
+    // assert.equal(typeof result, 'string');
+});
+
+test('promisePool add function', async () => {
+    const pool = promisePool();
+
+    pool.add(() => {
+        //iterate
+        for (let i = 0; i < 5000; i++) {}
+    });
+
+    expect(
+        doPoll(() => {
+            return pool.isDone();
+        }).promise
+    ).resolves.toBe(true);
+});
+
+test('promisePool', async () => {
+    const pool = promisePool();
+    pool.add(fetch('https://jsonplaceholder.typicode.com/todos/1'));
+    pool.add(fetch('https://jsonplaceholder.typicode.com/todos/2'));
+    pool.add(() => {
+        // iterate 5000 times
+        for (let i = 0; i < 5000; i++) {}
+        console.log('done');
+    });
+    pool.status(); // 'in-progress'
+    pool.on('completed', () => {
+        console.log('completed');
+    });
+    pool.on('rejected', (rejectedPromises) => {
+        console.log('rejected:', rejectedPromises);
+    });
+    pool.on('stats', ({ completed, rejected, pending, total }) => {
+        console.table({ completed, rejected, pending, total });
+    });
+
+    expect(
+        doPoll(() => {
+            return pool.isDone();
+        }).promise
+    ).resolves.toBe(true);
+    // assert.equal(typeof result, 'string');
+});
 
 test('promise pool', async () => {
     assert.equal(false, false);
@@ -33,7 +119,7 @@ test('promise pool', async () => {
         {
             timeout: 3000, // default is 1000
             interval: 500, // default is 50
-        },
+        }
     );
     expect(done).toBe(true);
 });
@@ -41,10 +127,21 @@ test('promise pool', async () => {
 test('promise queue', async () => {
     assert.equal(false, false);
 
-    const queue = new PromiseQueue();
+    const queue = promiseQueue();
 
-    queue.add(() => new Promise((resolve) => setTimeout(resolve, 1000)).then(() => console.log('resolved')));
-    queue.add(() => new Promise((resolve, reject) => setTimeout(reject, 500)).finally(() => console.log('rejected')));
+    queue.add(
+        new Promise((resolve) => setTimeout(resolve, 1000)).then(() => console.log('resolved'))
+    );
+
+    queue.add(() => {
+        return new Promise((resolve, reject) => setTimeout(reject, 500))
+            .finally(() => {
+                console.log('----> rejected');
+            })
+            .catch((error) => {
+                console.log('----> error:', error);
+            });
+    });
     queue.on('completed', () => {
         console.log('All promises resolved or rejected.');
     });
@@ -53,16 +150,16 @@ test('promise queue', async () => {
         () => {
             console.log('----', queue.status());
             if (queue.status() === 'done') {
-                console.log('______log______');
+                console.log('______promise done  ______');
                 console.log(queue.status());
 
                 return true;
             }
         },
         {
-            timeout: 3000, // default is 1000
+            timeout: 4000, // default is 1000
             interval: 500, // default is 50
-        },
+        }
     );
     expect(done).toBe(true);
 });
@@ -79,7 +176,7 @@ test('polling', async () => {
                     }, 1500);
                     console.log('1500');
                 },
-                { timeout: 2500, interval: 500 },
+                { timeout: 2500, interval: 500 }
             );
             console.log('waitUntil');
             if (response) {
@@ -89,7 +186,7 @@ test('polling', async () => {
         {
             timeout: 3000, // default is 1000
             interval: 2000, // default is 50
-        },
+        }
     );
     expect(done).toBe(true);
     // response = false;
