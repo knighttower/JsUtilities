@@ -142,7 +142,7 @@ const promisePool = () => {
  * status: Returns the current status of all promises in the queue.
  * @returns {Object} An instance of the PromiseQueue class.
  * @example
- * const queue = new PromiseQueue();
+ * const queue = promiseQueue();
  * queue.add(fetch('https://jsonplaceholder.typicode.com/todos/1'));
  * queue.add(fetch('https://jsonplaceholder.typicode.com/todos/2'));
  * queue.status(); // 'in-progress'
