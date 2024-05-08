@@ -731,6 +731,22 @@ System.register('PromiseQueue', [], (function (exports) {
                 }
             }
 
+            /**
+             * Wraps a function that might be synchronous or asynchronous into a standardized asynchronous workflow.
+             * @param {Function} fn - A function that may be synchronous or return a Promise.
+             * @returns {Promise<any>} - A Promise resolving with the function's return value or rejecting with any thrown error.
+             */
+            const doAsync = exports("doAsync", (fn) => {
+                return new Promise(async (resolve, reject) => {
+                    try {
+                        const fx = await fn();
+                        resolve(fx);
+                    } catch (error) {
+                        reject(error);
+                    }
+                });
+            });
+
         })
     };
 }));

@@ -31,6 +31,7 @@ const {
 const {
     PromisePool,
     PromiseQueue,
+    doAsync,
     doPoll,
     doTimeout,
     promisePool,
@@ -103,6 +104,7 @@ module.exports = {
     wildCardStringSearch,
     PromisePool,
     PromiseQueue,
+    doAsync,
     doPoll,
     doTimeout,
     promisePool,

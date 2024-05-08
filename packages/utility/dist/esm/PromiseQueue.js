@@ -724,4 +724,20 @@ function doTimeout(idOrDelay, delayOrCallback, callback, ...args) {
     }
 }
 
-export { promisePool as PromisePool, promiseQueue as PromiseQueue, doPoll, doTimeout, promisePool, promiseQueue };
+/**
+ * Wraps a function that might be synchronous or asynchronous into a standardized asynchronous workflow.
+ * @param {Function} fn - A function that may be synchronous or return a Promise.
+ * @returns {Promise<any>} - A Promise resolving with the function's return value or rejecting with any thrown error.
+ */
+const doAsync = (fn) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const fx = await fn();
+            resolve(fx);
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+
+export { promisePool as PromisePool, promiseQueue as PromiseQueue, doAsync, doPoll, doTimeout, promisePool, promiseQueue };

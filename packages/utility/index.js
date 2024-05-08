@@ -38,6 +38,7 @@ import powerHelper from './dist/esm/PowerHelpers.js';
 import {
     PromisePool,
     PromiseQueue,
+    doAsync,
     doPoll,
     doTimeout,
     promisePool,
@@ -114,6 +115,7 @@ export {
     powerHelper,
     PromisePool,
     PromiseQueue,
+    doAsync,
     doPoll,
     doTimeout,
     promisePool,

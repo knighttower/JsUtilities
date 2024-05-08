@@ -726,8 +726,25 @@ define(['exports'], (function (exports) { 'use strict';
         }
     }
 
+    /**
+     * Wraps a function that might be synchronous or asynchronous into a standardized asynchronous workflow.
+     * @param {Function} fn - A function that may be synchronous or return a Promise.
+     * @returns {Promise<any>} - A Promise resolving with the function's return value or rejecting with any thrown error.
+     */
+    const doAsync = (fn) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const fx = await fn();
+                resolve(fx);
+            } catch (error) {
+                reject(error);
+            }
+        });
+    };
+
     exports.PromisePool = promisePool;
     exports.PromiseQueue = promiseQueue;
+    exports.doAsync = doAsync;
     exports.doPoll = doPoll;
     exports.doTimeout = doTimeout;
     exports.promisePool = promisePool;
