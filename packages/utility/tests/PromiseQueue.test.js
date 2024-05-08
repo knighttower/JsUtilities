@@ -1,9 +1,35 @@
 import { test, vi, expect } from 'vitest';
 import assert from 'assert';
-import { promisePool, doPoll, promiseQueue } from '../src/PromiseQueue';
+import { promisePool, doPoll, promiseQueue, doTimeout } from '../src/PromiseQueue';
 
 vi.setConfig({
     testTimeout: 50000,
+});
+
+test('doTimeout', async () => {
+    let done = false;
+    // Example usage with an ID
+    doTimeout('exampleTimeout', 1000, () => {
+        console.log('Timeout executed with ID');
+        return false; // Return true to repeat
+    });
+
+    // Example usage without an ID
+    doTimeout(1000, () => {
+        console.log('Timeout executed without ID');
+        done = true;
+        return false; // Return true to repeat
+    });
+
+    // Example usage for polling
+    doTimeout(100, function () {
+        if (done) {
+            console.log('Condition met, stopping the polling.');
+            return false; // Stop polling when some condition is true
+        }
+        console.log('Condition not met, continue polling.');
+        return true; // Continue polling by returning true
+    });
 });
 
 test('promisePool add promise', async () => {

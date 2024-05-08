@@ -32,6 +32,7 @@ const {
     PromisePool,
     PromiseQueue,
     doPoll,
+    doTimeout,
     promisePool,
     promiseQueue,
 } = require('./dist/cjs/PromiseQueue.cjs');
@@ -103,6 +104,7 @@ module.exports = {
     PromisePool,
     PromiseQueue,
     doPoll,
+    doTimeout,
     promisePool,
     promiseQueue,
     ProxyClass,

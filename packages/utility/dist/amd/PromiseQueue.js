@@ -634,9 +634,102 @@ define(['exports'], (function (exports) { 'use strict';
         return { promise, stop };
     };
 
+    // =========================================
+    // --> doTimeout
+    // --------------------------
+    const doTimeoutStore = {};
+    /**
+     * Initialize, cancel, or force execution of a callback after a delay using a unique ID.
+     * If delay and callback are specified, a timeout is initialized. The callback will execute,
+     * asynchronously, after the delay. If an id is specified, this timeout will override and
+     * cancel any existing timeout with the same id. Any additional arguments will be passed
+     * into callback when it is executed.
+     * If the callback returns true, the timeout loop will execute again, after the delay,
+     * creating a polling loop until the callback returns a non-true value.
+     *
+     * @param {string|number} idOrDelay - A unique identifier for this timeout or the delay if no ID is given.
+     * @param {number|Function} delayOrCallback - A zero-or-greater delay in milliseconds or the callback function if no ID is given.
+     * @param {Function} [callback] - A function to be executed after delay milliseconds.
+     * @param {...any} args - Additional arguments to pass to the callback.
+     * @returns {boolean | undefined} - If the callback is yet to be executed, true is returned, otherwise undefined.
+     * @usage
+     * // Initialize a timeout with an ID
+     * doTimeout('myTimeout', 1000, () => console.log('Hello, world!'));
+     * // Initialize a timeout without an ID
+     * doTimeout(1000, () => console.log('Hello, world!'));
+     * // Cancel a timeout with an ID
+     * doTimeout('myTimeout');
+     * // Force execution of a timeout with an ID
+     * doTimeout('myTimeout', 0);
+     * // Initialize a polling loop
+     * // Example usage for polling
+        doTimeout(100, function() {
+            if (someCondition()) {
+                console.log('Condition met, stopping the polling.');
+                return false;  // Stop polling when some condition is true
+            }
+            console.log('Condition not met, continue polling.');
+            return true;  // Continue polling by returning true
+        });
+     *  
+     */
+    function doTimeout(idOrDelay, delayOrCallback, callback, ...args) {
+        let id, delay;
+
+        if (typeof idOrDelay === 'string' && typeof delayOrCallback === 'number') {
+            id = idOrDelay;
+            delay = delayOrCallback;
+        } else if (typeof idOrDelay === 'number' && typeof delayOrCallback === 'function') {
+            delay = idOrDelay;
+            callback = delayOrCallback;
+            args = [callback, ...args];
+            id = undefined;
+        }
+
+        // Namespace for timeout IDs to prevent conflicts
+        const namespace = '_doTimeout_';
+        const fullId = id ? namespace + id : null;
+
+        // Clear any existing timeout with this ID
+        if (fullId && fullId in doTimeoutStore) {
+            clearTimeout(doTimeoutStore[fullId]);
+            delete doTimeoutStore[fullId];
+        }
+
+        // Clean up function to remove the timeout ID
+        function cleanup() {
+            if (fullId && fullId in doTimeoutStore) {
+                delete doTimeoutStore[fullId];
+            }
+        }
+
+        // Setup the actual timeout function
+        function setupTimeout() {
+            doTimeoutStore[fullId] = setTimeout(() => {
+                if (callback(...args) === true) {
+                    setupTimeout();
+                } else {
+                    cleanup();
+                }
+            }, delay);
+        }
+
+        // If callback is a function and delay is defined, set up the timeout
+        if (typeof callback === 'function' && typeof delay === 'number') {
+            setupTimeout();
+            return true;
+        }
+
+        // Cancel the timeout without executing the callback
+        if (id && delay === undefined) {
+            cleanup();
+        }
+    }
+
     exports.PromisePool = promisePool;
     exports.PromiseQueue = promiseQueue;
     exports.doPoll = doPoll;
+    exports.doTimeout = doTimeout;
     exports.promisePool = promisePool;
     exports.promiseQueue = promiseQueue;
 

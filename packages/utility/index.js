@@ -39,6 +39,7 @@ import {
     PromisePool,
     PromiseQueue,
     doPoll,
+    doTimeout,
     promisePool,
     promiseQueue,
 } from './dist/esm/PromiseQueue.js';
@@ -114,6 +115,7 @@ export {
     PromisePool,
     PromiseQueue,
     doPoll,
+    doTimeout,
     promisePool,
     promiseQueue,
     ProxyClass,
