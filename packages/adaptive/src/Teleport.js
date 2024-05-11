@@ -1,7 +1,12 @@
 // author Knighttower
 //  MIT License
 //  Copyright (c) [2022] [Knighttower] https://github.com/knighttower
-import { selectElement, DomObserver, getDirectivesFromString as GetSettings, typeOf } from '@knighttower/utility';
+import {
+    selectElement,
+    domObserver,
+    getDirectivesFromString as GetSettings,
+    typeOf,
+} from '@knighttower/utility';
 import { validType } from '@knighttower/type-check';
 
 /**
@@ -28,6 +33,7 @@ class Teleport {
      * @return {Object}
      */
     constructor(props) {
+        domObserver.start();
         // Early exit if no props are provided
         if (!validType(props, 'string|object')) {
             return;
@@ -108,11 +114,11 @@ class Teleport {
         }
 
         // Add observer if the target is not in the DOM
-        DomObserver.addOnNodeChange(this.props.adaptiveId, () => {
+        domObserver.addOnNodeChange(this.props.adaptiveId, () => {
             const observedTarget = selectElement(selector);
             if (observedTarget.isInDom()) {
                 observedTarget.domElement.insertAdjacentElement(position, this.props.domElement);
-                DomObserver.removeOnNodeChange(this.props.adaptiveId);
+                domObserver.removeOnNodeChange(this.props.adaptiveId);
             }
         });
     }
@@ -136,7 +142,7 @@ class Teleport {
      * @example domElement.cancel()
      */
     cancel() {
-        DomObserver.removeOnNodeChange(this.props.adaptiveId);
+        domObserver.removeOnNodeChange(this.props.adaptiveId);
     }
 }
 

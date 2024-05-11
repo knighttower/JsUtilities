@@ -2,8 +2,8 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 const { execSync } = require('child_process');
-const { removeQuotes } = require('../dist/cjs/PowerHelpers.cjs');
-const { isEmpty } = require('../dist/cjs/Utility.cjs');
+const { removeQuotes } = require('../dist/cjs/powerHelper.cjs');
+const { isEmpty } = require('../dist/cjs/utility.cjs');
 const fs = require('fs');
 const path = require('path');
 

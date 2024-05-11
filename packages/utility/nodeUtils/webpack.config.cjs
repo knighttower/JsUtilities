@@ -35,7 +35,7 @@ const getWebpackConfig = (config) => ({
     },
     output: {
         path: path.resolve(__dirname, `${workingDir}/dist/${config.dir}`),
-        filename: `${config.fileName}.${config.ext}`,
+        filename: `${config.exportName}.${config.ext}`,
         // library: config.exportName,
         // libraryTarget: config.libraryTarget,
         umdNamedDefine: true,
@@ -46,11 +46,10 @@ const getWebpackConfig = (config) => ({
             type: config.libraryTarget,
             export: config.windowExport,
             umdNamedDefine: true,
-            export: config.windowExport,
         },
     },
     optimization: {
-        minimize: true,
+        minimize: mode === 'production' ? true : false,
         minimizer: [
             new TerserPlugin({
                 parallel: true,
@@ -58,11 +57,11 @@ const getWebpackConfig = (config) => ({
                 terserOptions: {
                     // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
                     ecma: 6,
-                    keep_classnames: true, // Preserve class names
+                    // keep_classnames: true, // Preserve class names
                     // keep_fnames: true, // Preserve function names
                     safari10: true, // Workaround for Safari 10/11 loop scoping and await bugs
 
-                    toplevel: false,
+                    toplevel: true,
                     output: {
                         ascii_only: true, // Escape Unicode characters
                         braces: true, // Always insert braces in if, for, do, while or with statements
@@ -78,25 +77,32 @@ const getWebpackConfig = (config) => ({
                         shebang: true, // Preserve shebang
                     },
 
-                    mangle: true, // Disable variable renaming
+                    mangle: true,
                 },
 
                 extractComments: false, // Do not extract comments to separate file
             }),
         ],
     },
-    stats: 'errors-only',
+    stats: mode === 'production' ? 'normal' : 'minimal',
     module: {
         rules: [
             {
                 test: /\.js$/,
-                exclude: /node_modules/,
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['@babel/preset-env'],
+                        presets: [
+                            [
+                                '@babel/preset-env',
+                                {
+                                    modules: false,
+                                },
+                            ],
+                        ],
                     },
                 },
+                exclude: /node_modules/,
             },
         ],
     },

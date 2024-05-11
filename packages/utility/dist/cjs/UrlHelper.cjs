@@ -7,8 +7,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
  *
  * @module urlHelper
  */
-const UrlHelper = (() => {
-
+const urlHelper = () => {
     /**
      * The window object from the global scope.
      * @type {Window}
@@ -95,7 +94,7 @@ const UrlHelper = (() => {
      * Public methods and properties for URL manipulation and information.
      * @namespace
      */
-    const urlHelper = {
+    return {
         /**
          * Retrieves the current page name (last part of the URL).
          * @return {string} The current page name or 'index' if none is found.
@@ -194,15 +193,7 @@ const UrlHelper = (() => {
         path: PATH,
         readUrl: HREF,
     };
+};
 
-    if (typeof window !== 'undefined' && typeof module !== 'object') {
-        return (window.UrlHelper = urlHelper);
-    } else if (typeof module === 'object') {
-        return () => urlHelper;
-    }
-    return urlHelper;
-})();
-
-exports.UrlHelper = UrlHelper;
-exports.default = UrlHelper;
-exports.urlHelper = UrlHelper;
+exports.default = urlHelper;
+exports.urlHelper = urlHelper;

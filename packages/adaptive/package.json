@@ -1,6 +1,6 @@
 {
   "name": "@knighttower/adaptive",
-  "version": "3.0.11",
+  "version": "3.1.1",
   "type": "module",
   "main": "index.cjs",
   "module": "index.js",
@@ -34,7 +34,7 @@
     "teleport",
     "DOM observer",
     "DOM selector",
-    "Utility",
+    "utility",
     "Element Helper",
     "Get Settings",
     "Vue",
@@ -63,8 +63,8 @@
     "test": "npm run format && npm run eslint && vitest"
   },
   "dependencies": {
-    "@knighttower/utility": "^4.2.15",
-    "@knighttower/type-check": "^4.1.20"
+    "@knighttower/utility": "*",
+    "@knighttower/type-check": "*"
   },
   "bugs": {
     "url": "https://github.com/knighttower/JsUtility/issues"

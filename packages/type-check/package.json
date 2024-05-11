@@ -1,13 +1,13 @@
 {
   "name": "@knighttower/type-check",
-  "version": "4.1.25",
+  "version": "5.0.4",
   "type": "module",
-  "description": "TypeCheck JS",
+  "description": "typeCheck JS",
   "main": "index.cjs",
   "module": "index.js",
-  "unpkg": "dist/browser/TypeCheck.js",
-  "jsdelivr": "dist/browser/TypeCheck.js",
-  "browser": "dist/browser/TypeCheck.js",
+  "unpkg": "dist/browser/typeCheck.js",
+  "jsdelivr": "dist/browser/typeCheck.js",
+  "browser": "dist/browser/typeCheck.js",
   "license": "MIT",
   "files": [
     "dist",
@@ -25,7 +25,7 @@
     "access": "public"
   },
   "keywords": [
-    "Utility",
+    "utility",
     "Vue",
     "react",
     "library",

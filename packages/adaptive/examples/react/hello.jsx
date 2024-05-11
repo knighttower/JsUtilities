@@ -37,8 +37,12 @@ class Button extends React.Component {
     }
     render() {
         return (
-            <button type="button" onClick={this.increment}>
-                clicker React count {this.state.count}, click me when it Tablet size and watch the console output!
+            <button
+                type="button"
+                onClick={this.increment}
+            >
+                clicker React count {this.state.count}, click me when it Tablet size and watch the
+                console output!
             </button>
         );
     }
@@ -57,14 +61,20 @@ function Hello(props) {
                 This is inside the react component
             </div>
             <Counter />
-            {/* One time Teleport */}
-            <teleport-to target="#hello" position="after">
+
+            <teleport-to
+                target="#hello"
+                position="after"
+            >
                 <div style={{ padding: '8px', background: 'violet' }}>
                     Teleporting an element from inside <b>react</b> component
                 </div>
             </teleport-to>
-            {/* conditional teleport with adaptive */}
-            <div data-adaptive="teleport.desktop|mobile.before(#hello)" style={{ background: 'beige' }}>
+
+            <div
+                data-adaptive="teleport.desktop|mobile.before(#hello)"
+                style={{ background: 'beige' }}
+            >
                 Teleporting on desktop or mobile
             </div>
         </div>

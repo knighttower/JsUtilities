@@ -1,11 +1,11 @@
 {
   "name": "@knighttower/utility",
-  "version": "6.0.7",
+  "version": "7.0.9",
   "type": "module",
   "main": "index.cjs",
   "module": "index.js",
-  "jsdelivr": "dist/browser/Utility.js",
-  "browser": "dist/browser/Utility.js",
+  "jsdelivr": "dist/browser/utility.js",
+  "browser": "dist/browser/utility.js",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
@@ -29,22 +29,22 @@
     "./nodeUtils/*": "./nodeUtils/*",
     "./nodeUtils": "./nodeUtils/index.cjs",
     "./proxyObject": {
-      "import": "./dist/esm/ProxyObject.js",
-      "require": "./dist/cjs/ProxyObject.cjs"
+      "import": "./dist/esm/proxyObject.js",
+      "require": "./dist/cjs/proxyObject.cjs"
     },
     "./proxyClass": {
       "import": "./dist/esm/proxyObject.js",
       "require": "./dist/cjs/proxyObject.cjs"
     },
     "./powerHelpers": {
-      "import": "./dist/esm/PowerHelpers.js",
-      "require": "./dist/cjs/PowerHelpers.cjs"
+      "import": "./dist/esm/powerHelper.js",
+      "require": "./dist/cjs/powerHelper.cjs"
     },
     "./promiseQueue": {
-      "import": "./dist/esm/PromiseQueue.js",
-      "require": "./dist/cjs/PromiseQueue.cjs"
+      "import": "./dist/esm/promiseQueue.js",
+      "require": "./dist/cjs/promiseQueue.cjs"
     },
-    "./eventBus": {
+    "./EventBus": {
       "import": "./dist/esm/EventBus.js",
       "require": "./dist/cjs/EventBus.cjs"
     },
@@ -58,7 +58,7 @@
     "bumpVersion": "./nodeUtils/BumpVersion.js"
   },
   "keywords": [
-    "Utility",
+    "utility",
     "Vue",
     "react",
     "library",

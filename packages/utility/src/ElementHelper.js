@@ -2,7 +2,7 @@
 // MIT License
 // Copyright (c) [2022] [Knighttower] https://github.com/knighttower
 
-import DomObserver from './DomObserver.js';
+import domObserver from './domObserver.js';
 
 /**
  * @class Adds some extra functionality to interact with a DOM element
@@ -20,6 +20,7 @@ class ElementHelper {
      * @return {Object}
      */
     constructor(selector, scope = document) {
+        domObserver.start();
         this.selector = selector;
         if (typeof selector === 'object') {
             this.domElement = selector;
@@ -53,12 +54,12 @@ class ElementHelper {
 
         return new Promise(function (resolveThis) {
             if (!$this.isInDom()) {
-                DomObserver.addOnNodeChange(callbackId, () => {
+                domObserver.addOnNodeChange(callbackId, () => {
                     let element = new ElementHelper($this.selector);
                     if (element.isInDom()) {
                         $this = element;
                         resolveThis($this);
-                        DomObserver.removeOnNodeChange(callbackId);
+                        domObserver.removeOnNodeChange(callbackId);
                     }
                 });
             } else {
@@ -74,7 +75,8 @@ class ElementHelper {
      * @return {Object} DOM element
      */
     getElementByXpath(xpath) {
-        return document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+        return document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
+            .singleNodeValue;
     }
 
     /**
@@ -98,7 +100,12 @@ class ElementHelper {
             let sibling = siblings[i];
             if (sibling === element) {
                 return (
-                    new ElementHelper(element.parentNode).getXpathTo() + '/' + element.tagName + '[' + (ix + 1) + ']'
+                    new ElementHelper(element.parentNode).getXpathTo() +
+                    '/' +
+                    element.tagName +
+                    '[' +
+                    (ix + 1) +
+                    ']'
                 );
             }
             if (sibling.nodeType === 1 && sibling.tagName === element.tagName) {
@@ -143,6 +150,7 @@ class ElementHelper {
 // --> Utilities
 // --------------------------
 const selectElement = (selector, scope = document) => new ElementHelper(selector, scope);
+const elementHelper = (selector, scope = document) => new ElementHelper(selector, scope);
 
 /**
  * Future
@@ -150,4 +158,4 @@ const selectElement = (selector, scope = document) => new ElementHelper(selector
  * @todo enhance to extend the prototype like https://stackoverflow.com/questions/779880/in-javascript-can-you-extend-the-dom
  */
 
-export { ElementHelper as elementHelper, ElementHelper as default, ElementHelper, selectElement };
+export { ElementHelper as default, ElementHelper, selectElement, elementHelper };

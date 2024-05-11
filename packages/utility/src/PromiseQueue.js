@@ -1,5 +1,5 @@
 import { EventBus } from './event-bus/EventBus.js';
-import { getDynamicId, makeArray, typeOf } from './Utility.js';
+import { getDynamicId, makeArray, typeOf } from './utility.js';
 
 /**
  * @class promisePool
@@ -19,7 +19,7 @@ import { getDynamicId, makeArray, typeOf } from './Utility.js';
  * pool.on('rejected', (rejectedPromises) => {});
  * pool.on('stats', ({ completed, rejected, pending, total }) => {});
  */
-const promisePool = () => {
+export const promisePool = () => {
     let _status = 'in-progress'; // 'in progress' or 'done'
     let promises = {};
     let rejectedPromises = [];
@@ -133,14 +133,14 @@ const promisePool = () => {
 };
 
 /**
- * @class PromiseQueue
+ * @class promiseQueue
  * Class to manage a queue of promises, executing them sequentially with status tracking for each promise.
  * @extends EventBus
  * @methods
  * add: Adds a promise to the queue and starts the queue processing if not already started.
  * clear: Clears the promise queue.
  * status: Returns the current status of all promises in the queue.
- * @returns {Object} An instance of the PromiseQueue class.
+ * @returns {Object} An instance of the promiseQueue class.
  * @example
  * const queue = promiseQueue();
  * queue.add(fetch('https://jsonplaceholder.typicode.com/todos/1'));
@@ -148,7 +148,7 @@ const promisePool = () => {
  * queue.status(); // 'in-progress'
  * queue.on('completed', () => {});
  */
-const promiseQueue = () => {
+export const promiseQueue = () => {
     return new (class extends EventBus {
         constructor() {
             super();
@@ -269,7 +269,7 @@ const promiseQueue = () => {
  *   return true; // or return a promise
  * }
  */
-const doPoll = (fn, options = {}) => {
+export const doPoll = (fn, options = {}) => {
     if (typeof fn !== 'function') {
         throw new Error('doPoll: The first argument must be a function.');
     }
@@ -377,7 +377,7 @@ const doTimeoutStore = {};
     });
  *  
  */
-function doTimeout(idOrDelay, delayOrCallback, callback, ...args) {
+export function doTimeout(idOrDelay, delayOrCallback, callback, ...args) {
     let id, delay;
 
     if (typeof idOrDelay === 'string' && typeof delayOrCallback === 'number') {
@@ -435,7 +435,7 @@ function doTimeout(idOrDelay, delayOrCallback, callback, ...args) {
  * @param {Function} fn - A function that may be synchronous or return a Promise.
  * @returns {Promise<any>} - A Promise resolving with the function's return value or rejecting with any thrown error.
  */
-const doAsync = (fn) => {
+export const doAsync = (fn) => {
     return new Promise(async (resolve, reject) => {
         try {
             const fx = await fn();
@@ -444,14 +444,4 @@ const doAsync = (fn) => {
             reject(error);
         }
     });
-};
-
-export {
-    promisePool,
-    promisePool as PromisePool,
-    promiseQueue,
-    promiseQueue as PromiseQueue,
-    doPoll,
-    doTimeout,
-    doAsync,
 };

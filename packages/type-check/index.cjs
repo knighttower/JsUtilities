@@ -1,15 +1,14 @@
-// Single Modules and Aliases from: TypeCheck
+// Single Modules and Aliases from: typeCheck
 const {
     TypeCheck,
     _tc,
     _tcx,
     _typeCheck,
     addTypeTest,
-    testBuilder,
     typeCheck,
     typesMap,
     validType,
-} = require('./dist/cjs/TypeCheck.cjs');
+} = require('./dist/cjs/typeCheck.cjs');
 
 module.exports = {
     TypeCheck,
@@ -17,7 +16,6 @@ module.exports = {
     _tcx,
     _typeCheck,
     addTypeTest,
-    testBuilder,
     typeCheck,
     typesMap,
     validType,

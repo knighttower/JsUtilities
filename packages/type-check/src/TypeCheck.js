@@ -1,5 +1,5 @@
 import { typeOf, isEmpty } from '@knighttower/utility';
-import { typesMap, testBuilder, addTypeTest } from './TestBuilder.js';
+import { typesMap, testBuilder, addTypeTest } from './testBuilder.js';
 
 // Error collectot
 const typeErrorLogs = [];
@@ -32,10 +32,7 @@ const runArrayTest = (inputVal, tests) => {
 class HandleObjects {
     constructor(inputVal, unitTest) {
         // Extract all properties at once
-        const { testOnly, testFew, testAllAny, optionalKeys, tests } = [...unitTest.entries()].reduce(
-            (acc, [key, value]) => ({ ...acc, [key]: value }),
-            {}
-        );
+        const { testOnly, testFew, testAllAny, optionalKeys, tests } = [...unitTest.entries()].reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
         // Use destructured variables
         this.testUnitKeys = [...tests.keys()];
         this.testOnly = testOnly;
@@ -293,7 +290,8 @@ const _typeCheck = (inputVal, typeExp, params) => {
         fail() {
             if (!this.testResult) {
                 this.log();
-                this.settings?.error && console.log('\n\n-----> Error Message: ', this.settings.error);
+                this.settings?.error &&
+                    console.log('\n\n-----> Error Message: ', this.settings.error);
                 return typeError(inputVal);
             }
             return this;
@@ -404,7 +402,7 @@ const validType = (inputVal, typeExp) => {
 };
 
 /**
-* TypeCheck
+* typeCheck
 * @param {any} inputVal
 * @param {string} typeExp
 * @example typeCheck(1, 'number') // true
@@ -428,6 +426,5 @@ export {
     typeCheck as TypeCheck,
     _typeCheck,
     typesMap,
-    testBuilder,
     addTypeTest,
 };

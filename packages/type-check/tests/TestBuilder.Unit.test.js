@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { test } from 'vitest';
-import testBuilder from '../src/TestBuilder.js';
+import testBuilder from '../src/testBuilder.js';
 import assert from 'assert';
 
 // console.table(testBuilder('{any: number, z: {x: number}, {any: number}}'));
@@ -194,7 +194,9 @@ test('Object Type: {x: number, y: string | number}', () => {
 
 // create test for {x: number, y: string | number, z: null}
 test('Object Type: {x: number, y: string | number, z: null}', () => {
-    const { testMethod, tests } = mapToObject(testBuilder('{x: number, y: string | number, z: null}'));
+    const { testMethod, tests } = mapToObject(
+        testBuilder('{x: number, y: string | number, z: null}')
+    );
     // console.log('__testLogHere__', tests);
     assert(testMethod === 'object');
     assert(tests.has('x'));

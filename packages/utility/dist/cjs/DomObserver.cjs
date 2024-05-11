@@ -20,10 +20,13 @@ Object.defineProperty(exports, '__esModule', { value: true });
  * @private
  */
 const executeOnNodeChanged = {};
+let observer;
 /**
  * When node change
  * @param {String} id
  * @param {Function} callback Callback when any node changes/ add/deleted/modified
+ * @memberof DomObserver
+ * @usage domObserver.addOnNodeChange('elementIdentifier', () => { console.log('Node changed') })
  * @return {Void}
  */
 const addOnNodeChange = (id, callback) => {
@@ -34,6 +37,8 @@ const addOnNodeChange = (id, callback) => {
 /**
  * Remove from node change
  * @param {String} id
+ * @memberof DomObserver
+ * @usage domObserver.removeOnNodeChange('elementIdentifier')
  * @return {Void}
  */
 const removeOnNodeChange = (id) => {
@@ -53,8 +58,8 @@ const cleanup = () => {
  * @private
  * @return {MutationObserver}
  */
-(() => {
-    if (typeof window !== 'undefined') {
+const start = () => {
+    if (typeof window !== 'undefined' && !observer) {
         const callback = (mutationList) => {
             for (const mutation of mutationList) {
                 if (mutation.type === 'childList') {
@@ -68,17 +73,30 @@ const cleanup = () => {
             childList: true,
             subtree: true,
         };
-        const observer = new MutationObserver(callback);
-        observer.observe(document.body, config);
+
+        observer = new MutationObserver(callback);
+        if (document.body) {
+            return observer.observe(document.body, config);
+        }
+        document.addEventListener('DOMContentLoaded', (event) => {
+            return observer.observe(document.body, config);
+        });
     }
-})();
-const DomObserver = {
-    executeOnNodeChanged,
+};
+/**
+ * @exports domObserver
+ * @type {Object}
+ * @usage domObserver.addOnNodeChange('elementIdentifier', () => { console.log('Node changed') })
+ * @usage domObserver.removeOnNodeChange('elementIdentifier')
+ * @usage domObserver.cleanup()
+ */
+const domObserver = {
+    start,
     addOnNodeChange,
     removeOnNodeChange,
     cleanup,
 };
 
-exports.DomObserver = DomObserver;
-exports.default = DomObserver;
-exports.domObserver = DomObserver;
+exports.DomObserver = domObserver;
+exports.default = domObserver;
+exports.domObserver = domObserver;

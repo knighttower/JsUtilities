@@ -121,10 +121,4 @@ function proxyClass(BaseClass) {
     });
 }
 
-export {
-    proxyObject,
-    proxyObject as default,
-    proxyObject as ProxyObject,
-    proxyClass,
-    proxyClass as ProxyClass,
-};
+export { proxyObject, proxyObject as default, proxyClass };

@@ -1,8 +1,8 @@
-# TypeCheck JS
+# typeCheck JS
 
 ## A simple type checker for JavaScript
 
-TypeCheck JS is a JavaScript library designed for fast and efficient type checking. Inspired by [gkz/type-check](https://github.com/gkz/type-check), this library aims to overcome the limitations and complexities associated with TypeScript. It offers a lightweight, memory-efficient, and easy-to-use solution for both basic and complex type-checking requirements.  
+typeCheck JS is a JavaScript library designed for fast and efficient type checking. Inspired by [gkz/type-check](https://github.com/gkz/type-check), this library aims to overcome the limitations and complexities associated with TypeScript. It offers a lightweight, memory-efficient, and easy-to-use solution for both basic and complex type-checking requirements.  
 [![release version](https://github.com/knighttower/typeCheckJs/actions/workflows/pre-release.yml/badge.svg)](https://github.com/knighttower/typeCheckJs/actions/workflows/pre-release.yml)
 [![NPM published](https://github.com/knighttower/typeCheckJs/actions/workflows/to-npm.yml/badge.svg)](https://github.com/knighttower/typeCheckJs/actions/workflows/to-npm.yml)
 
@@ -32,7 +32,7 @@ Include the following script tag in your HTML:
 Note: by default the library is ESM, but other builds are available in the dist folder (cjs, umd and iife)
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@knighttower/type-check@latest/dist/browser/TypeCheck.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@knighttower/type-check@latest/dist/browser/typeCheck.min.js"></script>
 // or as ESM
 <script type="module">
     import { typeCheck } from 'https://esm.run/@knighttower/type-check@latest/index.js';
@@ -45,15 +45,15 @@ Note: by default the library is ESM, but other builds are available in the dist 
 
 | File             | Size  |
 | ---------------- | ----- |
-| /TypeCheck.js    | 8 KiB |
-| /TypeCheck.js.br | 3 KiB |
-| /TypeCheck.js.gz | 3 KiB |
+| /typeCheck.js    | 8 KiB |
+| /typeCheck.js.br | 3 KiB |
+| /typeCheck.js.gz | 3 KiB |
 
 By default the "import" or "require", will load the indexes automatically. But, in case of wanting to use individual files or other specific formats, all Files are available in the dist folder as ESM, CJS, AMD, IIFE, Browser, UMD and System formats. For ESM + JS 'next', use the files in the src folder or import directly from the index.js (index.cjs.js for commonJS) file.
 
 <br/>
 
-## Why TypeCheck JS?
+## Why typeCheck JS?
 
 1. **Lightweight**: Adds minimal overhead to your project (only 6k GZip).
 2. **Fast Performance**: Micro Optimized for quick type-checking operations.
@@ -69,16 +69,16 @@ By default the "import" or "require", will load the indexes automatically. But, 
 
 ## What aims to solve?
 
-TypeCheck JS aims to solve the following problems:
+typeCheck JS aims to solve the following problems:
 
 -   Drop-in solution for existing projects. Most projects are already in production and it is not always possible to add a build step to compile TypeScript.
 -   Overkill. Typescript can be too much for just small projects or quick projects.
 -   All TypeScript type definitions are lost at runtime. Once a library is in production, it is impossible to check the types of the data being passed around.
 -   Does not require Build Step. Most TypeScript solution requires a build step to compile the code into JavaScript. This is not always possible in some projects or it adds complexity to the project.
--   Most library authors know what types should work with their code, but is hard to enforce once it goes to distribution. TypeCheck JS allows library authors to enforce the types when others use their libraries at runtime.
+-   Most library authors know what types should work with their code, but is hard to enforce once it goes to distribution. typeCheck JS allows library authors to enforce the types when others use their libraries at runtime.
 -   Be able to be used directly in browser or with Js that does not support TypeScript.
--   Complexity. TypeScript is a complex language and it is not always easy to understand the type definitions. TypeCheck JS aims to be simple and easy to understand.
--   Syntax. Projects are becaming too complex and heavily using 'defensive programming' to avoid errors. TypeCheck JS aims to be simple and easy to understand by all developers regardless of their experience while helping to focus on what really matters.
+-   Complexity. TypeScript is a complex language and it is not always easy to understand the type definitions. typeCheck JS aims to be simple and easy to understand.
+-   Syntax. Projects are becaming too complex and heavily using 'defensive programming' to avoid errors. typeCheck JS aims to be simple and easy to understand by all developers regardless of their experience while helping to focus on what really matters.
 
 ## What does no solve?
 
@@ -246,7 +246,7 @@ Note: notice the "\_" (underscore). This gives you more control for different ca
  * @param {any} valueToTest
  * @param {string} testExpression (see below for patterns)
  * @param {function} callback optional
- * @return {object} TypeCheck Object with chainable methods
+ * @return {object} typeCheck Object with chainable methods
  * @see testUnit for more examples and test cases
  */
 _typeCheck(valueToTest, testExpression, options);
@@ -375,7 +375,7 @@ Possible type patterns:
 
 <br />
 
-### ---> For more examples and usage patterns, further information and advanced use-cases, please refer to the `patterns` [here](/type-patterns.txt/) and `test` [here](/test/TypeCheck.test.js) files.
+### ---> For more examples and usage patterns, further information and advanced use-cases, please refer to the `patterns` [here](/type-patterns.txt/) and `test` [here](/test/typeCheck.test.js) files.
 
 ---
 

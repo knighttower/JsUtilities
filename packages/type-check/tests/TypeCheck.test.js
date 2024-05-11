@@ -1,6 +1,14 @@
 // @vitest-environment jsdom
 import { test } from 'vitest';
-import { addTypeTest, _typeCheck, typeCheck, _tc, _tcx, validType, typesMap } from '../src/TypeCheck.js';
+import {
+    addTypeTest,
+    _typeCheck,
+    typeCheck,
+    _tc,
+    _tcx,
+    validType,
+    typesMap,
+} from '../src/typeCheck.js';
 import assert from 'assert';
 
 const benchmark = (name, fn, iterations) => {
@@ -63,7 +71,10 @@ if (_typeCheck([1], '[customTypeTest]').test()) {
 }
 console.log('______log______', typesMap);
 
-_typeCheck([1, { x: 'string', y: 10, z: 20 }, 3], '[number, {y: string, x: string}, number]').test();
+_typeCheck(
+    [1, { x: 'string', y: 10, z: 20 }, 3],
+    '[number, {y: string, x: string}, number]'
+).test();
 if (_typeCheck([1], '[string]').test()) {
     console.log(3);
 }
@@ -78,7 +89,9 @@ console.log(_typeCheck([1], '[number]', 'fail'));
 console.log(_typeCheck([1], '[number]', { fail: true }));
 
 console.log(_typeCheck([1], '[number]', { fail: true, log: true }));
-console.log(_typeCheck([1], '[number]', { fail: true, log: true, return: true, callback: () => {} }));
+console.log(
+    _typeCheck([1], '[number]', { fail: true, log: true, return: true, callback: () => {} })
+);
 console.log(
     _typeCheck([1], '[number]', {
         fail: true,
@@ -125,12 +138,21 @@ test('Array Type', () => {
     assert.equal(_typeCheck([1, 'str'], '[number, string]').test(), true);
     assert.equal(_typeCheck([1, 3, null], '[number, number, string]').test(), false);
     assert.equal(
-        _typeCheck([1, { x: 'string', y: 10, z: 20 }, 3], '[number, {any: string, x: string}, number]').test(),
+        _typeCheck(
+            [1, { x: 'string', y: 10, z: 20 }, 3],
+            '[number, {any: string, x: string}, number]'
+        ).test(),
         false
     );
-    assert.equal(_typeCheck([1, { x: 'string', y: 10, z: 20 }, 3], '[number, {any: string}, number]').test(), false);
     assert.equal(
-        _typeCheck([1, { x: 'string', y: 10, z: 20 }, 3], '[number, {any: number, x: string}, number]').test(),
+        _typeCheck([1, { x: 'string', y: 10, z: 20 }, 3], '[number, {any: string}, number]').test(),
+        false
+    );
+    assert.equal(
+        _typeCheck(
+            [1, { x: 'string', y: 10, z: 20 }, 3],
+            '[number, {any: number, x: string}, number]'
+        ).test(),
         true
     );
 });
@@ -138,10 +160,22 @@ test('Array Type', () => {
 // test objects
 // Test for object types
 test('Object Type: {x: string, y: number, z?: number}', () => {
-    assert.equal(_typeCheck({ x: 'string', y: 10 }, '{x: string, y: number, z?: number}').test(), true);
-    assert.equal(_typeCheck({ x: 'string', y: 10, z: 20 }, '{x: string, y: number, z?: number}').test(), true);
-    assert.equal(_typeCheck({ x: 'string', y: 10, z: 'str' }, '{x: string, y: number, z: number?}').test(), false);
-    assert.equal(_typeCheck({ x: 'string', y: 10, z: 20 }, '{x: string, y: number, ...}').test(), true);
+    assert.equal(
+        _typeCheck({ x: 'string', y: 10 }, '{x: string, y: number, z?: number}').test(),
+        true
+    );
+    assert.equal(
+        _typeCheck({ x: 'string', y: 10, z: 20 }, '{x: string, y: number, z?: number}').test(),
+        true
+    );
+    assert.equal(
+        _typeCheck({ x: 'string', y: 10, z: 'str' }, '{x: string, y: number, z: number?}').test(),
+        false
+    );
+    assert.equal(
+        _typeCheck({ x: 'string', y: 10, z: 20 }, '{x: string, y: number, ...}').test(),
+        true
+    );
 });
 
 // create tests for {key1: type}
@@ -149,16 +183,31 @@ test('objects: {key: type}', () => {
     assert.equal(_typeCheck({ x: 'string', y: 10 }, '{x: string, y: number}').test(), true);
     assert.equal(_typeCheck({ x: 'string', y: 'str' }, '{x: string, y: number}').test(), false);
     assert.equal(_typeCheck({ x: 'string', y: 10, z: 20 }, '{x: string, y: number}').test(), false);
-    assert.equal(_typeCheck({ x: 'string', y: 10, z: 'str' }, '{x: string, y: number, ...}').test(), true);
-    assert.equal(_typeCheck({ x: 'string', y: 10, z: 20 }, '{x: string, y: number, any: number}').test(), true);
+    assert.equal(
+        _typeCheck({ x: 'string', y: 10, z: 'str' }, '{x: string, y: number, ...}').test(),
+        true
+    );
+    assert.equal(
+        _typeCheck({ x: 'string', y: 10, z: 20 }, '{x: string, y: number, any: number}').test(),
+        true
+    );
 });
 
 // create tests for {key1: type, key2: type}
 test('objects: {key: type, key: type}', () => {
     assert.equal(_typeCheck({ x: 2, y: 10 }, '{x: string|number, y: number}').test(), true);
-    assert.equal(_typeCheck({ x: 'string', y: 'str' }, '{x: string, y: number|null}').test(), false);
-    assert.equal(_typeCheck({ x: 'string', y: 10, z: 20 }, '{x: string, y: number, z?: number}').test(), true);
-    assert.equal(_typeCheck({ x: 'string', y: 10, z: 'str' }, '{x: string, y: number}').test(), false);
+    assert.equal(
+        _typeCheck({ x: 'string', y: 'str' }, '{x: string, y: number|null}').test(),
+        false
+    );
+    assert.equal(
+        _typeCheck({ x: 'string', y: 10, z: 20 }, '{x: string, y: number, z?: number}').test(),
+        true
+    );
+    assert.equal(
+        _typeCheck({ x: 'string', y: 10, z: 'str' }, '{x: string, y: number}').test(),
+        false
+    );
 });
 
 // create tests for {key1: type}
@@ -175,8 +224,14 @@ test('objects: {key: any}', () => {
     assert.equal(_typeCheck({ y: 33, x: null }, '{any: array}').log().test(), false);
     assert.equal(_typeCheck({ y: 33, x: null }, '{any: number}').log().test(), false);
     assert.equal(_typeCheck({ y: 33, x: null }, '{any: number|string}').log().test(), false);
-    assert.equal(_typeCheck({ y: 33, x: null }, '{y: number, any: number|null}').log().test(), true);
-    assert.equal(_typeCheck({ x: 'string', y: 10, z: 20 }, '{x: string, y: number, any: number}').test(), true);
+    assert.equal(
+        _typeCheck({ y: 33, x: null }, '{y: number, any: number|null}').log().test(),
+        true
+    );
+    assert.equal(
+        _typeCheck({ x: 'string', y: 10, z: 20 }, '{x: string, y: number, any: number}').test(),
+        true
+    );
 });
 
 test('array with objects: [{key: type, key: type}]', () => {

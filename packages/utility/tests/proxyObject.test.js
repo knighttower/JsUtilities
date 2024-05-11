@@ -1,6 +1,6 @@
 import { test } from 'vitest';
 import assert from 'assert';
-import { proxyObject, proxyClass } from '../src/ProxyObject';
+import { proxyObject, proxyClass } from '../src/proxyObject';
 
 class hello {
     constructor() {

@@ -21,7 +21,7 @@ import {
     instanceOf,
     convertToNumber,
     uuid,
-} from '../index';
+} from '../src/utility';
 
 test('uuid - should return a string', () => {
     const result = uuid(40);

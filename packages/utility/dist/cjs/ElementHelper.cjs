@@ -20,10 +20,13 @@ Object.defineProperty(exports, '__esModule', { value: true });
  * @private
  */
 const executeOnNodeChanged = {};
+let observer;
 /**
  * When node change
  * @param {String} id
  * @param {Function} callback Callback when any node changes/ add/deleted/modified
+ * @memberof DomObserver
+ * @usage domObserver.addOnNodeChange('elementIdentifier', () => { console.log('Node changed') })
  * @return {Void}
  */
 const addOnNodeChange = (id, callback) => {
@@ -34,6 +37,8 @@ const addOnNodeChange = (id, callback) => {
 /**
  * Remove from node change
  * @param {String} id
+ * @memberof DomObserver
+ * @usage domObserver.removeOnNodeChange('elementIdentifier')
  * @return {Void}
  */
 const removeOnNodeChange = (id) => {
@@ -53,8 +58,8 @@ const cleanup = () => {
  * @private
  * @return {MutationObserver}
  */
-(() => {
-    if (typeof window !== 'undefined') {
+const start = () => {
+    if (typeof window !== 'undefined' && !observer) {
         const callback = (mutationList) => {
             for (const mutation of mutationList) {
                 if (mutation.type === 'childList') {
@@ -68,12 +73,25 @@ const cleanup = () => {
             childList: true,
             subtree: true,
         };
-        const observer = new MutationObserver(callback);
-        observer.observe(document.body, config);
+
+        observer = new MutationObserver(callback);
+        if (document.body) {
+            return observer.observe(document.body, config);
+        }
+        document.addEventListener('DOMContentLoaded', (event) => {
+            return observer.observe(document.body, config);
+        });
     }
-})();
-const DomObserver = {
-    executeOnNodeChanged,
+};
+/**
+ * @exports domObserver
+ * @type {Object}
+ * @usage domObserver.addOnNodeChange('elementIdentifier', () => { console.log('Node changed') })
+ * @usage domObserver.removeOnNodeChange('elementIdentifier')
+ * @usage domObserver.cleanup()
+ */
+const domObserver = {
+    start,
     addOnNodeChange,
     removeOnNodeChange,
     cleanup,
@@ -100,6 +118,7 @@ class ElementHelper {
      * @return {Object}
      */
     constructor(selector, scope = document) {
+        domObserver.start();
         this.selector = selector;
         if (typeof selector === 'object') {
             this.domElement = selector;
@@ -133,12 +152,12 @@ class ElementHelper {
 
         return new Promise(function (resolveThis) {
             if (!$this.isInDom()) {
-                DomObserver.addOnNodeChange(callbackId, () => {
+                domObserver.addOnNodeChange(callbackId, () => {
                     let element = new ElementHelper($this.selector);
                     if (element.isInDom()) {
                         $this = element;
                         resolveThis($this);
-                        DomObserver.removeOnNodeChange(callbackId);
+                        domObserver.removeOnNodeChange(callbackId);
                     }
                 });
             } else {
@@ -154,7 +173,8 @@ class ElementHelper {
      * @return {Object} DOM element
      */
     getElementByXpath(xpath) {
-        return document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+        return document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
+            .singleNodeValue;
     }
 
     /**
@@ -178,7 +198,12 @@ class ElementHelper {
             let sibling = siblings[i];
             if (sibling === element) {
                 return (
-                    new ElementHelper(element.parentNode).getXpathTo() + '/' + element.tagName + '[' + (ix + 1) + ']'
+                    new ElementHelper(element.parentNode).getXpathTo() +
+                    '/' +
+                    element.tagName +
+                    '[' +
+                    (ix + 1) +
+                    ']'
                 );
             }
             if (sibling.nodeType === 1 && sibling.tagName === element.tagName) {
@@ -223,8 +248,9 @@ class ElementHelper {
 // --> Utilities
 // --------------------------
 const selectElement = (selector, scope = document) => new ElementHelper(selector, scope);
+const elementHelper = (selector, scope = document) => new ElementHelper(selector, scope);
 
 exports.ElementHelper = ElementHelper;
 exports.default = ElementHelper;
-exports.elementHelper = ElementHelper;
+exports.elementHelper = elementHelper;
 exports.selectElement = selectElement;

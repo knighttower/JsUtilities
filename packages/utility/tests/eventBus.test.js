@@ -1,9 +1,9 @@
 import { test } from 'vitest';
 import assert from 'assert';
-import { eventBus } from '../src/event-bus/EventBus'; // Replace with your actual path
+import { EventBus } from '../src/event-bus/EventBus'; // Replace with your actual path
 
 test('should register an event and trigger it', () => {
-    const _eventBus = eventBus();
+    const _eventBus = new EventBus();
     let flag = false;
 
     _eventBus.on('myEvent', () => {
@@ -18,7 +18,7 @@ test('should register an event and trigger it', () => {
 });
 
 test('should trigger an event only once', () => {
-    const _eventBus = eventBus();
+    const _eventBus = new EventBus();
     let counter = 0;
 
     _eventBus.once('myEvent', () => {
@@ -34,7 +34,7 @@ test('should trigger an event only once', () => {
 });
 
 test('should trigger an event exactly N times', () => {
-    const _eventBus = eventBus();
+    const _eventBus = new EventBus();
     let counter = 0;
     const N = 3;
 
@@ -56,7 +56,7 @@ test('should trigger an event exactly N times', () => {
 });
 
 test('should kill an event with all its callbacks', () => {
-    const _eventBus = eventBus();
+    const _eventBus = new EventBus();
     let flag = false;
 
     _eventBus.on('myEvent', () => {
@@ -72,7 +72,7 @@ test('should kill an event with all its callbacks', () => {
 });
 
 test('should detach a specific callback for an event', () => {
-    const _eventBus = eventBus();
+    const _eventBus = new EventBus();
     let counter1 = 0;
     let counter2 = 0;
 
@@ -95,7 +95,7 @@ test('should detach a specific callback for an event', () => {
 });
 
 test('off', async () => {
-    const _eventBus = eventBus();
+    const _eventBus = new EventBus();
     let triggered = false;
     _eventBus.on('my-event', () => {
         triggered = true;
@@ -106,7 +106,7 @@ test('off', async () => {
 });
 
 test('detach', async () => {
-    const _eventBus = eventBus();
+    const _eventBus = new EventBus();
     let triggered = 0;
     const callback = () => {
         triggered++;
@@ -119,7 +119,7 @@ test('detach', async () => {
 });
 
 test('once', async () => {
-    const _eventBus = eventBus();
+    const _eventBus = new EventBus();
     let triggered = 0;
     _eventBus.once('my-event', () => {
         triggered++;
@@ -130,7 +130,7 @@ test('once', async () => {
 });
 
 test('exactly', async () => {
-    const _eventBus = eventBus();
+    const _eventBus = new EventBus();
     let triggered = 0;
     _eventBus.exactly(
         'my-event',
@@ -147,7 +147,7 @@ test('exactly', async () => {
 });
 
 test('greedy wildcard emit', async () => {
-    const _eventBus = eventBus();
+    const _eventBus = new EventBus();
     let triggered = 0;
     _eventBus.on('my-event.a', () => {
         triggered++;
@@ -159,7 +159,7 @@ test('greedy wildcard emit', async () => {
 });
 
 test('nested wildcard and emit', async () => {
-    const _eventBus = eventBus();
+    const _eventBus = new EventBus();
     let triggered = 0;
     _eventBus.on('my-event.a.name', () => {
         triggered++;
@@ -171,7 +171,7 @@ test('nested wildcard and emit', async () => {
 });
 
 test('nested wildcard multi -- and emit', async () => {
-    const _eventBus = eventBus();
+    const _eventBus = new EventBus();
     let triggered = 0;
     _eventBus.on('my-event.a.name-hello', () => {
         triggered++;
@@ -183,7 +183,7 @@ test('nested wildcard multi -- and emit', async () => {
 });
 
 test('nested wildcard and emit double wild', async () => {
-    const _eventBus = eventBus();
+    const _eventBus = new EventBus();
     let triggered = 0;
     _eventBus.on('my-event.x.name.b', () => {
         triggered++;
@@ -195,7 +195,7 @@ test('nested wildcard and emit double wild', async () => {
 });
 
 test('nested wildcard and emit with "on"', async () => {
-    const _eventBus = eventBus();
+    const _eventBus = new EventBus();
     let triggered = 0;
     _eventBus.on('my-event.x.*', () => {
         triggered++;
@@ -207,7 +207,7 @@ test('nested wildcard and emit with "on"', async () => {
 });
 
 test('nested wildcard and emit with "on" multi card', async () => {
-    const _eventBus = eventBus();
+    const _eventBus = new EventBus();
     let triggered = 0;
     _eventBus.on('my-event.y*b', () => {
         triggered++;
@@ -222,7 +222,7 @@ test('nested wildcard and emit with "on" multi card', async () => {
 });
 
 test('passing data', async () => {
-    const _eventBus = eventBus();
+    const _eventBus = new EventBus();
     let content = null;
     _eventBus.on('my-event', (data) => {
         content = data;
@@ -231,7 +231,7 @@ test('passing data', async () => {
     assert.equal(content, 'hello');
 });
 test('passing data multi args', async () => {
-    const _eventBus = eventBus();
+    const _eventBus = new EventBus();
     let content = null;
     _eventBus.on('my-event', (data, other) => {
         content = other;
@@ -241,18 +241,11 @@ test('passing data multi args', async () => {
 });
 
 test('passing data object', async () => {
-    const _eventBus = eventBus();
+    const _eventBus = new EventBus();
     let content = null;
     _eventBus.on('my-event', (data) => {
         content = data;
     });
     _eventBus.emit('my-event', { key: 'value' });
     assert.deepEqual(content, { key: 'value' });
-});
-
-test('global', async () => {
-    const _eventBus = eventBus();
-    _eventBus.global();
-    console.log(global.eventBus);
-    assert(typeof global.eventBus === 'object');
 });

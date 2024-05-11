@@ -3,14 +3,13 @@
  *
  * @module urlHelper
  */
-const UrlHelper = (() => {
+const urlHelper = () => {
     'use strict';
-
     /**
      * The window object from the global scope.
      * @type {Window}
      */
-    const win = typeof window !== 'undefined' ? window : this;
+    const win = typeof window !== 'undefined' ? window : undefined;
 
     /**
      * The document object from the global scope.
@@ -92,7 +91,7 @@ const UrlHelper = (() => {
      * Public methods and properties for URL manipulation and information.
      * @namespace
      */
-    const urlHelper = {
+    return {
         /**
          * Retrieves the current page name (last part of the URL).
          * @return {string} The current page name or 'index' if none is found.
@@ -191,13 +190,6 @@ const UrlHelper = (() => {
         path: PATH,
         readUrl: HREF,
     };
+};
 
-    if (typeof window !== 'undefined' && typeof module !== 'object') {
-        return (window.UrlHelper = urlHelper);
-    } else if (typeof module === 'object') {
-        return () => urlHelper;
-    }
-    return urlHelper;
-})();
-
-export { UrlHelper, UrlHelper as default, UrlHelper as urlHelper };
+export { urlHelper, urlHelper as default };

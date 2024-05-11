@@ -60,7 +60,7 @@ function convertToNumber(input) {
 /**
  * Translate dollar amounts to decimal notation
  * @function currencyToDecimal
- * @memberof Utility
+ * @memberof utility
  * @param {String|Number} amount
  * @return number
  * @example currencyToDecimal('$123.45') // 123.45
@@ -72,7 +72,7 @@ function currencyToDecimal(amount) {
 /**
  * Format dates to standard US, with or w/out time
  * @function dateFormat
- * @memberof Utility
+ * @memberof utility
  * @param {String} dateTime Raw format 2201-01-01 16:15PM or unix or object
  * @param {Boolean} wTime If set, returns date with time as H:MM A
  * @return string
@@ -104,7 +104,7 @@ function dateFormat(dateTime, wTime) {
 /**
  * Translate decimal notation to dollar amount
  * @function decimalToCurrency
- * @memberof Utility
+ * @memberof utility
  * @param {String|Number} amount
  * @return number
  * @example decimalToCurrency(123.45) // 123.45
@@ -121,7 +121,7 @@ function decimalToCurrency(amount) {
  * Check if there is a value, if not return null or the default value
  * It can test strings, arrays, objects, numbers, booleans
  * @function emptyOrValue
- * @memberof Utility
+ * @memberof utility
  * @param {String|Number} value If the value is not empty, returns it
  * @param {String|Number} _default The default value if empty
  * @return mixed
@@ -206,7 +206,7 @@ const makeArray = (item) => (Array.isArray(item) ? item : [item]);
 /**
  * Generate unique ids
  * @function getDynamicId
- * @memberof Utility
+ * @memberof utility
  * @return string Format kn__000000__000
  */
 function getDynamicId() {
@@ -216,7 +216,7 @@ function getDynamicId() {
 /**
  * Alias to getDynamicId
  * @function getRandomId
- * @memberof Utility
+ * @memberof utility
  * @return string
  * @example getRandomId() // kn__000000__000
  */
@@ -237,7 +237,7 @@ const uniqueId = uuid;
 /**
  * Form a valid Google search address
  * @function getGoogleMapsAddress
- * @memberof Utility
+ * @memberof utility
  * @param {String|Object} address
  * @return string
  * @example getGoogleMapsAddress('New York') // 'https://maps.google.it/maps?q=New+York'
@@ -294,7 +294,7 @@ function includes(collection, value, fromIndex = 0) {
 /**
  * Check if a value is empty
  * @function isEmpty
- * @memberof Utility
+ * @memberof utility
  * @param {string|array|object|map|set|number|boolean} value
  * @url https://moderndash.io/
  * @return {string}
@@ -328,7 +328,7 @@ function isEmpty(value) {
  * Integrates both Int and Number, or convert a string number to number to test
  * Note: this is not like Lodash isNumber since this one takes into consideration the 'string number'
  * @function isNumber
- * @memberof Utility
+ * @memberof utility
  * @param {String|Number} value
  * @return null|int
  * @example isNumber(123) // true
@@ -410,7 +410,7 @@ function instanceOf(input, test) {
 /**
  * Open a Google Map using a provided address
  * @function openGoogleMapsAddress
- * @memberof Utility
+ * @memberof utility
  * @param {String|Object} object - Address information either as a string or as an object
  * @throws {Error} Throws an error if the address is invalid or if it's not a string or object.
  * @return {void}
@@ -434,7 +434,7 @@ function openGoogleMapsAddress(object) {
 /**
  * Alias to getDynamicId
  * @function toCurrency
- * @memberof Utility
+ * @memberof utility
  * @param {String|Number} amount
  * @return number
  * @example toCurrency(123.45) // 123.45
@@ -447,7 +447,7 @@ function toCurrency(amount) {
 /**
  * Covert to dollar string
  * @function toDollarString
- * @memberof Utility
+ * @memberof utility
  * @param {String|Number} amount
  * @return number
  * @example toDollarString(2,000) // 2K
@@ -529,7 +529,7 @@ function typeOf(input, test) {
 /**
  * Validate emails
  * @function validateEmail
- * @memberof Utility
+ * @memberof utility
  * @param {String} email
  * @return Boolean
  * @example validateEmail('<EMAIL>') // false
@@ -546,7 +546,7 @@ function validateEmail(email) {
 /**
  * Validate a phone number
  * @function validatePhone
- * @memberof Utility
+ * @memberof utility
  * @param {String} phone
  * @return void|Toast
  * @example validatePhone('1234567890') // true
@@ -560,31 +560,30 @@ function validatePhone(phone) {
     return phoneRegex.test(phone);
 }
 
-// export default Utility;
-const Utility = {
-    convertToBool,
-    currencyToDecimal,
-    convertToNumber,
-    dateFormat,
-    decimalToCurrency,
-    emptyOrValue,
-    formatPhoneNumber,
-    getDynamicId,
-    getGoogleMapsAddress,
-    getRandomId,
-    includes,
-    isEmpty, // from https://moderndash.io/
-    isNumber,
-    instanceOf,
-    openGoogleMapsAddress,
-    toCurrency,
-    toDollarString,
-    typeOf,
-    validateEmail,
-    validatePhone,
-    makeArray,
-    uuid,
-    uniqueId,
-};
+// //   utility; {
+//     convertToBool,
+//     currencyToDecimal,
+//     convertToNumber,
+//     dateFormat,
+//     decimalToCurrency,
+//     emptyOrValue,
+//     formatPhoneNumber,
+//     getDynamicId,
+//     getGoogleMapsAddress,
+//     getRandomId,
+//     includes,
+//     isEmpty, // from https://moderndash.io/
+//     isNumber,
+//     instanceOf,
+//     openGoogleMapsAddress,
+//     toCurrency,
+//     toDollarString,
+//     typeOf,
+//     validateEmail,
+//     validatePhone,
+//     makeArray,
+//     uuid,
+//     uniqueId,
+// };
 
-export { Utility, convertToBool, convertToNumber, currencyToDecimal, dateFormat, decimalToCurrency, Utility as default, emptyOrValue, formatPhoneNumber, getDynamicId, getGoogleMapsAddress, getRandomId, includes, instanceOf, isEmpty, isNumber, makeArray, openGoogleMapsAddress, randomId, toCurrency, toDollarString, typeOf, uniqueId, Utility as utility, Utility as utils, uuid, validateEmail, validatePhone };
+export { convertToBool, convertToNumber, currencyToDecimal, dateFormat, decimalToCurrency, emptyOrValue, formatPhoneNumber, getDynamicId, getGoogleMapsAddress, getRandomId, includes, instanceOf, isEmpty, isNumber, makeArray, openGoogleMapsAddress, randomId, toCurrency, toDollarString, typeOf, uniqueId, uuid, validateEmail, validatePhone };

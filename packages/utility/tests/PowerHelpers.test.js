@@ -20,7 +20,7 @@ import {
     setWildCardString,
     getArrObjFromString,
     proxyObject,
-} from '../index';
+} from '../src/powerHelper.js';
 // console.log(proxyObject({ a: 1, b: 2, c: 3 }));
 let results = '';
 // getDirectivesFromString

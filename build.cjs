@@ -8,12 +8,12 @@ const rollupConfig = `${workingDir}/packages/utility/nodeUtils/rollup.config.cjs
 const buildExports = `${workingDir}/packages/utility/nodeUtils/BuildExports.js`;
 const bumpVersion = `${workingDir}/packages/utility/nodeUtils/BumpVersion.cjs`;
 const pretty = `${workingDir}/.prettierrc.json`;
-const eslint = `${workingDir}/.eslintrc.js`;
+const eslint = `${workingDir}/.eslintrc.cjs`;
 
 const local = getFlagValue('local');
 const pkgOnly = getFlagValue('pkg');
 
-// Utility
+// utility
 const utility = () => {
     runCommand(
         `cd ./packages/utility \
@@ -21,7 +21,7 @@ const utility = () => {
     && npx webpack --mode production --config "${webpackConfig}" \
     && npx rollup -c "${rollupConfig}" \
     && node "${buildExports}" --dir ./dist/cjs --type=cjs \
-    && node "${buildExports}" --dir ./dist/esm --type=esm \
+    && node "${buildExports}" --dir ./src --type=esm \
     && prettier --config "${pretty}" --write ./index.js \
     && prettier --config "${pretty}" --write ./index.cjs \
     && npm run test \
@@ -38,8 +38,8 @@ const typeCheck = () => {
     && eslint -c "${eslint}" --fix ./src --ext .js,.cjs,.mjs \
     && npx webpack --mode production --config "${webpackConfig}" \
     && npx rollup -c "${rollupConfig}" \
-    && node "${buildExports}" --file ./dist/cjs/TypeCheck.cjs --type=cjs \
-    && node "${buildExports}" --file ./dist/esm/TypeCheck.js --type=esm \
+    && node "${buildExports}" --file ./dist/cjs/typeCheck.cjs --type=cjs \
+    && node "${buildExports}" --file ./src/typeCheck.js --type=esm \
     && prettier --config "${pretty}" --write ./index.js \
     && prettier --config "${pretty}" --write ./index.cjs \
     && npm run test \
@@ -88,7 +88,7 @@ const vueUtils = () => {
     && npx webpack --mode production --config "${webpackConfig}" \
     && npx rollup -c "${rollupConfig}" \
     && node "${buildExports}" --dir ./dist/cjs --type=cjs \
-    && node "${buildExports}" --dir ./dist/esm --type=esm \
+    && node "${buildExports}" --dir ./src --type=esm \
     && prettier --config "${pretty}" --write ./index.js \
     && prettier --config "${pretty}" --write ./index.cjs \
     && node "${bumpVersion}" --exe \

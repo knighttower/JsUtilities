@@ -1,13 +1,38 @@
+<!doctype html>
 <html style="background-color: black">
     <head>
         <script src="../dist/browser/EventBus.js"></script>
+        <script src="../dist/browser/utility.js"></script>
+        <script src="../dist/browser/urlHelper.js"></script>
+        <script src="../dist/browser/powerHelper.js"></script>
+        <script src="../dist/browser/proxyObject.js"></script>
+        <script src="../dist/browser/proxyClass.js"></script>
+        <script src="../dist/browser/domObserver.js"></script>
+        <script src="../dist/browser/elementHelper.js"></script>
+        <script src="../dist/browser/promises.js"></script>
+        <script src="../dist/browser/urlHelper.js"></script>
         <script>
             console.log(EventBus);
 
-            const ev = EventBus.default().global();
-            // eventBus.default().global();
+            const ev = new EventBus();
+
             console.log(ev);
             console.log(window);
+            console.log('______log______', window.utility.uuid);
+            console.log('url', window.urlHelper);
+            console.log('power', window.powerHelper);
+            console.log('proxy', window.proxyObject);
+            console.log('proxy', window.proxyClass);
+            console.log('domObserver', window.domObserver);
+            console.log('ElementHelper', window.elementHelper);
+            let elh = elementHelper('h1');
+            console.log('test ElementHelper', elh);
+            console.log('promiseQueue', window.promises);
+            console.log('urlHelper', window.urlHelper());
         </script>
     </head>
+    <body>
+        <h1>Utility</h1>
+        <p>minutes</p>
+    </body>
 </html>

@@ -13,7 +13,7 @@ const eslint = `${workingDir}/.eslintrc.js`;
 
 const once = getFlagValue('once') ? '' : '--watch';
 
-// Utility
+// utility
 const utility = () => {
     runCommand(
         `cd ./packages/utility \

@@ -12,7 +12,7 @@ import {
     getDynamicId,
     selectElement,
     proxyObject,
-    DomObserver,
+    domObserver,
     getDirectivesFromString as GetSettings,
 } from '@knighttower/utility';
 import AdaptiveElement from './classes/AdaptiveElement.js';
@@ -37,6 +37,7 @@ import componentTeleportTo from './web-components/TeleportTo.js';
 const _adaptive = (function () {
     'use strict';
 
+    domObserver.start();
     const $window = typeof window !== 'undefined' ? window : {};
 
     // -----------------------------------------
@@ -143,7 +144,7 @@ const _adaptive = (function () {
     const customExpressionQueries = {};
 
     // =========================================
-    // --> Utility
+    // --> utility
     // --------------------------
 
     /**
@@ -152,7 +153,14 @@ const _adaptive = (function () {
      * @return {Object}
      */
     $this.getAllQueries = () => {
-        return Object.assign({}, screens, devices, broadMediaQueries, customMinMaxQueries, customExpressionQueries);
+        return Object.assign(
+            {},
+            screens,
+            devices,
+            broadMediaQueries,
+            customMinMaxQueries,
+            customExpressionQueries
+        );
     };
 
     /**
@@ -184,7 +192,7 @@ const _adaptive = (function () {
      * @return {Void}
      */
     $this.registerElement = (elementOrSelector, data) => {
-        let helper = selectElement(elementOrSelector);
+        const helper = selectElement(elementOrSelector);
 
         if (helper.isInDom()) {
             return registerThis(helper, data);
@@ -347,7 +355,7 @@ const _adaptive = (function () {
      */
     $this.reset = () => {
         Object.keys(domElements).forEach((key) => delete domElements[key]);
-        DomObserver.cleanup();
+        domObserver.cleanup();
         QueryHandler.reset();
         isMounted = false;
     };
@@ -362,9 +370,11 @@ const _adaptive = (function () {
      */
     function _init() {
         isMounted = true;
-        document.querySelectorAll('[data-adaptive]:not([data-adaptive-id])').forEach(function (element) {
-            $this.registerElement(element);
-        });
+        document
+            .querySelectorAll('[data-adaptive]:not([data-adaptive-id])')
+            .forEach(function (element) {
+                $this.registerElement(element);
+            });
 
         QueryHandler.init();
         if (useVue || useReact) {

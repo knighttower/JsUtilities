@@ -9,7 +9,7 @@ import {
     isEmpty,
     typeOf,
     convertToNumber,
-} from './Utility.js';
+} from './utility.js';
 
 // @private
 function _removeBrackets(strExp) {
@@ -587,26 +587,23 @@ export function wildCardStringSearch(pattern, listOrString, matchStart = false, 
     return emptyOrValue(filteredList);
 }
 
-export const powerHelper = {
-    addQuotes,
-    cleanStr,
-    convertKeysToSymbols,
-    findAndReplaceInArray,
-    findNested,
-    fixQuotes,
-    getArrObjFromString,
-    getChunks,
-    getDirectivesFromString,
-    getMatchBlock,
-    getMatchInBetween,
-    getObjectFromPath,
-    removeQuotes,
-    startAndEndWith,
-    setExpString,
-    setLookUpExp,
-    setWildCardString,
-    wildCardStringSearch,
-};
-
-// Export ES6 modules
-export { powerHelper as default, powerHelper as PowerHelper };
+//  const powerHelper = {
+//     addQuotes,
+//     cleanStr,
+//     convertKeysToSymbols,
+//     findAndReplaceInArray,
+//     findNested,
+//     fixQuotes,
+//     getArrObjFromString,
+//     getChunks,
+//     getDirectivesFromString,
+//     getMatchBlock,
+//     getMatchInBetween,
+//     getObjectFromPath,
+//     removeQuotes,
+//     startAndEndWith,
+//     setExpString,
+//     setLookUpExp,
+//     setWildCardString,
+//     wildCardStringSearch,
+// };

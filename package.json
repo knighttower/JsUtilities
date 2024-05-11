@@ -1,7 +1,7 @@
 {
   "name": "knighttower",
-  "version": "8.0.7",
-  "type": "commonjs",
+  "version": "9.0.2",
+  "type": "module",
   "engines": {
     "node": ">=20.10.0"
   },
@@ -14,7 +14,8 @@
     "build:local": "node ./build.cjs --local",
     "do:update": "ncu --interactive && npm i",
     "dev": "node ./dev.cjs",
-    "dev:dry": "node ./dev.cjs --once"
+    "dev:dry": "node ./dev.cjs --once",
+    "test": "node ./test.cjs"
   },
   "repository": {
     "type": "git",
@@ -35,6 +36,7 @@
       "import": "./packages/utility/index.js",
       "require": "./packages/utility/index.cjs"
     },
+    "./utils/*": "./packages/utility/*",
     "./utility/node/*": "./packages/utility/nodeUtils/*",
     "./utility/nodeUtils/*": "./packages/utility/nodeUtils/*",
     "./utility/nodeUtils": {
@@ -49,7 +51,6 @@
       "import": "./packages/type-check/index.js",
       "require": "./packages/type-check/index.cjs"
     },
-    "./utils/*": "./packages/utility/*",
     "./event-bus": {
       "import": "./packages/utility/dist/esm/EventBus.js",
       "require": "./packages/utility/dist/cjs/EventBus.cjs"
@@ -90,6 +91,7 @@
     "bootstrap": "^5.3.3"
   },
   "devDependencies": {
+    "@babel/cli": "^7.24.5",
     "@babel/core": "^7.24.5",
     "@babel/plugin-proposal-class-properties": "^7.18.6",
     "@babel/plugin-syntax-class-properties": "^7.12.13",

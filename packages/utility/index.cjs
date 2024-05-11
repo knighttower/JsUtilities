@@ -3,10 +3,9 @@ const { DomObserver, domObserver } = require('./dist/cjs/DomObserver.cjs');
 // Single Modules and Aliases from: ElementHelper
 const { ElementHelper, elementHelper, selectElement } = require('./dist/cjs/ElementHelper.cjs');
 // Single Modules and Aliases from: EventBus
-const { EventBus, _eventBus, eventBus } = require('./dist/cjs/EventBus.cjs');
-// Single Modules and Aliases from: PowerHelpers
+const { EventBus } = require('./dist/cjs/EventBus.cjs');
+// Single Modules and Aliases from: powerHelper
 const {
-    PowerHelper,
     addQuotes,
     cleanStr,
     convertKeysToSymbols,
@@ -19,29 +18,26 @@ const {
     getMatchBlock,
     getMatchInBetween,
     getObjectFromPath,
-    powerHelper,
     removeQuotes,
     setExpString,
     setLookUpExp,
     setWildCardString,
     startAndEndWith,
     wildCardStringSearch,
-} = require('./dist/cjs/PowerHelpers.cjs');
-// Single Modules and Aliases from: PromiseQueue
+} = require('./dist/cjs/powerHelper.cjs');
+// Single Modules and Aliases from: promiseQueue
 const {
-    PromisePool,
-    PromiseQueue,
     doAsync,
     doPoll,
     doTimeout,
     promisePool,
     promiseQueue,
-} = require('./dist/cjs/PromiseQueue.cjs');
-// Single Modules and Aliases from: ProxyObject
-const { ProxyClass, ProxyObject, proxyClass, proxyObject } = require('./dist/cjs/ProxyObject.cjs');
-// Single Modules and Aliases from: UrlHelper
-const { UrlHelper, urlHelper } = require('./dist/cjs/UrlHelper.cjs');
-// Single Modules and Aliases from: Utility
+} = require('./dist/cjs/promiseQueue.cjs');
+// Single Modules and Aliases from: proxyObject
+const { proxyClass, proxyObject } = require('./dist/cjs/proxyObject.cjs');
+// Single Modules and Aliases from: urlHelper
+const { urlHelper } = require('./dist/cjs/urlHelper.cjs');
+// Single Modules and Aliases from: utility
 const {
     convertToBool,
     convertToNumber,
@@ -64,14 +60,10 @@ const {
     toDollarString,
     typeOf,
     uniqueId,
-    utility,
-    utils,
     uuid,
     validateEmail,
     validatePhone,
-} = require('./dist/cjs/Utility.cjs');
-// Default Module from: Utility
-const Utility = require('./dist/cjs/Utility.cjs');
+} = require('./dist/cjs/utility.cjs');
 
 module.exports = {
     DomObserver,
@@ -80,9 +72,6 @@ module.exports = {
     elementHelper,
     selectElement,
     EventBus,
-    _eventBus,
-    eventBus,
-    PowerHelper,
     addQuotes,
     cleanStr,
     convertKeysToSymbols,
@@ -95,25 +84,19 @@ module.exports = {
     getMatchBlock,
     getMatchInBetween,
     getObjectFromPath,
-    powerHelper,
     removeQuotes,
     setExpString,
     setLookUpExp,
     setWildCardString,
     startAndEndWith,
     wildCardStringSearch,
-    PromisePool,
-    PromiseQueue,
     doAsync,
     doPoll,
     doTimeout,
     promisePool,
     promiseQueue,
-    ProxyClass,
-    ProxyObject,
     proxyClass,
     proxyObject,
-    UrlHelper,
     urlHelper,
     convertToBool,
     convertToNumber,
@@ -136,10 +119,7 @@ module.exports = {
     toDollarString,
     typeOf,
     uniqueId,
-    utility,
-    utils,
     uuid,
     validateEmail,
     validatePhone,
-    Utility,
 };

@@ -1,9 +1,9 @@
 import { test } from 'vitest';
 import assert from 'assert';
-import UrlHelper from '../dist/esm/UrlHelper.js';
+import urlHelper from '../src/urlHelper.js';
 
 test('imports test', () => {
-    const uHelper = UrlHelper();
+    const uHelper = urlHelper();
     console.log(uHelper);
     assert(uHelper !== null && typeof uHelper === 'object');
 });

@@ -4,11 +4,11 @@ const targets = [
 ];
 
 const rollupFormats = [
-    { type: 'amd', ext: 'js' },
+    // { type: 'amd', ext: 'js' },
     { type: 'cjs', ext: 'cjs' },
     // { type: 'umd', ext: 'js' },
-    { type: 'iife', ext: 'js' },
-    { type: 'system', ext: 'js' },
+    // { type: 'iife', ext: 'js' },
+    // { type: 'system', ext: 'js' },
     { type: 'esm', ext: 'js' },
 ];
 

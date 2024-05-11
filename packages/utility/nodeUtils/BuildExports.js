@@ -2,8 +2,8 @@
 import fs from 'fs';
 import path from 'path';
 import glob from 'glob';
-import { PowerHelper as helper } from '../src/PowerHelpers.js';
-import { Utility as utils } from '../src/Utility.js';
+import * as helper from '../src/powerHelper.js';
+import * as utils from '../src/utility.js';
 import { getFlagValue } from './NodeHelpers.js';
 
 const workingDir = process.cwd();
@@ -17,9 +17,11 @@ function getExports(filePath) {
     const content = fs.readFileSync(filePath, 'utf-8');
     // Example matches: export const myVar, export function myFunc, export class MyClass
     // Example matches: export myVar, export myFunc
-    const matchSingleExps = content.match(/export\s+(const|let|var|function|class)\s+(\w+)|export\s+(\w+)/g) || [];
+    const matchSingleExps =
+        content.match(/export\s+(const|let|var|function|class)\s+(\w+)|export\s+(\w+)/g) || [];
     // Example matches: export default class MyClass, export default function myFunc,
-    const matchDefClasses = content.match(/export\s+default\s+(class|function)\s*(\b(?!(\{|\())\w+\b)/) || [];
+    const matchDefClasses =
+        content.match(/export\s+default\s+(class|function)\s*(\b(?!(\{|\())\w+\b)/) || [];
     // Example matches: export default Name, Name as default
     const matchDefSingles =
         content.match(
@@ -29,10 +31,20 @@ function getExports(filePath) {
     const matchAliasesExps = content.match(/export\s*{([^}]+)}/g) || [];
 
     //Example matches: module.exports = { myVar, myFunc }
-    const matchModuleExports = helper.getMatchInBetween(content, /module\.exports\s*={/g, '}', true);
-    const matchModuleExports2 = helper.getMatchInBetween(content, /module\.exports\./g, /(=|;)/, true);
-    const matchModuleExports3 = (content.match(/module\.exports\s*=\s*(\w+)/g) || []).map((module) =>
-        helper.cleanStr(module, 'module.exports', '=')
+    const matchModuleExports = helper.getMatchInBetween(
+        content,
+        /module\.exports\s*={/g,
+        '}',
+        true
+    );
+    const matchModuleExports2 = helper.getMatchInBetween(
+        content,
+        /module\.exports\./g,
+        /(=|;)/,
+        true
+    );
+    const matchModuleExports3 = (content.match(/module\.exports\s*=\s*(\w+)/g) || []).map(
+        (module) => helper.cleanStr(module, 'module.exports', '=')
     );
 
     //Example matches: modules.myModule = any
@@ -72,29 +84,34 @@ function getExports(filePath) {
     });
 
     // Handle aliases
-    [...matchAliasesExps, ...matchModuleExports, ...matchModuleExports2, ...matchModuleExports3].forEach(
-        (aliasLine) => {
-            helper
-                // cleanup and create an array of aliases
-                .getChunks(helper.cleanStr(aliasLine, 'export', '{', '}'))
-                // exclude default export
-                .filter((chunk) => chunk && !chunk.includes('default'))
-                // iterate to pick the correct alias;
-                .forEach((chunk) => {
-                    if (chunk.includes(' as ')) {
-                        const alias = helper.getChunks(chunk, ' as ');
-                        if (alias[1]) {
-                            aliasExports.push(alias[1]);
-                        }
-                    } else {
-                        aliasExports.push(chunk);
+    [
+        ...matchAliasesExps,
+        ...matchModuleExports,
+        ...matchModuleExports2,
+        ...matchModuleExports3,
+    ].forEach((aliasLine) => {
+        helper
+            // cleanup and create an array of aliases
+            .getChunks(helper.cleanStr(aliasLine, 'export', '{', '}'))
+            // exclude default export
+            .filter((chunk) => chunk && !chunk.includes('default'))
+            // iterate to pick the correct alias;
+            .forEach((chunk) => {
+                if (chunk.includes(' as ')) {
+                    const alias = helper.getChunks(chunk, ' as ');
+                    if (alias[1]) {
+                        aliasExports.push(alias[1]);
                     }
-                });
-        }
-    );
+                } else {
+                    aliasExports.push(chunk);
+                }
+            });
+    });
 
     // Merge all named exports and filter
-    namedExports = [...aliasExports, ...singleExports].filter((name) => name !== 'default' && name !== defaultExport);
+    namedExports = [...aliasExports, ...singleExports].filter(
+        (name) => name !== 'default' && name !== defaultExport
+    );
 
     return {
         named: Array.from(new Set(namedExports)), // Remove duplicates
@@ -183,13 +200,17 @@ function getCommonJsContent(allExports) {
     type = ['js', 'esm', 'cjs'].includes(type) ? type : 'js';
     const ext = type === 'esm' ? 'js' : type;
     const singleFile = getFlagValue('file') ?? false;
-    const out = getFlagValue('out') ? helper.cleanStr(getFlagValue('out'), '.js', '.mjs', '.cjs', '.ts') : null;
+    const out = getFlagValue('out')
+        ? helper.cleanStr(getFlagValue('out'), '.js', '.mjs', '.cjs', '.ts')
+        : null;
     const destination = out ? `${out}.${ext}` : `${workingDir}/index.${ext}`;
     // Synchronously fetch all file paths within a esmDir and its subdirectories
     // that have a .js or .mjs extension
 
     const processFiles = () => {
-        const filePaths = !singleFile ? glob.sync(`${dir}/**/*.{js,mjs,cjs}`) : glob.sync(`${singleFile}`);
+        const filePaths = !singleFile
+            ? glob.sync(`${dir}/**/*.{js,mjs,cjs}`)
+            : glob.sync(`${singleFile}`);
         const allExports = {};
 
         filePaths.forEach((filePath) => {
@@ -198,7 +219,8 @@ function getCommonJsContent(allExports) {
             }
         });
 
-        const indexContent = type === 'cjs' ? getCommonJsContent(allExports) : getEsmContent(allExports);
+        const indexContent =
+            type === 'cjs' ? getCommonJsContent(allExports) : getEsmContent(allExports);
 
         fs.writeFileSync(destination, indexContent);
         console.log(' Generated In:--->', destination);

@@ -1,4 +1,4 @@
-ℹ This package is part of the [Js Utility](https://github.com/knighttower/JsUtility) collection of packages (monorepo)  
+ℹ This package is part of the [Js utility](https://github.com/knighttower/JsUtility) collection of packages (monorepo)  
 
 # MixinInstaller
 Helps to install a mixin in Vue 2 or 3 for both options and composition API

@@ -1,20 +1,36 @@
 const targets = [
-    { file: 'Utility.js', exportType: 'named' },
-    { file: 'DomObserver.js', exportType: 'named' },
-    { file: 'UrlHelper.js', exportType: 'named', windowExport: 'default' },
-    { file: 'ElementHelper.js', exportType: 'named' },
-    { file: 'ProxyObject.js', exportType: 'named' },
-    { file: 'PowerHelpers.js', exportType: 'named' },
-    { file: 'PromiseQueue.js', exportType: 'named' },
-    { file: 'event-bus/EventBus.js', exportType: 'named' },
+    { file: 'utility.js', exportType: 'named' },
+    {
+        file: 'domObserver.js',
+        exportType: 'named',
+        exportName: 'domObserver',
+        windowExport: 'domObserver',
+    },
+    { file: 'urlHelper.js', exportType: 'named', windowExport: 'urlHelper' },
+    {
+        file: 'ElementHelper.js',
+        exportType: 'named',
+        exportName: 'elementHelper',
+        windowExport: 'elementHelper',
+    },
+    { file: 'proxyObject.js', exportType: 'named', windowExport: 'proxyObject' },
+    {
+        file: 'proxyObject.js',
+        exportType: 'named',
+        exportName: 'proxyClass',
+        windowExport: 'proxyClass',
+    },
+    { file: 'powerHelper.js', exportType: 'named' },
+    { file: 'promiseQueue.js', exportType: 'named', exportName: 'promises' },
+    { file: 'event-bus/EventBus.js', exportType: 'named', windowExport: 'EventBus' },
 ];
 
 const rollupFormats = [
-    { type: 'amd', ext: 'js' },
+    // { type: 'amd', ext: 'js' },
     { type: 'cjs', ext: 'cjs' },
     // { type: 'umd', ext: 'js' },
-    { type: 'iife', ext: 'js' },
-    { type: 'system', ext: 'js' },
+    // { type: 'iife', ext: 'js' },
+    // { type: 'system', ext: 'js' },
     { type: 'esm', ext: 'js' },
 ];
 

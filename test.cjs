@@ -1,7 +1,7 @@
 const { select } = require('@inquirer/prompts');
-const { runCommand, getFlagValue } = require('./packages/utility/nodeUtils/index.cjs');
+const { runCommand, getFlagValue } = require('./packages/utility/nodeUtils/NodeHelpers.cjs');
 
-// Utility
+// utility
 const utility = () => {
     runCommand(
         `cd ./packages/utility \

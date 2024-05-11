@@ -1,25 +1,14 @@
-// Single Modules and Aliases from: TypeCheck
+// Single Modules and Aliases from: typeCheck
 import {
-    TypeCheck,
     _tc,
     _tcx,
-    _typeCheck,
-    addTypeTest,
-    testBuilder,
-    typesMap,
     validType,
-} from './dist/esm/TypeCheck.js';
-// Default Module from: TypeCheck
-import typeCheck from './dist/esm/TypeCheck.js';
+    TypeCheck,
+    _typeCheck,
+    typesMap,
+    addTypeTest,
+} from './src/typeCheck.js';
+// Default Module from: typeCheck
+import typeCheck from './src/typeCheck.js';
 
-export {
-    TypeCheck,
-    _tc,
-    _tcx,
-    _typeCheck,
-    addTypeTest,
-    testBuilder,
-    typesMap,
-    validType,
-    typeCheck,
-};
+export { _tc, _tcx, validType, TypeCheck, _typeCheck, typesMap, addTypeTest, typeCheck };

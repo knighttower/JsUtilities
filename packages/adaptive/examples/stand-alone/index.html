@@ -1,12 +1,17 @@
 <html>
-    <head> </head>
+    <head>
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1"
+        />
+    </head>
     <body>
         <section id="app">
             <h2>Resize this window in different resolutions</h2>
 
             <h3>
-                Look at all the examples in the "test/index.html" and "example/app.js" and "example/hello.vue", and/or
-                use the code inspector to see the DOM changes
+                Look at all the examples in the "test/index.html" and "example/app.js" and
+                "example/hello.vue", and/or use the code inspector to see the DOM changes
             </h3>
             <br />
             <!-- Example adding classes -->
@@ -17,7 +22,8 @@
                 class="static-hello"
                 data-adaptive="{'addClass':{'tablet':'hello','desktop':'this-is-a-class-for-desktop'}}"
             >
-                Static element ID "hello" that will add classes at "tablet" and "desktop" size. Uses compliant json.
+                Static element ID "hello" that will add classes at "tablet" and "desktop" size. Uses
+                compliant json.
             </div>
             <div data-adaptive="teleport.tablet({before: #hello})">ELEMENT</div>
             <br />
@@ -29,10 +35,16 @@
                 static element (Id= world)
             </div>
             <div
-                style="background-color: rgb(236, 236, 206); padding: 15px; display: block; margin-bottom: 10px"
+                style="
+                    background-color: rgb(236, 236, 206);
+                    padding: 15px;
+                    display: block;
+                    margin-bottom: 10px;
+                "
                 data-adaptive="{addClass:{tablet:'any-class-here',desktop:'this-is-a-class-for-desktop'}}"
             >
-                Static element using non compliant json object. Will add classes at "tablet" and "desktop" size.
+                Static element using non compliant json object. Will add classes at "tablet" and
+                "desktop" size.
             </div>
             <br />
             <!-- Example of only adding styles per breakdown -->
@@ -60,7 +72,8 @@
                 style="padding: 15px"
                 data-adaptive="{'addStyle':{'tablet':'color: blue;','desktop':'color: green;'}}"
             >
-                Inline styling per device, the style will be added to the element and the color will change
+                Inline styling per device, the style will be added to the element and the color will
+                change
             </div>
             <br />
 
@@ -71,7 +84,8 @@
             addClass.mobile|fullscreen(red, green) && 
             addClass.desktop(uno, dos)"
             >
-                String like directives, add a class to the element and removes a class from the element
+                String like directives, add a class to the element and removes a class from the
+                element
             </div>
 
             <br />
@@ -90,8 +104,8 @@
                 id="customQueries2"
                 data-adaptive="addClass[(min-width: 900px) and (max-width: 1599px)](custom-class-at-custom-breakdown)"
             >
-                Custom query Expressions via string like Directive. Adds classes at min-width: 900px and max-width:
-                1599px. This element has an ID of <b>"customQueries2"</b>.
+                Custom query Expressions via string like Directive. Adds classes at min-width: 900px
+                and max-width: 1599px. This element has an ID of <b>"customQueries2"</b>.
             </div>
 
             <!-- Teleporting only at mobile and desktop, all others will be set back to original position -->
@@ -105,7 +119,8 @@
                         margin-bottom: 10px;
                         border: 1px dashed;
                     "
-                    >Static element that will teleport at "desktop or mobile" TO "static hello"</span
+                    >Static element that will teleport at "desktop or mobile" TO "static
+                    hello"</span
                 >
             </div>
 
@@ -120,16 +135,23 @@
                         margin-bottom: 10px;
                         border: 1px dashed;
                     "
-                    >Static element that will teleport this to "before" ID "customQueries2". Will trigger only
-                    once</span
+                    >Static element that will teleport this to "before" ID "customQueries2". Will
+                    trigger only once</span
                 >
             </div>
             <br />
             <!-- Teleporting -->
             <div data-teleport="{after: '#world'}">
-                <span style="background: #067e74; color: white; padding: 15px; display: block; margin-bottom: 10px"
-                    >Direct teleport <b><u>after</u></b> "world" on load. Unline using "data-adaptive" this will only
-                    teleport once, not responsive</span
+                <span
+                    style="
+                        background: #067e74;
+                        color: white;
+                        padding: 15px;
+                        display: block;
+                        margin-bottom: 10px;
+                    "
+                    >Direct teleport <b><u>after</u></b> "world" on load. Unline using
+                    "data-adaptive" this will only teleport once, not responsive</span
                 >
             </div>
             <br />

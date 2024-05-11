@@ -1,8 +1,7 @@
-let listeners = {};
 class EventBus {
     constructor() {
         // cleanup
-        listeners = {};
+        this.listeners = {};
     }
     // creates an event that can be triggered any number of times
     /**
@@ -11,7 +10,7 @@ class EventBus {
      * @param {string} eventName - The name of the event
      * @param {function} callback - The callback to execute
      * @return {void}
-     * @example eventBus.on('event.name', function() { console.log('event.name was triggered') })
+     * @example EventBus.on('event.name', function() { console.log('event.name was triggered') })
      */
     on(eventName, callback) {
         this.registerListener(eventName, callback);
@@ -22,7 +21,7 @@ class EventBus {
      * @param {string} eventName - The name of the event
      * @param {function} callback - The callback to execute
      * @return {void}
-     * @example eventBus.once('event.name', function() { console.log('event.name was triggered only once') })
+     * @example EventBus.once('event.name', function() { console.log('event.name was triggered only once') })
      */
     once(eventName, callback) {
         this.registerListener(eventName, callback, 1);
@@ -32,7 +31,7 @@ class EventBus {
      * @method exactly
      * @param {string} eventName - The name of the event
      * @return {void}
-     * @example eventBus.exactly('event.name', function() { console.log('event.name was triggered 3 times') }, 3)
+     * @example EventBus.exactly('event.name', function() { console.log('event.name was triggered 3 times') }, 3)
      */
     exactly(eventName, callback, capacity) {
         this.registerListener(eventName, callback, capacity);
@@ -42,10 +41,10 @@ class EventBus {
      * @method off
      * @param {string} eventName - The name of the event
      * @return {void}
-     * @example eventBus.off('event.name')
+     * @example EventBus.off('event.name')
      */
     off(eventName) {
-        delete listeners[eventName];
+        delete this.listeners[eventName];
     }
     /**
      * removes the given callback for the given event
@@ -53,15 +52,15 @@ class EventBus {
      * @param {string} eventName - The name of the event
      * @param {function} callback - The callback to remove
      * @return {void|boolean} - Returns true if the event was found and removed, void otherwise
-     * @example eventBus.detach('event.name', callback)
+     * @example EventBus.detach('event.name', callback)
      */
     detach(eventName, callback) {
-        const listenersRecords = listeners[eventName] || [];
+        const listenersRecords = this.listeners[eventName] || [];
         const filteredListeners = listenersRecords.filter(function (value) {
             return value.callback !== callback;
         });
-        if (eventName in listeners) {
-            listeners[eventName] = filteredListeners;
+        if (eventName in this.listeners) {
+            this.listeners[eventName] = filteredListeners;
             return true; // Event was found and removed
         }
         return false; // Event was not found
@@ -73,8 +72,8 @@ class EventBus {
      * @param {any} args - The arguments to pass to the callback
      * @return {void}
      * @use {__context: this|Instance} to pass the context to the callback
-     * @example eventBus.emit('event.name', arg1, arg2, arg3)
-     * @example eventBus.emit('event.name', arg1, arg2, arg3, {__context: YourInstance})
+     * @example EventBus.emit('event.name', arg1, arg2, arg3)
+     * @example EventBus.emit('event.name', arg1, arg2, arg3, {__context: YourInstance})
      */
     emit(eventName, ...args) {
         let queueListeners = [];
@@ -85,28 +84,28 @@ class EventBus {
 
         // name exact match
         if (this.hasListener(eventName)) {
-            queueListeners = listeners[eventName];
+            queueListeners = this.listeners[eventName];
         } else {
             // -----------------------------------------
             // Wildcard support
             if (eventName.includes('*')) {
                 // case 1, if the incoming string has * or ** in it
-                // Matches the emit 'eventName' to the registered 'on' listeners
-                matches = this.patternSearch(eventName, Object.keys(listeners));
+                // Matches the emit 'eventName' to the registered 'on' this.listeners
+                matches = this.patternSearch(eventName, Object.keys(this.listeners));
 
                 if (matches.length > 0) {
                     matches.forEach((match) => {
-                        queueListeners = queueListeners.concat(listeners[match]);
+                        queueListeners = queueListeners.concat(this.listeners[match]);
                     });
                 }
             } else {
                 // case 2, if the incoming string does not have * or ** in it
-                // get the patterns from the listeners (on method) and match them to the emit name
-                for (const key in listeners) {
+                // get the patterns from the this.listeners (on method) and match them to the emit name
+                for (const key in this.listeners) {
                     if (key.includes('*')) {
                         matches = this.patternSearch(key, [eventName]);
                         if (matches) {
-                            queueListeners = queueListeners.concat(listeners[key]);
+                            queueListeners = queueListeners.concat(this.listeners[key]);
                         }
                     }
                 }
@@ -123,7 +122,7 @@ class EventBus {
                 queueListeners[k].triggerCapacity = listener.triggerCapacity;
             }
             if (this.checkToRemoveListener(listener)) {
-                listeners[eventName].splice(k, 1);
+                this.listeners[eventName].splice(k, 1);
             }
             callback(...args);
         });
@@ -174,9 +173,9 @@ class EventBus {
     }
     registerListener(eventName, callback, triggerCapacity) {
         if (!this.hasListener(eventName)) {
-            listeners[eventName] = [];
+            this.listeners[eventName] = [];
         }
-        listeners[eventName].push({ callback, triggerCapacity });
+        this.listeners[eventName].push({ callback, triggerCapacity });
     }
     checkToRemoveListener(eventInformation) {
         if (eventInformation.triggerCapacity !== undefined) {
@@ -185,29 +184,8 @@ class EventBus {
         return false;
     }
     hasListener(eventName) {
-        return eventName in listeners;
+        return eventName in this.listeners;
     }
-    global() {
-        return _eventBus();
-    }
-}
-
-function _eventBus() {
-    // support for browser
-    if (typeof window !== 'undefined') {
-        if (!window.eventBus) {
-            window.eventBus = new EventBus();
-        }
-        return window.eventBus;
-    }
-    if (typeof global !== 'undefined') {
-        if (!global.eventBus) {
-            global.eventBus = new EventBus();
-        }
-        return global.eventBus;
-    }
-    // if none of the above is available, return a new instance
-    return new EventBus();
 }
 
 // // -----------------------------------------
@@ -231,7 +209,7 @@ const makeArray = (item) => (Array.isArray(item) ? item : [item]);
 /**
  * Generate unique ids
  * @function getDynamicId
- * @memberof Utility
+ * @memberof utility
  * @return string Format kn__000000__000
  */
 function getDynamicId() {
@@ -253,10 +231,9 @@ function getDynamicId() {
 function typeOf(input, test) {
     // Special case for null since it can be treated as an object
     if (input === null) {
-        if (test) {
-            return test === null || test === 'null' ? true : false;
+        {
+            return false;
         }
-        return 'null';
     }
 
     let inputType;
@@ -279,7 +256,7 @@ function typeOf(input, test) {
             inputType = 'unknown';
     }
 
-    if (test) {
+    {
         if (test.includes('|')) {
             for (let type of test.split('|')) {
                 if (inputType === type) {
@@ -291,9 +268,33 @@ function typeOf(input, test) {
 
         return test === inputType;
     }
-
-    return inputType;
 }
+
+// //   utility; {
+//     convertToBool,
+//     currencyToDecimal,
+//     convertToNumber,
+//     dateFormat,
+//     decimalToCurrency,
+//     emptyOrValue,
+//     formatPhoneNumber,
+//     getDynamicId,
+//     getGoogleMapsAddress,
+//     getRandomId,
+//     includes,
+//     isEmpty, // from https://moderndash.io/
+//     isNumber,
+//     instanceOf,
+//     openGoogleMapsAddress,
+//     toCurrency,
+//     toDollarString,
+//     typeOf,
+//     validateEmail,
+//     validatePhone,
+//     makeArray,
+//     uuid,
+//     uniqueId,
+// };
 
 /**
  * @class promisePool
@@ -427,14 +428,14 @@ const promisePool = () => {
 };
 
 /**
- * @class PromiseQueue
+ * @class promiseQueue
  * Class to manage a queue of promises, executing them sequentially with status tracking for each promise.
  * @extends EventBus
  * @methods
  * add: Adds a promise to the queue and starts the queue processing if not already started.
  * clear: Clears the promise queue.
  * status: Returns the current status of all promises in the queue.
- * @returns {Object} An instance of the PromiseQueue class.
+ * @returns {Object} An instance of the promiseQueue class.
  * @example
  * const queue = promiseQueue();
  * queue.add(fetch('https://jsonplaceholder.typicode.com/todos/1'));
@@ -740,4 +741,4 @@ const doAsync = (fn) => {
     });
 };
 
-export { promisePool as PromisePool, promiseQueue as PromiseQueue, doAsync, doPoll, doTimeout, promisePool, promiseQueue };
+export { doAsync, doPoll, doTimeout, promisePool, promiseQueue };

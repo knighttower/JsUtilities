@@ -1,3 +1,5 @@
+'use strict';
+
 // // -----------------------------------------
 // /**
 //  * @knighttower
@@ -61,7 +63,7 @@ function convertToNumber(input) {
  * Check if there is a value, if not return null or the default value
  * It can test strings, arrays, objects, numbers, booleans
  * @function emptyOrValue
- * @memberof Utility
+ * @memberof utility
  * @param {String|Number} value If the value is not empty, returns it
  * @param {String|Number} _default The default value if empty
  * @return mixed
@@ -99,7 +101,7 @@ function emptyOrValue(value, _default = null) {
 /**
  * Generate unique ids
  * @function getDynamicId
- * @memberof Utility
+ * @memberof utility
  * @return string Format kn__000000__000
  */
 function getDynamicId() {
@@ -109,7 +111,7 @@ function getDynamicId() {
 /**
  * Alias to getDynamicId
  * @function getRandomId
- * @memberof Utility
+ * @memberof utility
  * @return string
  * @example getRandomId() // kn__000000__000
  */
@@ -118,7 +120,7 @@ const getRandomId = getDynamicId;
 /**
  * Check if a value is empty
  * @function isEmpty
- * @memberof Utility
+ * @memberof utility
  * @param {string|array|object|map|set|number|boolean} value
  * @url https://moderndash.io/
  * @return {string}
@@ -152,7 +154,7 @@ function isEmpty(value) {
  * Integrates both Int and Number, or convert a string number to number to test
  * Note: this is not like Lodash isNumber since this one takes into consideration the 'string number'
  * @function isNumber
- * @memberof Utility
+ * @memberof utility
  * @param {String|Number} value
  * @return null|int
  * @example isNumber(123) // true
@@ -242,6 +244,32 @@ function typeOf(input, test) {
 
     return inputType;
 }
+
+// //   utility; {
+//     convertToBool,
+//     currencyToDecimal,
+//     convertToNumber,
+//     dateFormat,
+//     decimalToCurrency,
+//     emptyOrValue,
+//     formatPhoneNumber,
+//     getDynamicId,
+//     getGoogleMapsAddress,
+//     getRandomId,
+//     includes,
+//     isEmpty, // from https://moderndash.io/
+//     isNumber,
+//     instanceOf,
+//     openGoogleMapsAddress,
+//     toCurrency,
+//     toDollarString,
+//     typeOf,
+//     validateEmail,
+//     validatePhone,
+//     makeArray,
+//     uuid,
+//     uniqueId,
+// };
 
 // Author Knighttower
 // MIT License
@@ -824,25 +852,42 @@ function wildCardStringSearch(pattern, listOrString, matchStart = false, matchEn
     return emptyOrValue(filteredList);
 }
 
-const powerHelper = {
-    addQuotes,
-    cleanStr,
-    convertKeysToSymbols,
-    findAndReplaceInArray,
-    findNested,
-    fixQuotes,
-    getArrObjFromString,
-    getChunks,
-    getDirectivesFromString,
-    getMatchBlock,
-    getMatchInBetween,
-    getObjectFromPath,
-    removeQuotes,
-    startAndEndWith,
-    setExpString,
-    setLookUpExp,
-    setWildCardString,
-    wildCardStringSearch,
-};
+//  const powerHelper = {
+//     addQuotes,
+//     cleanStr,
+//     convertKeysToSymbols,
+//     findAndReplaceInArray,
+//     findNested,
+//     fixQuotes,
+//     getArrObjFromString,
+//     getChunks,
+//     getDirectivesFromString,
+//     getMatchBlock,
+//     getMatchInBetween,
+//     getObjectFromPath,
+//     removeQuotes,
+//     startAndEndWith,
+//     setExpString,
+//     setLookUpExp,
+//     setWildCardString,
+//     wildCardStringSearch,
+// };
 
-export { powerHelper as PowerHelper, addQuotes, cleanStr, convertKeysToSymbols, powerHelper as default, findAndReplaceInArray, findNested, fixQuotes, getArrObjFromString, getChunks, getDirectivesFromString, getMatchBlock, getMatchInBetween, getObjectFromPath, powerHelper, removeQuotes, setExpString, setLookUpExp, setWildCardString, startAndEndWith, wildCardStringSearch };
+exports.addQuotes = addQuotes;
+exports.cleanStr = cleanStr;
+exports.convertKeysToSymbols = convertKeysToSymbols;
+exports.findAndReplaceInArray = findAndReplaceInArray;
+exports.findNested = findNested;
+exports.fixQuotes = fixQuotes;
+exports.getArrObjFromString = getArrObjFromString;
+exports.getChunks = getChunks;
+exports.getDirectivesFromString = getDirectivesFromString;
+exports.getMatchBlock = getMatchBlock;
+exports.getMatchInBetween = getMatchInBetween;
+exports.getObjectFromPath = getObjectFromPath;
+exports.removeQuotes = removeQuotes;
+exports.setExpString = setExpString;
+exports.setLookUpExp = setLookUpExp;
+exports.setWildCardString = setWildCardString;
+exports.startAndEndWith = startAndEndWith;
+exports.wildCardStringSearch = wildCardStringSearch;

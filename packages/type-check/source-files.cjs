@@ -1,15 +1,11 @@
-const targets = [
-    { file: 'TypeCheck.js', exportType: 'named' },
-    { file: 'TestBuilder.js', exportType: 'named' },
-    { file: 'types.js', exportType: 'named' },
-];
+const targets = [{ file: 'typeCheck.js', exportType: 'named', windowExport: 'typeCheck' }];
 
 const rollupFormats = [
-    { type: 'amd', ext: 'js' },
+    // { type: 'amd', ext: 'js' },
     { type: 'cjs', ext: 'cjs' },
     // { type: 'umd', ext: 'js' },
-    { type: 'iife', ext: 'js' },
-    { type: 'system', ext: 'js' },
+    // { type: 'iife', ext: 'js' },
+    // { type: 'system', ext: 'js' },
     { type: 'esm', ext: 'js' },
 ];
 

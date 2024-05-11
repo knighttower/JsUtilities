@@ -1,89 +1,3 @@
-// Author Knighttower
-// MIT License
-// [2022] [Knighttower] https://github.com/knighttower
-/**
- * @module DomObserver
- * Detect DOM changes
- * @name DomObserver
- * @param {window} selector
- * @param {Function}
- * @return DomObserver
- * @example DomObserver.addOnNodeChange('elementIdentifier', () => { console.log('Node changed') })
- * @example DomObserver.removeOnNodeChange('elementIdentifier')
- */
-/**
- * Holds memory of registered functions
- * @private
- */
-const executeOnNodeChanged$1 = {};
-/**
- * Observer
- * @private
- * @return {MutationObserver}
- */
-(() => {
-    if (typeof window !== 'undefined') {
-        const callback = (mutationList) => {
-            for (const mutation of mutationList) {
-                if (mutation.type === 'childList') {
-                    for (const id in executeOnNodeChanged$1) {
-                        executeOnNodeChanged$1[id]();
-                    }
-                }
-            }
-        };
-        const config = {
-            childList: true,
-            subtree: true,
-        };
-        const observer = new MutationObserver(callback);
-        observer.observe(document.body, config);
-    }
-})();
-
-// Author Knighttower
-// MIT License
-// [2022] [Knighttower] https://github.com/knighttower
-/**
- * @module DomObserver
- * Detect DOM changes
- * @name DomObserver
- * @param {window} selector
- * @param {Function}
- * @return DomObserver
- * @example DomObserver.addOnNodeChange('elementIdentifier', () => { console.log('Node changed') })
- * @example DomObserver.removeOnNodeChange('elementIdentifier')
- */
-/**
- * Holds memory of registered functions
- * @private
- */
-const executeOnNodeChanged = {};
-/**
- * Observer
- * @private
- * @return {MutationObserver}
- */
-(() => {
-    if (typeof window !== 'undefined') {
-        const callback = (mutationList) => {
-            for (const mutation of mutationList) {
-                if (mutation.type === 'childList') {
-                    for (const id in executeOnNodeChanged) {
-                        executeOnNodeChanged[id]();
-                    }
-                }
-            }
-        };
-        const config = {
-            childList: true,
-            subtree: true,
-        };
-        const observer = new MutationObserver(callback);
-        observer.observe(document.body, config);
-    }
-})();
-
 // // -----------------------------------------
 // /**
 //  * @knighttower
@@ -119,7 +33,7 @@ function convertToNumber(input) {
  * Check if there is a value, if not return null or the default value
  * It can test strings, arrays, objects, numbers, booleans
  * @function emptyOrValue
- * @memberof Utility
+ * @memberof utility
  * @param {String|Number} value If the value is not empty, returns it
  * @param {String|Number} _default The default value if empty
  * @return mixed
@@ -147,7 +61,7 @@ function emptyOrValue(value, _default = null) {
 
     if (isNumber(value) !== null || typeof value === 'boolean') {
         return value;
-    } else if (!isEmpty$1(value)) {
+    } else if (!isEmpty(value)) {
         return value;
     }
 
@@ -157,7 +71,7 @@ function emptyOrValue(value, _default = null) {
 /**
  * Generate unique ids
  * @function getDynamicId
- * @memberof Utility
+ * @memberof utility
  * @return string Format kn__000000__000
  */
 function getDynamicId() {
@@ -167,7 +81,7 @@ function getDynamicId() {
 /**
  * Alias to getDynamicId
  * @function getRandomId
- * @memberof Utility
+ * @memberof utility
  * @return string
  * @example getRandomId() // kn__000000__000
  */
@@ -176,12 +90,12 @@ const getRandomId = getDynamicId;
 /**
  * Check if a value is empty
  * @function isEmpty
- * @memberof Utility
+ * @memberof utility
  * @param {string|array|object|map|set|number|boolean} value
  * @url https://moderndash.io/
  * @return {string}
  */
-function isEmpty$1(value) {
+function isEmpty(value) {
     if (value === null || value === undefined) {
         return true;
     }
@@ -210,7 +124,7 @@ function isEmpty$1(value) {
  * Integrates both Int and Number, or convert a string number to number to test
  * Note: this is not like Lodash isNumber since this one takes into consideration the 'string number'
  * @function isNumber
- * @memberof Utility
+ * @memberof utility
  * @param {String|Number} value
  * @return null|int
  * @example isNumber(123) // true
@@ -256,7 +170,7 @@ function isNumber(value) {
  * @example typeOf('hello') // returns 'string'
  * @example typeOf({}) // returns 'object'
  */
-function typeOf$1(input, test) {
+function typeOf(input, test) {
     // Special case for null since it can be treated as an object
     if (input === null) {
         if (test) {
@@ -300,6 +214,32 @@ function typeOf$1(input, test) {
 
     return inputType;
 }
+
+// //   utility; {
+//     convertToBool,
+//     currencyToDecimal,
+//     convertToNumber,
+//     dateFormat,
+//     decimalToCurrency,
+//     emptyOrValue,
+//     formatPhoneNumber,
+//     getDynamicId,
+//     getGoogleMapsAddress,
+//     getRandomId,
+//     includes,
+//     isEmpty, // from https://moderndash.io/
+//     isNumber,
+//     instanceOf,
+//     openGoogleMapsAddress,
+//     toCurrency,
+//     toDollarString,
+//     typeOf,
+//     validateEmail,
+//     validatePhone,
+//     makeArray,
+//     uuid,
+//     uniqueId,
+// };
 
 // Author Knighttower
 // MIT License
@@ -391,7 +331,7 @@ function findNested(str, start = '[', end = ']') {
  */
 function getArrObjFromString(strExp) {
     // alredy typeof object or array just return it
-    if (typeOf$1(strExp, 'object') || typeOf$1(strExp, 'array')) {
+    if (typeOf(strExp, 'object') || typeOf(strExp, 'array')) {
         return strExp;
     }
     const isObject = startAndEndWith(strExp, '{', '}');
@@ -455,7 +395,7 @@ function getChunks(str, splitter = ',') {
     if (typeof str !== 'string') {
         return str;
     }
-    if (isEmpty$1(str)) {
+    if (isEmpty(str)) {
         return [];
     }
     str = cleanStr(str);
@@ -517,304 +457,26 @@ function setExpString(exp) {
     }
 }
 
-/**
- * URL Object Class with public methods for URL functions and manipulation.
- *
- * @module urlHelper
- */
-(() => {
-
-    /**
-     * The window object from the global scope.
-     * @type {Window}
-     */
-    const win = typeof window !== 'undefined' ? window : undefined;
-
-    /**
-     * The document object from the global scope.
-     * @type {Document}
-     */
-    const doc = typeof document !== 'undefined' ? document : {};
-
-    const LOCATION = win?.location;
-    let hash = LOCATION?.hash;
-    let HREF = LOCATION?.href;
-    const SEARCH = LOCATION?.search;
-
-    /**
-     * Protocol part of the URL, without the colon.
-     * @type {string}
-     */
-    const PROTOCOL = LOCATION?.protocol?.replace(':', '');
-
-    /**
-     * Host part of the URL, including hostname and port.
-     * @type {string}
-     */
-    const HOST = LOCATION?.host;
-
-    /**
-     * Pathname part of the URL.
-     * @type {string}
-     */
-    const PATH = LOCATION?.pathname;
-
-    /**
-     * Base site URL, constructed from protocol and host.
-     * @type {string}
-     */
-    const SITE_URL = `${PROTOCOL}://${HOST}`;
-
-    /**
-     * Full URL constructed from protocol, host, and path.
-     * @type {string}
-     */
-    const FULL_URL = `${SITE_URL}${PATH}`;
-
-    /**
-     * Parses the current URL parameters and caches them for future use.
-     * @returns {Object} Contains various representations of URL parameters.
-     * @private
-     */
-    const parseURLParams = () => {
-        if (cachedURLParams) {
-            return cachedURLParams;
-        }
-
-        const params = new URLSearchParams(SEARCH);
-        const vars = {};
-
-        for (const [key, value] of params.entries()) {
-            vars[key] = value;
-        }
-
-        cachedURLParams = {
-            params,
-            queryString: params.toString(),
-            search: SEARCH,
-            keys: Array.from(params.keys()),
-            values: Array.from(params.values()),
-            collection: vars,
-        };
-
-        return cachedURLParams;
-    };
-
-    /**
-     * Cached URL parameters for efficient access.
-     * @type {Object|null}
-     */
-    let cachedURLParams = null;
-
-    /**
-     * Public methods and properties for URL manipulation and information.
-     * @namespace
-     */
-    const urlHelper = {
-        /**
-         * Retrieves the current page name (last part of the URL).
-         * @return {string} The current page name or 'index' if none is found.
-         */
-        getPage: () => {
-            const cURL = HREF?.toLowerCase();
-            const page = cURL.split('/').pop().split('.')[0];
-            return page || 'index';
-        },
-
-        /**
-         * Retrieves parsed URL parameters.
-         * @return {Object} An object with methods and properties to interact with URL parameters.
-         */
-        getParams: () => parseURLParams(),
-
-        /**
-         * Retrieves the URL's query string.
-         * @return {string} The query string of the current URL.
-         */
-        getQuery: () => parseURLParams().queryString,
-
-        /**
-         * Adds new parameters to the current URL's query string.
-         * @param {Object} query The new parameters to add.
-         * @return {Object} An object containing the updated query parameters and string.
-         */
-        addToQuery: (query) => {
-            const currentQuery = parseURLParams().collection;
-            Object.assign(currentQuery, query);
-            const qString = Object.entries(currentQuery)
-                .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-                .join('&');
-
-            return {
-                collection: currentQuery,
-                queryString: qString,
-            };
-        },
-
-        /**
-         * Retrieves the hash part of the URL, without the '#' symbol.
-         * @return {string} The current hash value.
-         */
-        getHash: () => hash?.substring(1),
-
-        /**
-         * Sets the hash part of the URL.
-         * @param {string} h The hash to set.
-         */
-        setHash: (h) => {
-            hash = h;
-        },
-
-        /**
-         * Removes the hash part of the URL.
-         */
-        deleteHash: () => {
-            history.pushState('', doc.title, PATH + SEARCH);
-        },
-
-        /**
-         * Navigates to a specified URL.
-         * @param {string} url The URL to navigate to.
-         * @return {boolean} Always returns false to prevent default browser behavior.
-         */
-        goTo: (url) => {
-            HREF = url;
-            return false;
-        },
-
-        /**
-         * Opens a URL in a new window or tab.
-         * @param {string} url The URL to open.
-         * @param {string} [name='_blank'] The target window name.
-         * @param {string} [params=''] Parameters for the new window.
-         * @return {Window} The window object of the newly opened window.
-         */
-        open: (url, name = '_blank', params = '') => win.open(url, name, params),
-
-        /**
-         * Sets up a listener to execute a callback function when the URL hash changes.
-         * @param {Function} callback The function to call when the hash changes.
-         */
-        onChange: (callback) => {
-            if (typeof callback === 'function') {
-                win.addEventListener('hashchange', callback);
-            }
-        },
-
-        // Exposing constants for easy access
-        fullUrl: FULL_URL,
-        siteUrl: SITE_URL,
-        protocol: PROTOCOL,
-        host: HOST,
-        path: PATH,
-        readUrl: HREF,
-    };
-
-    if (typeof window !== 'undefined' && typeof module !== 'object') {
-        return (window.UrlHelper = urlHelper);
-    } else if (typeof module === 'object') {
-        return () => urlHelper;
-    }
-    return urlHelper;
-})();
-
-// // -----------------------------------------
-// /**
-//  * @knighttower
-//  * @url knighttower.io
-//  * @git https://github.com/knighttower/
-//  */
-// // -----------------------------------------
-
-
-/**
- * Check if a value is empty
- * @function isEmpty
- * @memberof Utility
- * @param {string|array|object|map|set|number|boolean} value
- * @url https://moderndash.io/
- * @return {string}
- */
-function isEmpty(value) {
-    if (value === null || value === undefined) {
-        return true;
-    }
-
-    if (typeof value === 'string' || Array.isArray(value)) {
-        return value.length === 0;
-    }
-
-    if (value instanceof Map || value instanceof Set) {
-        return value.size === 0;
-    }
-
-    if (ArrayBuffer.isView(value)) {
-        return value.byteLength === 0;
-    }
-
-    if (typeof value === 'object') {
-        return Object.keys(value).length === 0;
-    }
-
-    return false;
-}
-
-/**
- * Check the type of a variable, and get the correct type for it. It also accepts simple comparisons
- * For more advance type checking see https://github.com/knighttower/JsTypeCheck
- * @param {any} input - The variable to check
- * @param {string} test - The types to check against, piped string
- * @return {string|boolean} - The type of the variable
- * @example typeOf('hello', 'string') // returns true
- * @example typeOf('hello', 'number') // returns false
- * @example typeOf('hello', 'string') // returns true
- * @example typeOf('hello') // returns 'string'
- * @example typeOf({}) // returns 'object'
- */
-function typeOf(input, test) {
-    // Special case for null since it can be treated as an object
-    if (input === null) {
-        if (test) {
-            return test === null || test === 'null' ? true : false;
-        }
-        return 'null';
-    }
-
-    let inputType;
-
-    switch (typeof input) {
-        case 'number':
-        case 'string':
-        case 'boolean':
-        case 'undefined':
-        case 'bigint':
-        case 'symbol':
-        case 'function':
-            inputType = typeof input;
-            break;
-        case 'object':
-            inputType = Array.isArray(input) ? 'array' : 'object';
-
-            break;
-        default:
-            inputType = 'unknown';
-    }
-
-    if (test) {
-        if (test.includes('|')) {
-            for (let type of test.split('|')) {
-                if (inputType === type) {
-                    return type;
-                }
-            }
-            return false;
-        }
-
-        return test === inputType;
-    }
-
-    return inputType;
-}
+//  const powerHelper = {
+//     addQuotes,
+//     cleanStr,
+//     convertKeysToSymbols,
+//     findAndReplaceInArray,
+//     findNested,
+//     fixQuotes,
+//     getArrObjFromString,
+//     getChunks,
+//     getDirectivesFromString,
+//     getMatchBlock,
+//     getMatchInBetween,
+//     getObjectFromPath,
+//     removeQuotes,
+//     startAndEndWith,
+//     setExpString,
+//     setLookUpExp,
+//     setWildCardString,
+//     wildCardStringSearch,
+// };
 
 // typeOf is used here insteand of the native typeof because it can handle better the identifications of arrays and objects
 
@@ -1090,10 +752,7 @@ const runArrayTest = (inputVal, tests) => {
 class HandleObjects {
     constructor(inputVal, unitTest) {
         // Extract all properties at once
-        const { testOnly, testFew, testAllAny, optionalKeys, tests } = [...unitTest.entries()].reduce(
-            (acc, [key, value]) => ({ ...acc, [key]: value }),
-            {}
-        );
+        const { testOnly, testFew, testAllAny, optionalKeys, tests } = [...unitTest.entries()].reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
         // Use destructured variables
         this.testUnitKeys = [...tests.keys()];
         this.testOnly = testOnly;
@@ -1351,7 +1010,8 @@ const _typeCheck = (inputVal, typeExp, params) => {
         fail() {
             if (!this.testResult) {
                 this.log();
-                this.settings?.error && console.log('\n\n-----> Error Message: ', this.settings.error);
+                this.settings?.error &&
+                    console.log('\n\n-----> Error Message: ', this.settings.error);
                 return typeError(inputVal);
             }
             return this;
@@ -1462,7 +1122,7 @@ const validType = (inputVal, typeExp) => {
 };
 
 /**
-* TypeCheck
+* typeCheck
 * @param {any} inputVal
 * @param {string} typeExp
 * @example typeCheck(1, 'number') // true
@@ -1477,4 +1137,4 @@ const typeCheck = (inputVal, typeExp, params = null) => {
     return _typeCheck(inputVal, typeExp, params).fail();
 };
 
-export { typeCheck as TypeCheck, _tc, _tcx, _typeCheck, addTypeTest, typeCheck as default, testBuilder, typeCheck, typesMap, validType };
+export { typeCheck as TypeCheck, _tc, _tcx, _typeCheck, addTypeTest, typeCheck as default, typeCheck, typesMap, validType };
