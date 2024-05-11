@@ -12,23 +12,52 @@
         <script src="../dist/browser/promises.js"></script>
         <script src="../dist/browser/urlHelper.js"></script>
         <script>
-            console.log(EventBus);
+            console.log('window  ===> ', window);
 
+            // eventBus can be instantiated as class or as window
             const ev = new EventBus();
+            console.log('EventBus as class', ev);
+            window.eventBus = new EventBus();
+            console.log('EventBus as window', eventBus);
+            // use eventBus.emit('event', data) to emit events
 
-            console.log(ev);
-            console.log(window);
-            console.log('______log______', window.utility.uuid);
-            console.log('url', window.urlHelper);
+            // utility no need to be instantiated
+            console.log('utility --> ', window.utility.uuid);
+
+            // urlHelper as function
+            console.log('url', urlHelper());
+            window.urlHelper = urlHelper();
+            console.log('url', urlHelper);
+
+            // powerHelper no need to be instantiated
             console.log('power', window.powerHelper);
-            console.log('proxy', window.proxyObject);
-            console.log('proxy', window.proxyClass);
+
+            // proxyObject as function
+            console.log('proxy', window.proxyObject({}));
+            console.log('proxy', window.proxyClass({}));
+
+            // domObserver return object
             console.log('domObserver', window.domObserver);
+            // neeeds to be started before it can be used
+            domObserver.start();
+            // domObserver....
+
+            // elementHelper as function
             console.log('ElementHelper', window.elementHelper);
             let elh = elementHelper('h1');
             console.log('test ElementHelper', elh);
+
+            // promises returns object with functions:
+            // doAsync: ​
+            // doPoll:
+            // doTimeout:
+            // promisePool:
+            // promiseQueue:
             console.log('promiseQueue', window.promises);
-            console.log('urlHelper', window.urlHelper());
+            const doAsync = promises.doAsync;
+            doAsync(() => {
+                console.log('doAsync');
+            });
         </script>
     </head>
     <body>

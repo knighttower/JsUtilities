@@ -95,6 +95,9 @@ export {
 ## In the browser
 Each library can be loaded individually or all at once. The library is also available via CDN.
 
+see browser examples here: https://github.com/knighttower/JsUtility/blob/development/packages/utility/tests/index.html
+
+
 ```html
 <script src="https://cdn.jsdelivr.net/npm/@knighttower/utility@VERSION_NUMBER/dist/browser/LIBRARY_NAME.min.js"></script>
 //or ESM

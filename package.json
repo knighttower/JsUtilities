@@ -36,6 +36,10 @@
       "import": "./packages/utility/index.js",
       "require": "./packages/utility/index.cjs"
     },
+    "./utils": {
+      "import": "./packages/utility/src/utility.js",
+      "require": "./packages/utility/dist/cjs/utility.cjs"
+    },
     "./utils/*": "./packages/utility/*",
     "./utility/node/*": "./packages/utility/nodeUtils/*",
     "./utility/nodeUtils/*": "./packages/utility/nodeUtils/*",
