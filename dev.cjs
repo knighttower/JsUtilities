@@ -4,12 +4,7 @@ const { input, select, rawlist } = require('@inquirer/prompts');
 const { runCommand, getFlagValue } = require('./packages/utility/nodeUtils/index.cjs');
 const workingDir = process.cwd();
 const webpackConfig = `${workingDir}/packages/utility/nodeUtils/webpack.config.cjs`;
-const rollupConfig = `${workingDir}/packages/utility/nodeUtils/rollup.config.cjs`;
-const minify = `${workingDir}/packages/utility/nodeUtils/Minify.js`;
-const buildExports = `${workingDir}/packages/utility/nodeUtils/BuildExports.js`;
-const bumpVersion = `${workingDir}/packages/utility/nodeUtils/BumpVersion.cjs`;
-const pretty = `${workingDir}/.prettierrc.json`;
-const eslint = `${workingDir}/.eslintrc.js`;
+// const minify = `${workingDir}/packages/utility/nodeUtils/Minify.cjs`;
 
 const once = getFlagValue('once') ? '' : '--watch';
 

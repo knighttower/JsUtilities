@@ -1,10 +1,11 @@
 #!/usr/bin/env node
-import fs from 'fs';
-import path from 'path';
-import glob from 'glob';
-import * as helper from '../src/powerHelper.js';
-import * as utils from '../src/utility.js';
-import { getFlagValue } from './NodeHelpers.js';
+Object.defineProperty(exports, '__esModule', { value: true });
+const fs = require('fs');
+const path = require('path');
+const glob = require('glob');
+const helper = require('../dist/cjs/powerHelper.cjs');
+const utils = require('../dist/cjs/utility.cjs');
+const { getFlagValue } = require('./NodeHelpers.cjs');
 
 const workingDir = process.cwd();
 /**

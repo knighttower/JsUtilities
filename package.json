@@ -1,7 +1,6 @@
 {
   "name": "knighttower",
-  "version": "9.0.2",
-  "type": "module",
+  "version": "9.0.6",
   "engines": {
     "node": ">=20.10.0"
   },
@@ -31,31 +30,45 @@
     "bumpVersion": "./packages/utility/nodeUtils/BumpVersion.js"
   },
   "exports": {
-    "./packages/*": "./packages/*",
-    "./utility": {
-      "import": "./packages/utility/index.js",
-      "require": "./packages/utility/index.cjs"
+    "./adaptive": {
+      "import": "./packages/adaptive/index.js",
+      "require": "./packages/adaptive/index.cjs"
     },
-    "./utils": {
-      "import": "./packages/utility/src/utility.js",
-      "require": "./packages/utility/dist/cjs/utility.cjs"
-    },
-    "./utils/*": "./packages/utility/*",
-    "./utility/node/*": "./packages/utility/nodeUtils/*",
-    "./utility/nodeUtils/*": "./packages/utility/nodeUtils/*",
-    "./utility/nodeUtils": {
-      "import": "./packages/utility/nodeUtils/index.mjs",
-      "require": "./packages/utility/nodeUtils/index.cjs"
+    "./adaptive/dist/*": "./packages/adaptive/dist/*",
+    "./bootstrap-mini": {
+      "import": "./packages/bootstrap-mini/index.js",
+      "require": "./packages/bootstrap-mini/dist/bootstrap-mini.css"
     },
     "./type-check": {
       "import": "./packages/type-check/index.js",
       "require": "./packages/type-check/index.cjs"
     },
-    "./packages/type-check": {
-      "import": "./packages/type-check/index.js",
-      "require": "./packages/type-check/index.cjs"
+    "./type-check/dist/*": "./packages/type-check/dist/*",
+    "./utility": {
+      "import": "./packages/utility/index.js",
+      "require": "./packages/utility/index.cjs"
     },
-    "./event-bus": {
+    "./utility/dist/*": "./packages/utility/dist/*",
+    "./utility/node/*": "./packages/utility/nodeUtils/*",
+    "./utility/nodeUtils/*": "./packages/utility/nodeUtils/*",
+    "./utility/nodeUtils": "./packages/utility/nodeUtils/index.cjs",
+    "./utility/proxyObject": {
+      "import": "./packages/utility/dist/esm/proxyObject.js",
+      "require": "./packages/utility/dist/cjs/proxyObject.cjs"
+    },
+    "./utility/proxyClass": {
+      "import": "./packages/utility/dist/esm/proxyObject.js",
+      "require": "./packages/utility/dist/cjs/proxyObject.cjs"
+    },
+    "./utility/powerHelpers": {
+      "import": "./packages/utility/dist/esm/powerHelper.js",
+      "require": "./packages/utility/dist/cjs/powerHelper.cjs"
+    },
+    "./utility/promiseQueue": {
+      "import": "./packages/utility/dist/esm/promiseQueue.js",
+      "require": "./packages/utility/dist/cjs/promiseQueue.cjs"
+    },
+    "./utility/EventBus": {
       "import": "./packages/utility/dist/esm/EventBus.js",
       "require": "./packages/utility/dist/cjs/EventBus.cjs"
     },
@@ -63,24 +76,6 @@
       "import": "./packages/utility/dist/esm/EventBus.js",
       "require": "./packages/utility/dist/cjs/EventBus.cjs"
     },
-    "./bootstrap-mini": {
-      "import": "./packages/bootstrap-mini/index.js",
-      "require": "./packages/bootstrap-mini/dist/bootstrap-mini.css"
-    },
-    "./packages/bootstrap-mini": {
-      "import": "./packages/bootstrap-mini/index.js",
-      "require": "./packages/bootstrap-mini/dist/bootstrap-mini.css"
-    },
-    "./adaptive": {
-      "import": "./packages/adaptive/index.js",
-      "require": "./packages/adaptive/index.cjs"
-    },
-    "./packages/adaptive": {
-      "import": "./packages/adaptive/index.js",
-      "require": "./packages/adaptive/index.cjs"
-    },
-    "./adaptive/dist/*": "./packages/adaptive/dist/*",
-    "./adaptive/src/*": "./packages/adaptive/src/*",
     "./vue-utils": {
       "import": "./packages/vue-utils/index.js",
       "require": "./packages/vue-utils/index.cjs"
@@ -89,7 +84,7 @@
       "import": "./packages/vue-utils/dist/esm/mixinInstaller.js",
       "require": "./packages/vue-utils/dist/cjs/mixinInstaller.cjs"
     },
-    "./vue-utils/dist/*": "./packages/vue-utils/dist/*"
+    "./*": "./packages/*"
   },
   "dependencies": {
     "bootstrap": "^5.3.3"

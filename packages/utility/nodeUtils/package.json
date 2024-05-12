@@ -1,15 +1,9 @@
 {
-    "name": "node-utils",
-    "main": "index.mjs",
-    "type": "module",
-    "module": "index.mjs",
+    "main": "index.cjs",
+    "module": "index.js",
     "exports": {
         ".": {
-            "import": "./index.mjs",
-            "require": "./index.cjs"
-        },
-        "./node": {
-            "import": "./index.mjs",
+            "import": "./index.js",
             "require": "./index.cjs"
         }
     }

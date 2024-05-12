@@ -1,19 +1,22 @@
-import fs from 'fs';
-import path from 'path';
-import glob from 'glob';
-import { minify } from 'terser';
-const workingDir = process.cwd();
+Object.defineProperty(exports, '__esModule', { value: true });
 
-function getFilesToMinify(destination = 'dist') {
-    const directory = workingDir + '/' + destination;
-    const filePaths = glob.sync(`${directory}/**/*.{js,mjs,cjs}` || []);
+const fs = require('fs');
+const path = require('path');
+const glob = require('glob');
+const { minify } = require('terser');
+const { getFlagValue } = require('./NodeHelpers.cjs');
+
+getFilesToMinify = function (originDir, destination) {
+    destination = destination ?? originDir;
+    const filePaths = glob.sync(`${originDir}/**/*.{js,mjs,cjs}` || []);
     const allExports = [];
 
     filePaths.forEach((filePath) => {
         const moduleName = path.basename(filePath).replace(/\.js|\.mjs|\.cjs/, '');
+        const extension = path.extname(filePath);
         allExports.push({
-            input: directory + `/${moduleName}.js`,
-            output: directory + '/${moduleName}.min.js',
+            input: originDir + `/${moduleName}.${extension}`,
+            output: destination + `/${moduleName}.min.${extension}`,
             options: {
                 compress: true,
                 mangle: true,
@@ -22,7 +25,7 @@ function getFilesToMinify(destination = 'dist') {
     });
 
     return allExports;
-}
+};
 
 async function minifyFile(input, output, options) {
     try {
@@ -39,12 +42,12 @@ async function minifyFile(input, output, options) {
     }
 }
 
-async function main() {
-    for (const { input, output, options } of getFilesToMinify()) {
+exports.minify = async function (originDir, destination) {
+    for (const { input, output, options } of getFilesToMinify(originDir, destination)) {
         await minifyFile(input, output, options);
     }
-}
+};
 
-main().catch((err) => {
-    console.error('Minification failed:', err);
-});
+if (getFlagValue('dir')) {
+    exports.minify(getFlagValue('dir'), getFlagValue('dest'));
+}

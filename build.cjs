@@ -5,10 +5,11 @@ const { runCommand, getFlagValue } = require('./packages/utility/nodeUtils');
 const workingDir = process.cwd();
 const webpackConfig = `${workingDir}/packages/utility/nodeUtils/webpack.config.cjs`;
 const rollupConfig = `${workingDir}/packages/utility/nodeUtils/rollup.config.cjs`;
-const buildExports = `${workingDir}/packages/utility/nodeUtils/BuildExports.js`;
+const buildExports = `${workingDir}/packages/utility/nodeUtils/BuildExports.cjs`;
 const bumpVersion = `${workingDir}/packages/utility/nodeUtils/BumpVersion.cjs`;
 const pretty = `${workingDir}/.prettierrc.json`;
 const eslint = `${workingDir}/.eslintrc.cjs`;
+const minify = `${workingDir}/packages/utility/nodeUtils/minify.cjs`;
 
 const local = getFlagValue('local');
 const pkgOnly = getFlagValue('pkg');
@@ -75,7 +76,7 @@ const adaptive = () => {
 const mono = () => {
     runCommand(
         `\
-    node "${bumpVersion}" --exe \
+    node ./add-exports.cjs && node "${bumpVersion}" --exe \
     ` + (local ? '' : '&& npm publish --access public')
     );
 };

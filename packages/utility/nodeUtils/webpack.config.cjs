@@ -59,7 +59,7 @@ const getWebpackConfig = (config) => ({
                     ecma: 6,
                     // keep_classnames: true, // Preserve class names
                     // keep_fnames: true, // Preserve function names
-                    safari10: true, // Workaround for Safari 10/11 loop scoping and await bugs
+                    // safari10: true, // Workaround for Safari 10/11 loop scoping and await bugs
 
                     toplevel: true,
                     output: {
