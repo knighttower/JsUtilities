@@ -18,6 +18,9 @@ If you want to install all packages at once as a build tool, you can use the fol
 ```bash
 npm install knighttower
 ```
+for browser use: see all packages on [jsDelivr](https://cdn.jsdelivr.net/npm/knighttower@9.0.6/packages/)
+
+<br>
 
 ## Usage
 
