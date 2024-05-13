@@ -1,6 +1,6 @@
 # Sensitive files
 .*
-
+!.babelrc
 !.github
 !.gitignore
 !.gitattributes
