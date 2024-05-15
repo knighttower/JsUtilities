@@ -229,3 +229,21 @@ test('doAsync', async () => {
 
     expect(done2).toBeTypeOf('object');
 });
+
+test('doAsync 2', async () => {
+    const doasync = doAsync(
+        (arg1, arg2) => {
+            console.log('______log______', arg1, arg2);
+            return fetch('https://knighttower.io');
+        },
+        'hello',
+        'world'
+    );
+    let response = false;
+    const done2 = await vi.waitUntil(() => doasync, {
+        timeout: 3000, // default is 1000
+        interval: 200, // default is 50
+    });
+
+    expect(done2).toBeTypeOf('object');
+});
