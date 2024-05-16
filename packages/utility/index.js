@@ -30,7 +30,7 @@ import {
     wildCardStringSearch,
 } from './src/powerHelper.js';
 // Single Modules and Aliases from: promiseQueue
-import { promisePool, promiseQueue, doPoll, doTimeout, doAsync } from './src/promiseQueue.js';
+import { promiseQueue, doPoll, promisePool, doTimeout, doAsync } from './src/promiseQueue.js';
 // Single Modules and Aliases from: proxyObject
 import { proxyClass } from './src/proxyObject.js';
 // Default Module from: proxyObject
@@ -47,11 +47,12 @@ import {
     emptyOrValue,
     formatPhoneNumber,
     makeArray,
-    getDynamicId,
-    getRandomId,
-    randomId,
     uuid,
     uniqueId,
+    getDynamicId,
+    getRandomId,
+    dynamicId,
+    randomId,
     getGoogleMapsAddress,
     includes,
     isEmpty,
@@ -90,9 +91,9 @@ export {
     setLookUpExp,
     setWildCardString,
     wildCardStringSearch,
-    promisePool,
     promiseQueue,
     doPoll,
+    promisePool,
     doTimeout,
     doAsync,
     proxyClass,
@@ -106,11 +107,12 @@ export {
     emptyOrValue,
     formatPhoneNumber,
     makeArray,
-    getDynamicId,
-    getRandomId,
-    randomId,
     uuid,
     uniqueId,
+    getDynamicId,
+    getRandomId,
+    dynamicId,
+    randomId,
     getGoogleMapsAddress,
     includes,
     isEmpty,
