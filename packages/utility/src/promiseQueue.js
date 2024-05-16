@@ -27,7 +27,7 @@ export const promiseQueue = () => {
             this.queue = [];
             this.inProgress = false;
             this._timer = null;
-            this.stats = {
+            this._stats = {
                 completed: 0,
                 rejected: 0,
                 pending: 0,
@@ -63,8 +63,8 @@ export const promiseQueue = () => {
             }
 
             makeArray(promise).forEach((promiseFunction) => {
-                this.stats.total++;
-                this.stats.pending++;
+                this._stats.total++;
+                this._stats.pending++;
                 this.queue.push({
                     promiseFunction,
                     status: 'pending', // 'pending', 'fulfilled', or 'rejected'
@@ -113,21 +113,21 @@ export const promiseQueue = () => {
             promiseFunction
                 .then(() => {
                     this.queue[0].status = 'fulfilled';
-                    this.stats.completed++;
+                    this._stats.completed++;
                 })
                 .catch(() => {
                     this.queue[0].status = 'rejected';
-                    this.stats.rejected++;
+                    this._stats.rejected++;
                 })
                 .finally(() => {
-                    this.stats.pending--;
+                    this._stats.pending--;
                     this.queue.shift(); // Remove the processed promise from the queue
                     this._next(); // Process the next promise
                 });
         }
 
         stats() {
-            return this.stats;
+            return this._stats;
         }
 
         /**
@@ -264,7 +264,7 @@ export const promisePool = () => {
     let _status = 'not-started'; // 'in-progress' or 'done'
     const promises = {};
     const rejectedPromises = [];
-    let stats = {
+    let _stats = {
         completed: 0,
         rejected: 0,
         pending: 0,
@@ -353,10 +353,10 @@ export const promisePool = () => {
          * @returns {Object} The results of the promise pool.
          */
         results() {
-            return stats;
+            return _stats;
         }
         stats() {
-            return stats;
+            return _stats;
         }
 
         /**
@@ -369,7 +369,7 @@ export const promisePool = () => {
             }
             const instances = Object.values(promises);
 
-            stats = {
+            _stats = {
                 completed: instances.filter((promise) => promise.status === 'completed').length,
                 rejected: instances.filter((promise) => promise.status === 'rejected').length,
                 pending: instances.filter((promise) => promise.status === 'in-progress').length,
@@ -377,18 +377,18 @@ export const promisePool = () => {
                 errors: rejectedPromises.join('\n'),
                 promises,
             };
-            this.emit('stats', stats);
+            this.emit('stats', _stats);
 
             const allCompletedOrRejected = instances.every(
                 (promise) => promise.status === 'completed' || promise.status === 'rejected'
             );
 
-            _status = allCompletedOrRejected || stats.total === 0 ? 'done' : 'in-progress';
+            _status = allCompletedOrRejected || _stats.total === 0 ? 'done' : 'in-progress';
 
             if (_status === 'done') {
-                this.emit('completed', stats);
-                this.emit('done', stats);
-                this.emit('rejected', rejectedPromises, stats);
+                this.emit('completed', _stats);
+                this.emit('done', _stats);
+                this.emit('rejected', rejectedPromises, _stats);
             }
         }
     })();
