@@ -353,10 +353,11 @@ export const promisePool = () => {
          * @returns {Object} The results of the promise pool.
          */
         results() {
+            this._updateStatus();
             return _stats;
         }
         stats() {
-            return _stats;
+            return results();
         }
 
         /**
