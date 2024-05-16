@@ -500,7 +500,7 @@ export function doAsync(fn, ...args) {
     return new Promise((resolve, reject) => {
         try {
             Promise.resolve(fn(...args))
-                .then((result) => resolve(result !== undefined ? result : true))
+                .then((result) => resolve(result))
                 .catch((error) => reject(error));
         } catch (error) {
             reject(error);

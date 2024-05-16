@@ -282,6 +282,7 @@ test('doAsync 2', async () => {
         'world'
     );
     let response = false;
+    console.log('______ log ______', await doasync);
     const done2 = await vi.waitUntil(() => doasync, {
         timeout: 3000, // default is 1000
         interval: 200, // default is 50
@@ -298,7 +299,16 @@ test('doAsync empty', async () => {
         console.log('______logw______');
         () => {};
     });
-    console.log('______ log ______', doasync instanceof Promise);
+    let response = false;
+});
+
+test('doAsync empty', async () => {
+    const doasync = doAsync(() => {
+        console.log('______logw______');
+        () => {};
+        return true;
+    });
+    console.log('______ log ______', await doasync);
     let response = false;
     const done2 = await vi.waitUntil(() => doasync, {
         timeout: 4000, // default is 1000
