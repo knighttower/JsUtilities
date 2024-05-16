@@ -183,10 +183,7 @@ export const doPoll = (fn, options = {}) => {
         rejectPromise = reject;
 
         const poll = () => {
-            if (stopped) {
-                return;
-            }
-            if (promiseRunning) {
+            if (stopped || promiseRunning) {
                 return;
             }
 
@@ -230,35 +227,34 @@ export const doPoll = (fn, options = {}) => {
 // --> promisePool
 // --------------------------
 /**
- * @class promisePool
+ * @class PromisePool
  * @description Class to manage a pool of promises with status tracking.
  * @methods
- * add: Adds a promise to the pool and sets up handling for resolution.
+ * add: Adds a promise or array of promises to the pool and sets up handling for resolution.
  * status: Returns the overall status of the promise pool.
  * isDone: Returns true if the pool is done processing all promises.
  * clear: Clears all promises from the pool.
- * @returns {Object} An instance of the promisePool class.
+ * @returns {Object} An instance of the PromisePool class.
  * @example
  * const pool = promisePool();
  * pool.add(fetch('https://jsonplaceholder.typicode.com/todos/1'));
  * pool.add(fetch('https://jsonplaceholder.typicode.com/todos/2'));
  * pool.status(); // 'in-progress'
- * pool.on('completed', () => {});
- * pool.on('done', () => {});
- * pool.on('rejected', (rejectedPromises) => {});
- * pool.on('stats', ({ completed, rejected, pending, total }) => {});
+ * pool.on('completed', (stats) => {});
+ * pool.on('done', (stats) => {});
+ * pool.on('rejected', (rejectedPromises, stats) => {});
+ * pool.on('stats', (stats) => {});
  */
 export const promisePool = () => {
-    let _status = 'not-started'; // 'in progress' or 'done'
-    let promises = {};
-    let rejectedPromises = [];
-    const _statsSet = {
+    let _status = 'not-started'; // 'in-progress' or 'done'
+    const promises = {};
+    const rejectedPromises = [];
+    let stats = {
         completed: 0,
         rejected: 0,
         pending: 0,
         total: 0,
     };
-    let stats = _statsSet;
 
     return new (class extends EventBus {
         constructor() {
@@ -275,9 +271,10 @@ export const promisePool = () => {
                 );
             }, 100);
         }
+
         /**
-         * Adds a promise to the pool and sets up handling for resolution.
-         * @param {Promise|Array} promise The promise to add to the pool.
+         * Adds a promise or array of promises to the pool and sets up handling for resolution.
+         * @param {Promise|Array<Promise>} _promises The promise or array of promises to add to the pool.
          */
         add(_promises) {
             const $this = this;
@@ -288,37 +285,31 @@ export const promisePool = () => {
             _status = 'in-progress';
             const promiseCollection = makeArray(_promises);
             promiseCollection.forEach((promise) => {
-                const isValidPromise = (() => {
-                    if (promise instanceof Promise) {
-                        return true;
-                    }
-                    return false;
-                })();
-
-                if (!isValidPromise) {
-                    if (typeOf(promise, 'function')) {
-                        promise = doAsync(() => {
-                            return promise();
-                        });
+                if (!(promise instanceof Promise)) {
+                    if (typeof promise === 'function') {
+                        promise = doAsync(() => promise());
                     } else {
                         console.info('---> Invalid promise added to the pool.');
                         rejectedPromises.push(promise.toString());
                         return;
                     }
                 }
-                const promiseBag = Promise.all([promise]);
+
                 const promiseId = getDynamicId();
+
                 promises[promiseId] = {
-                    promiseBag,
                     status: 'in-progress',
                 };
-                promiseBag
-                    .then(() => {
+                promise
+                    .then((response) => {
                         promises[promiseId].status = 'completed';
+                        promises[promiseId].response = response;
                         $this._updateStatus();
                     })
-                    .catch(() => {
+                    .catch((error) => {
+                        rejectedPromises.push(error);
                         promises[promiseId].status = 'rejected';
+                        promises[promiseId].error = error;
                         $this._updateStatus();
                     });
             });
@@ -333,53 +324,54 @@ export const promisePool = () => {
             return _status;
         }
 
+        /**
+         * Checks if the pool has finished processing all promises.
+         * @returns {Boolean} True if all promises are resolved or rejected.
+         */
         isDone() {
             this._updateStatus();
             return _status === 'done';
         }
 
+        /**
+         * gets the results of the promise pool.
+         * @returns {Object} The results of the promise pool.
+         */
+        results() {
+            return stats;
+        }
+
+        /**
+         * Updates the status of the promise pool based on the status of individual promises.
+         * @private
+         */
         _updateStatus() {
             if (_status === 'done') {
                 return;
             }
             const instances = Object.values(promises);
-            instances.forEach((promise) => {
-                const { status } = promise;
-                const stringForm = promise.toString();
-                if (status === 'rejected' && !rejectedPromises.includes(stringForm)) {
-                    rejectedPromises.push(stringForm);
-                }
-            });
 
             stats = {
                 completed: instances.filter((promise) => promise.status === 'completed').length,
-                rejected: rejectedPromises.length,
+                rejected: instances.filter((promise) => promise.status === 'rejected').length,
                 pending: instances.filter((promise) => promise.status === 'in-progress').length,
                 total: instances.length,
+                errors: rejectedPromises.join('\n'),
+                promises,
             };
             this.emit('stats', stats);
 
-            const statuses = instances.every(
+            const allCompletedOrRejected = instances.every(
                 (promise) => promise.status === 'completed' || promise.status === 'rejected'
             );
 
-            _status = statuses || stats.total === 0 ? 'done' : 'in-progress';
+            _status = allCompletedOrRejected || stats.total === 0 ? 'done' : 'in-progress';
 
             if (_status === 'done') {
                 this.emit('completed', stats);
                 this.emit('done', stats);
                 this.emit('rejected', rejectedPromises, stats);
-                this.clear();
             }
-        }
-
-        /**
-         * Clears all promises from the pool.
-         */
-        clear() {
-            promises = {};
-            rejectedPromises = [];
-            stats = _statsSet;
         }
     })();
 };
@@ -388,12 +380,13 @@ export const promisePool = () => {
 // --> doTimeout
 // --------------------------
 const doTimeoutStore = {};
+
 /**
  * Initialize, cancel, or force execution of a callback after a delay using a unique ID.
- * If delay and callback are specified, a timeout is initialized. The callback will execute,
- * asynchronously, after the delay. If an id is specified, this timeout will override and
- * cancel any existing timeout with the same id. Any additional arguments will be passed
- * into callback when it is executed.
+ * If delay and callback are specified, a timeout is initialized. The callback will execute
+ * asynchronously after the delay. If an ID is specified, this timeout will override and
+ * cancel any existing timeout with the same ID. Any additional arguments will be passed
+ * into the callback when it is executed.
  * If the callback returns true, the timeout loop will execute again, after the delay,
  * creating a polling loop until the callback returns a non-true value.
  *
@@ -412,16 +405,14 @@ const doTimeoutStore = {};
  * // Force execution of a timeout with an ID
  * doTimeout('myTimeout', 0);
  * // Initialize a polling loop
- * // Example usage for polling
-    doTimeout(100, function() {
-        if (someCondition()) {
-            console.log('Condition met, stopping the polling.');
-            return false;  // Stop polling when some condition is true
-        }
-        console.log('Condition not met, continue polling.');
-        return true;  // Continue polling by returning true
-    });
- *  
+ * doTimeout(100, function() {
+ *     if (someCondition()) {
+ *         console.log('Condition met, stopping the polling.');
+ *         return false;  // Stop polling when some condition is true
+ *     }
+ *     console.log('Condition not met, continue polling.');
+ *     return true;  // Continue polling by returning true
+ * });
  */
 export function doTimeout(idOrDelay, delayOrCallback, callback, ...args) {
     let id, delay;
@@ -432,8 +423,8 @@ export function doTimeout(idOrDelay, delayOrCallback, callback, ...args) {
     } else if (typeof idOrDelay === 'number' && typeof delayOrCallback === 'function') {
         delay = idOrDelay;
         callback = delayOrCallback;
-        args = [callback, ...args];
-        id = undefined;
+    } else {
+        throw new Error('Invalid parameters');
     }
 
     // Namespace for timeout IDs to prevent conflicts
@@ -483,13 +474,15 @@ export function doTimeout(idOrDelay, delayOrCallback, callback, ...args) {
  * Wraps a function that might be synchronous or asynchronous into a standardized asynchronous workflow.
  * Helps to mitigate the need to know if a function is synchronous or asynchronous.
  * @param {Function} fn - A function that may be synchronous or return a Promise.
- * @returns {Promise<any>} - A Promise resolving with the function's return value or rejecting with any thrown error.
+ * @param {...any} args - Arguments to be passed to the function.
+ * @returns {Promise<any>} - A Promise resolving with the function's return value or resolving with `true` if the function returns void or rejecting with any thrown error.
  */
 export function doAsync(fn, ...args) {
-    return new Promise(async (resolve, reject) => {
+    return new Promise((resolve, reject) => {
         try {
-            const fx = await fn(...args);
-            resolve(fx || true);
+            Promise.resolve(fn(...args))
+                .then((result) => resolve(result !== undefined ? result : true))
+                .catch((error) => reject(error));
         } catch (error) {
             reject(error);
         }

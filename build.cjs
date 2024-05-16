@@ -26,7 +26,7 @@ const utility = () => {
     && prettier --config "${pretty}" --write ./index.js \
     && prettier --config "${pretty}" --write ./index.cjs \
     && npm run test \
-    && node "${bumpVersion}" --exe \
+    && node "${bumpVersion}" --exe --minor \
     ` + (local ? '' : '&& npm publish --access public')
     );
 };
@@ -44,7 +44,7 @@ const typeCheck = () => {
     && prettier --config "${pretty}" --write ./index.js \
     && prettier --config "${pretty}" --write ./index.cjs \
     && npm run test \
-    && node "${bumpVersion}" --exe \
+    && node "${bumpVersion}" --exe --minor \
     ` + (local ? '' : '&& npm publish --access public')
     );
 };
@@ -68,7 +68,7 @@ const adaptive = () => {
     && npx rollup -c "${rollupConfig}" \
     && prettier --config "${pretty}" --write ./index.js \
     && prettier --config "${pretty}" --write ./index.cjs \
-    && node "${bumpVersion}" --exe \
+    && node "${bumpVersion}" --exe --minor \
     ` + (local ? '' : '&& npm publish --access public')
     );
 };
@@ -76,7 +76,7 @@ const adaptive = () => {
 const mono = () => {
     runCommand(
         `\
-    node ./add-exports.cjs && node "${bumpVersion}" --exe \
+    node ./add-exports.cjs && node "${bumpVersion}" --exe --minor \
     ` + (local ? '' : '&& npm publish --access public')
     );
 };

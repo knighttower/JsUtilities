@@ -128,6 +128,13 @@ test('promisePool', async () => {
         for (let i = 0; i < 5000; i++) {}
         console.log('------------------ for loop done');
     });
+    pool.add(() => {
+        // iterate 5000 times
+        for (let i = 0; i < 4000; i++) {}
+        console.log('------------------ for loop done');
+    });
+    pool.add(doAsync(() => fetch('https://jsonplaceholder.typicode.com/todos/3')));
+    pool.add(doAsync(() => fetch('https://jsonplaceholder.typicode.com/todos/3')));
     pool.status(); // 'in-progress'
     pool.on('completed', () => {
         console.log('completed');
@@ -168,21 +175,21 @@ test('promise pool 2', async () => {
     promPool.on('completed', () => {
         console.log('All promises resolved or rejected.');
     });
-    // const done = await vi.waitUntil(
-    //     () => {
-    //         if (promPool.isDone()) {
-    //             console.log('______log______');
-    //             console.log(promPool.status());
+    const done = await vi.waitUntil(
+        () => {
+            if (promPool.isDone()) {
+                console.log('______log______');
+                console.log(promPool.status());
 
-    //             return true;
-    //         }
-    //     },
-    //     {
-    //         timeout: 3000, // default is 1000
-    //         interval: 500, // default is 50
-    //     }
-    // );
-    // expect(done).toBe(true);
+                return true;
+            }
+        },
+        {
+            timeout: 3000, // default is 1000
+            interval: 500, // default is 50
+        }
+    );
+    expect(done).toBe(true);
 });
 
 test('promise queue', async () => {

@@ -38,9 +38,9 @@ exports.bumpVersion = (currentVersion, flag) => {
     const [major, minor, patch] = currentVersion.split('.').map(Number);
 
     switch (flag) {
-        case '--major':
+        case 'major':
             return `${major + 1}.0.0`;
-        case '--minor':
+        case 'minor':
             return `${major}.${minor + 1}.0`;
         default:
             return `${major}.${minor}.${patch + 1}`;
@@ -50,7 +50,10 @@ exports.bumpVersion = (currentVersion, flag) => {
 exports.exe = () => {
     const workingDir = process.cwd();
     // Parse command-line arguments
-    const flag = getFlagValue('major') || getFlagValue('minor') || getFlagValue('patch');
+    const isMajor = getFlagValue('major') ? 'major' : false;
+    const isMinor = getFlagValue('minor') ? 'minor' : false;
+    const isPatch = getFlagValue('patch') ? 'patch' : false;
+    const flag = isMajor || isMinor || isPatch;
 
     // Read package.json and get current version
     const packageJson = exports.readJson(workingDir);
