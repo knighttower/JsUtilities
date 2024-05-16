@@ -357,7 +357,7 @@ export const promisePool = () => {
             return _stats;
         }
         stats() {
-            return results();
+            return this.results();
         }
 
         /**
