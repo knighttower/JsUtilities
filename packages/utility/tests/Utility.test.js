@@ -27,6 +27,12 @@ test('uuid - should return a string', () => {
     const result = uuid(40);
     assert.equal(typeof result, 'string');
 });
+
+test('getDynamicId - Generate ID', () => {
+    console.log(getDynamicId());
+    assert.equal(typeof getDynamicId(), 'string');
+});
+
 // convertToNumber
 test('convertToNumber - Convert to number', () => {
     assert.equal(convertToNumber('123'), 123);

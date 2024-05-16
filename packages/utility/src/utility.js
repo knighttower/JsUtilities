@@ -203,26 +203,6 @@ export function formatPhoneNumber(phoneNumber, template) {
  */
 export const makeArray = (item) => (Array.isArray(item) ? item : [item]);
 
-/**
- * Generate unique ids
- * @function getDynamicId
- * @memberof utility
- * @return string Format kn__000000__000
- */
-export function getDynamicId() {
-    return 'kn__' + new Date().getTime() + '__' + Math.floor(Math.random() * (999 - 100));
-}
-
-/**
- * Alias to getDynamicId
- * @function getRandomId
- * @memberof utility
- * @return string
- * @example getRandomId() // kn__000000__000
- */
-export const getRandomId = getDynamicId;
-export const randomId = getDynamicId;
-
 export const uuid = (max = 20) => {
     const rnd = () => Math.random().toString(36).substring(2, 15);
     max = max || 40;
@@ -233,6 +213,27 @@ export const uuid = (max = 20) => {
     return str.substring(0, max);
 };
 export const uniqueId = uuid;
+
+/**
+ * Generate unique ids
+ * @function getDynamicId
+ * @memberof utility
+ * @return string Format kn__000000__000
+ */
+export function getDynamicId() {
+    return 'id__' + uuid(8) + '__' + new Date().getTime();
+}
+
+/**
+ * Alias to getDynamicId
+ * @function getRandomId
+ * @memberof utility
+ * @return string
+ * @example getRandomId() // kn__000000__000
+ */
+export const getRandomId = getDynamicId;
+export const dynamicId = getDynamicId;
+export const randomId = getDynamicId;
 
 /**
  * Form a valid Google search address

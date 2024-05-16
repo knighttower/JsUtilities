@@ -568,8 +568,11 @@ const promiseQueue = () => {
  */
 const doPoll = (fn, options = {}) => {
     if (typeof fn !== 'function') {
-        throw new Error('doPoll: The first argument must be a function.');
+        if (typeof fn !== 'object') {
+            throw new Error('doPoll: The first argument must be a function or Promise.');
+        }
     }
+    const isPromise = (promise) => promise instanceof Promise;
     const {
         interval = 200,
         timeout = 1000,
@@ -578,6 +581,7 @@ const doPoll = (fn, options = {}) => {
     let timeoutId, intervalId;
     let resolvePromise, rejectPromise;
     let stopped = false;
+    let promiseRunning = false;
 
     const stop = () => {
         clearTimers();
@@ -598,18 +602,22 @@ const doPoll = (fn, options = {}) => {
     const promise = new Promise((resolve, reject) => {
         resolvePromise = resolve;
         rejectPromise = reject;
-        const isPromise = fn instanceof Promise;
 
         const poll = () => {
             if (stopped) {
                 return;
             }
+            if (promiseRunning) {
+                return;
+            }
 
-            const pollThis = isPromise ? fn : fn();
-
-            if (isPromise) {
+            const pollThis = isPromise(fn) ? fn : fn();
+            // double test if the pollThis returns a promise
+            if (isPromise(pollThis)) {
+                promiseRunning = true;
                 pollThis
                     .then((resolvedValue) => {
+                        promiseRunning = false;
                         if (resolvedValue) {
                             done(resolvedValue);
                         }
@@ -732,10 +740,10 @@ function doTimeout(idOrDelay, delayOrCallback, callback, ...args) {
  * @param {Function} fn - A function that may be synchronous or return a Promise.
  * @returns {Promise<any>} - A Promise resolving with the function's return value or rejecting with any thrown error.
  */
-const doAsync = (fn) => {
+const doAsync = (fn, ...args) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const fx = await fn();
+            const fx = await fn(...args);
             resolve(fx);
         } catch (error) {
             reject(error);

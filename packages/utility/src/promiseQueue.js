@@ -16,6 +16,7 @@ import { getDynamicId, makeArray, typeOf } from './utility.js';
  * pool.add(fetch('https://jsonplaceholder.typicode.com/todos/2'));
  * pool.status(); // 'in-progress'
  * pool.on('completed', () => {});
+ * pool.on('done', () => {});
  * pool.on('rejected', (rejectedPromises) => {});
  * pool.on('stats', ({ completed, rejected, pending, total }) => {});
  */
@@ -23,6 +24,13 @@ export const promisePool = () => {
     let _status = 'in-progress'; // 'in progress' or 'done'
     let promises = {};
     let rejectedPromises = [];
+    const _statsSet = {
+        completed: 0,
+        rejected: 0,
+        pending: 0,
+        total: 0,
+    };
+    let stats = _statsSet;
 
     return new (class extends EventBus {
         constructor() {
@@ -55,8 +63,8 @@ export const promisePool = () => {
                     return this.emit('fail', promise.toString());
                 }
             }
-
             const $this = this;
+            $this._updateStatus();
             const promiseCollection = makeArray(promise);
             promiseCollection.forEach((promise) => {
                 const promiseBag = Promise.all([promise]);
@@ -82,18 +90,16 @@ export const promisePool = () => {
          * @returns {String} The current status of the pool.
          */
         status() {
+            this._updateStatus();
             return _status;
         }
 
         isDone() {
+            this._updateStatus();
             return _status === 'done';
         }
 
         _updateStatus() {
-            if (_status === 'done') {
-                return;
-            }
-
             const instances = Object.values(promises);
             instances.forEach((promise) => {
                 if (promise.status === 'rejected') {
@@ -101,13 +107,7 @@ export const promisePool = () => {
                 }
             });
 
-            const statuses = instances.every(
-                (promise) => promise.status === 'completed' || promise.status === 'rejected'
-            );
-
-            _status = statuses ? 'done' : 'in-progress';
-
-            const stats = {
+            stats = {
                 completed: instances.filter((promise) => promise.status === 'completed').length,
                 rejected: rejectedPromises.length,
                 pending: instances.filter((promise) => promise.status === 'in-progress').length,
@@ -115,9 +115,16 @@ export const promisePool = () => {
             };
             this.emit('stats', stats);
 
+            const statuses = instances.every(
+                (promise) => promise.status === 'completed' || promise.status === 'rejected'
+            );
+
+            _status = statuses || stats.total === 0 ? 'done' : 'in-progress';
+
             if (_status === 'done') {
                 this.emit('completed', stats);
-                this.emit('rejected', rejectedPromises);
+                this.emit('done', stats);
+                this.emit('rejected', rejectedPromises, stats);
                 this.clear();
             }
         }
@@ -128,6 +135,7 @@ export const promisePool = () => {
         clear() {
             promises = {};
             rejectedPromises = [];
+            stats = _statsSet;
         }
     })();
 };
@@ -211,6 +219,7 @@ export const promiseQueue = () => {
             this._timer = setInterval(() => {
                 if (this.status() === 'done') {
                     this.emit('completed');
+                    this.emit('done');
                     clearInterval(this._timer);
                     this._timer = null;
                 }
@@ -440,6 +449,7 @@ export function doTimeout(idOrDelay, delayOrCallback, callback, ...args) {
 
 /**
  * Wraps a function that might be synchronous or asynchronous into a standardized asynchronous workflow.
+ * Helps to mitigate the need to know if a function is synchronous or asynchronous.
  * @param {Function} fn - A function that may be synchronous or return a Promise.
  * @returns {Promise<any>} - A Promise resolving with the function's return value or rejecting with any thrown error.
  */

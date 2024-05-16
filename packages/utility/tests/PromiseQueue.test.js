@@ -44,6 +44,17 @@ test('promisePool add promise', async () => {
     // assert.equal(typeof result, 'string');
 });
 
+test('promisePool empty', async () => {
+    const pool = promisePool();
+
+    expect(
+        doPoll(() => {
+            return pool.isDone();
+        }).promise
+    ).resolves.toBe(true);
+    // assert.equal(typeof result, 'string');
+});
+
 test('promisePool add bad promise', async () => {
     const pool = promisePool();
     let result = false;

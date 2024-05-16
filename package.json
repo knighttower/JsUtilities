@@ -1,6 +1,6 @@
 {
   "name": "knighttower",
-  "version": "9.0.8",
+  "version": "9.0.9",
   "engines": {
     "node": ">=20.10.0"
   },
@@ -97,7 +97,7 @@
     "@babel/plugin-transform-object-assign": "^7.24.1",
     "@babel/preset-env": "^7.24.5",
     "@babel/preset-react": "^7.24.1",
-    "@inquirer/prompts": "^5.0.2",
+    "@inquirer/prompts": "^5.0.3",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-buble": "^1.0.3",
     "@rollup/plugin-commonjs": "^25.0.7",
@@ -125,7 +125,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "rollup": "^4.17.2",
-    "sass": "^1.77.0",
+    "sass": "^1.77.1",
     "sass-loader": "^14.2.1",
     "terser": "^5.31.0",
     "terser-webpack-plugin": "^5.3.10",
