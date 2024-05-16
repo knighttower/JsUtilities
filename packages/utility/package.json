@@ -1,6 +1,6 @@
 {
   "name": "@knighttower/utility",
-  "version": "7.2.0",
+  "version": "7.3.0",
   "main": "index.cjs",
   "module": "index.js",
   "jsdelivr": "dist/browser/utility.js",

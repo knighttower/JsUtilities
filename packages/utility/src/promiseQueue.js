@@ -27,6 +27,12 @@ export const promiseQueue = () => {
             this.queue = [];
             this.inProgress = false;
             this._timer = null;
+            this.stats = {
+                completed: 0,
+                rejected: 0,
+                pending: 0,
+                total: 0,
+            };
         }
 
         /**
@@ -57,6 +63,8 @@ export const promiseQueue = () => {
             }
 
             makeArray(promise).forEach((promiseFunction) => {
+                this.stats.total++;
+                this.stats.pending++;
                 this.queue.push({
                     promiseFunction,
                     status: 'pending', // 'pending', 'fulfilled', or 'rejected'
@@ -105,14 +113,21 @@ export const promiseQueue = () => {
             promiseFunction
                 .then(() => {
                     this.queue[0].status = 'fulfilled';
+                    this.stats.completed++;
                 })
                 .catch(() => {
                     this.queue[0].status = 'rejected';
+                    this.stats.rejected++;
                 })
                 .finally(() => {
+                    this.stats.pending--;
                     this.queue.shift(); // Remove the processed promise from the queue
                     this._next(); // Process the next promise
                 });
+        }
+
+        stats() {
+            return this.stats;
         }
 
         /**
@@ -338,6 +353,9 @@ export const promisePool = () => {
          * @returns {Object} The results of the promise pool.
          */
         results() {
+            return stats;
+        }
+        stats() {
             return stats;
         }
 
