@@ -30,6 +30,18 @@ test('doTimeout', async () => {
         console.log('Condition not met, continue polling.');
         return true; // Continue polling by returning true
     });
+    const done2 = await vi.waitUntil(
+        () => {
+            if (done) {
+                return true;
+            }
+        },
+        {
+            timeout: 4000, // default is 1000
+            interval: 500, // default is 50
+        }
+    );
+    expect(done2).toBe(true);
 });
 
 test('promisePool add promise', async () => {
@@ -49,7 +61,7 @@ test('promisePool empty', async () => {
 
     expect(
         doPoll(() => {
-            if (pool.isDone()) {
+            if (pool.isEmpty()) {
                 return true;
             }
         }).promise
@@ -66,13 +78,15 @@ test('promisePool empty2', async () => {
         result = true;
     });
 
-    expect(
-        doPoll(() => {
-            if (result === true) {
-                return true;
-            }
-        }).promise
-    ).resolves.toBe(true);
+    assert.equal(pool.isEmpty(), true);
+
+    // expect(
+    //     doPoll(() => {
+    //         if (result === true) {
+    //             return true;
+    //         }
+    //     }).promise
+    // ).resolves.toBe('undefined');
     // assert.equal(typeof result, 'string');
 });
 
@@ -142,8 +156,8 @@ test('promisePool', async () => {
     pool.on('rejected', (rejectedPromises) => {
         console.log('rejected:', rejectedPromises);
     });
-    pool.on('stats', ({ completed, rejected, pending, total }) => {
-        console.table({ completed, rejected, pending, total });
+    pool.on('stats', (stats) => {
+        console.log(stats);
     });
 
     expect(
@@ -190,6 +204,38 @@ test('promise pool 2', async () => {
         }
     );
     expect(done).toBe(true);
+});
+
+test('promise pool clear', async () => {
+    const promPool = promisePool();
+
+    // Adding a single promise
+    promPool.add(new Promise((resolve) => setTimeout(resolve, 1000)));
+
+    promPool.on('stats', (stats) => {
+        console.log(stats);
+    });
+    promPool.clear();
+    promPool.stats();
+    console.log('______ STATUS ______', promPool.status(), promPool.stats());
+    // promPool.on('completed', () => {
+    //     console.log('All promises resolved or rejected.');
+    // });
+    // const done = await vi.waitUntil(
+    //     () => {
+    //         if (promPool.isDone()) {
+    //             console.log('______log______');
+    //             console.log(promPool.status());
+
+    //             return true;
+    //         }
+    //     },
+    //     {
+    //         timeout: 3000, // default is 1000
+    //         interval: 500, // default is 50
+    //     }
+    // );
+    assert.equal(promPool.status(), 'done');
 });
 
 test('promise queue', async () => {

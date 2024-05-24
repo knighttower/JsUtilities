@@ -319,6 +319,16 @@ function emptyOrValue(value, _default = null) {
     return _default;
 }
 
+const uuid = (max = 20) => {
+    const rnd = () => Math.random().toString(36).substring(2, 15);
+    max = max || 40;
+    var str = '';
+    for (var i = 0; i < max / 3 + 1; i++) {
+        str += rnd();
+    }
+    return str.substring(0, max);
+};
+
 /**
  * Generate unique ids
  * @function getDynamicId
@@ -326,7 +336,7 @@ function emptyOrValue(value, _default = null) {
  * @return string Format kn__000000__000
  */
 function getDynamicId() {
-    return 'kn__' + new Date().getTime() + '__' + Math.floor(Math.random() * (999 - 100));
+    return 'id__' + uuid(8) + '__' + new Date().getTime();
 }
 
 /**

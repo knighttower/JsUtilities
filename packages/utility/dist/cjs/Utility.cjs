@@ -205,26 +205,6 @@ function formatPhoneNumber(phoneNumber, template) {
  */
 const makeArray = (item) => (Array.isArray(item) ? item : [item]);
 
-/**
- * Generate unique ids
- * @function getDynamicId
- * @memberof utility
- * @return string Format kn__000000__000
- */
-function getDynamicId() {
-    return 'kn__' + new Date().getTime() + '__' + Math.floor(Math.random() * (999 - 100));
-}
-
-/**
- * Alias to getDynamicId
- * @function getRandomId
- * @memberof utility
- * @return string
- * @example getRandomId() // kn__000000__000
- */
-const getRandomId = getDynamicId;
-const randomId = getDynamicId;
-
 const uuid = (max = 20) => {
     const rnd = () => Math.random().toString(36).substring(2, 15);
     max = max || 40;
@@ -235,6 +215,27 @@ const uuid = (max = 20) => {
     return str.substring(0, max);
 };
 const uniqueId = uuid;
+
+/**
+ * Generate unique ids
+ * @function getDynamicId
+ * @memberof utility
+ * @return string Format kn__000000__000
+ */
+function getDynamicId() {
+    return 'id__' + uuid(8) + '__' + new Date().getTime();
+}
+
+/**
+ * Alias to getDynamicId
+ * @function getRandomId
+ * @memberof utility
+ * @return string
+ * @example getRandomId() // kn__000000__000
+ */
+const getRandomId = getDynamicId;
+const dynamicId = getDynamicId;
+const randomId = getDynamicId;
 
 /**
  * Form a valid Google search address
@@ -593,6 +594,7 @@ exports.convertToNumber = convertToNumber;
 exports.currencyToDecimal = currencyToDecimal;
 exports.dateFormat = dateFormat;
 exports.decimalToCurrency = decimalToCurrency;
+exports.dynamicId = dynamicId;
 exports.emptyOrValue = emptyOrValue;
 exports.formatPhoneNumber = formatPhoneNumber;
 exports.getDynamicId = getDynamicId;

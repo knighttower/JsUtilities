@@ -248,6 +248,8 @@ export const doPoll = (fn, options = {}) => {
  * add: Adds a promise or array of promises to the pool and sets up handling for resolution.
  * status: Returns the overall status of the promise pool.
  * isDone: Returns true if the pool is done processing all promises.
+ * results: Gets the results of the promise pool.
+ * stats: Gets the results of the promise pool.
  * clear: Clears all promises from the pool.
  * @returns {Object} An instance of the PromisePool class.
  * @example
@@ -255,8 +257,9 @@ export const doPoll = (fn, options = {}) => {
  * pool.add(fetch('https://jsonplaceholder.typicode.com/todos/1'));
  * pool.add(fetch('https://jsonplaceholder.typicode.com/todos/2'));
  * pool.status(); // 'in-progress'
- * pool.on('completed', (stats) => {});
- * pool.on('done', (stats) => {});
+ * pool.isDone(); // use this to check if the pool has completed its cycle
+ * pool.on('completed', (stats) => {}); // 'completed' is emitted only if there are any promises
+ * pool.on('done', (stats) => {}); // 'done' is emitted whether or not there are any promises
  * pool.on('rejected', (rejectedPromises, stats) => {});
  * pool.on('stats', (stats) => {});
  */
@@ -269,22 +272,48 @@ export const promisePool = () => {
         rejected: 0,
         pending: 0,
         total: 0,
+        errors: '',
     };
 
     return new (class extends EventBus {
         constructor() {
             super();
             const $this = this;
+            this._currentPoll = null;
             setTimeout(() => {
-                doPoll(
-                    () => {
-                        if ($this.isDone()) {
-                            return true;
-                        }
-                    },
-                    { timeoutMsg: '' }
-                );
+                $this._poll();
             }, 100);
+        }
+
+        _poll() {
+            const $this = this;
+            this._currentPoll && this._currentPoll.stop();
+            this._currentPoll = doPoll(
+                () => {
+                    if ($this.isDone()) {
+                        return true;
+                    }
+                },
+                { timeoutMsg: '' }
+            );
+            return this._currentPoll;
+        }
+
+        clear() {
+            _status = 'not-started';
+            _stats = {
+                completed: 0,
+                rejected: 0,
+                pending: 0,
+                total: 0,
+                errors: '',
+            };
+            rejectedPromises.length = 0;
+            Object.keys(promises).forEach((key) => {
+                promises[key].rejecter('Promise pool cleared.');
+                delete promises[key];
+            });
+            this._currentPoll = this._poll();
         }
 
         /**
@@ -309,24 +338,44 @@ export const promisePool = () => {
                         return;
                     }
                 }
-
+                _stats.total++;
                 const promiseId = getDynamicId();
 
                 promises[promiseId] = {
                     status: 'in-progress',
+                    response: null,
+                    error: null,
+                    resolver: null,
+                    rejecter: null,
                 };
-                promise
-                    .then((response) => {
+                new Promise((resolve, reject) => {
+                    promises[promiseId].resolver = (response) => {
+                        if (promises[promiseId].status === 'rejected') {
+                            return;
+                        }
                         promises[promiseId].status = 'completed';
                         promises[promiseId].response = response;
                         $this._updateStatus();
-                    })
-                    .catch((error) => {
-                        rejectedPromises.push(error);
+                        resolve(response);
+                    };
+                    promises[promiseId].rejecter = (error) => {
                         promises[promiseId].status = 'rejected';
                         promises[promiseId].error = error;
+                        rejectedPromises.push(error);
                         $this._updateStatus();
-                    });
+                        reject();
+                    };
+                    promise
+                        .then((response) => {
+                            // using the "?" in case it has been removed from the pool
+                            promises[promiseId]?.resolver(response);
+                        })
+                        .catch((error) => {
+                            promises[promiseId]?.rejecter(error);
+                        });
+                }).catch((error) => {
+                    promises[promiseId]?.rejecter(error);
+                });
             });
         }
 
@@ -346,6 +395,10 @@ export const promisePool = () => {
         isDone() {
             this._updateStatus();
             return _status === 'done';
+        }
+
+        isEmpty() {
+            return _stats.total === 0;
         }
 
         /**
@@ -387,9 +440,13 @@ export const promisePool = () => {
             _status = allCompletedOrRejected || _stats.total === 0 ? 'done' : 'in-progress';
 
             if (_status === 'done') {
-                this.emit('completed', _stats);
+                //emits 'done' whether or not there are any promises but the pool has run its cycle
                 this.emit('done', _stats);
-                this.emit('rejected', rejectedPromises, _stats);
+                // if there are any promises, emit 'completed' and 'rejected'
+                if (_stats.total > 0) {
+                    this.emit('completed', _stats);
+                    this.emit('rejected', rejectedPromises, _stats);
+                }
             }
         }
     })();

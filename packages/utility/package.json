@@ -1,8 +1,9 @@
 {
   "name": "@knighttower/utility",
-  "version": "7.7.0",
+  "version": "7.10.0",
   "main": "index.cjs",
   "module": "index.js",
+  "type": "module",
   "jsdelivr": "dist/browser/utility.js",
   "browser": "dist/browser/utility.js",
   "license": "MIT",
