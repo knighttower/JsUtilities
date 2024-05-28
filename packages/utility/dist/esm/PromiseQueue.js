@@ -326,18 +326,21 @@ function typeOf(input, test) {
  * queue.on('completed', () => {});
  */
 const promiseQueue = () => {
+    const stats = {
+        completed: 0,
+        rejected: 0,
+        pending: 0,
+        total: 0,
+        errors: '',
+        promises: [],
+    };
     return new (class extends EventBus {
         constructor() {
             super();
             this.queue = [];
             this.inProgress = false;
             this._timer = null;
-            this._stats = {
-                completed: 0,
-                rejected: 0,
-                pending: 0,
-                total: 0,
-            };
+            this._stats = { ...stats };
         }
 
         /**
@@ -372,7 +375,9 @@ const promiseQueue = () => {
                 this._stats.pending++;
                 this.queue.push({
                     promiseFunction,
+                    response: null,
                     status: 'pending', // 'pending', 'fulfilled', or 'rejected'
+                    error: null,
                 });
             });
 
@@ -386,7 +391,12 @@ const promiseQueue = () => {
          * Clears the promise queue.
          */
         clear() {
+            this._timer && clearInterval(this._timer);
+            this._timer = null;
             this.queue = [];
+            this.inProgress = false;
+            this._stats = { ...stats };
+            return this;
         }
 
         _setTimer() {
@@ -395,10 +405,10 @@ const promiseQueue = () => {
             }
             this._timer = setInterval(() => {
                 if (this.status() === 'done') {
-                    this.emit('completed');
-                    this.emit('done');
                     clearInterval(this._timer);
                     this._timer = null;
+                    this.emit('completed', this._stats);
+                    this.emit('done', this._stats);
                 }
             }, 10);
         }
@@ -414,17 +424,21 @@ const promiseQueue = () => {
             }
 
             this.inProgress = true;
+            // this always grabs the first promise in the queue and then removes it after processing
             const { promiseFunction } = this.queue[0];
             promiseFunction
-                .then(() => {
+                .then((response) => {
                     this.queue[0].status = 'fulfilled';
+                    this.queue[0].response = response;
                     this._stats.completed++;
                 })
-                .catch(() => {
+                .catch((error) => {
+                    this._stats.errors += error + '\n';
                     this.queue[0].status = 'rejected';
                     this._stats.rejected++;
                 })
                 .finally(() => {
+                    this._stats.promises.push(this.queue[0]);
                     this._stats.pending--;
                     this.queue.shift(); // Remove the processed promise from the queue
                     this._next(); // Process the next promise

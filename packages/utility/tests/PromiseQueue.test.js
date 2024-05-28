@@ -246,6 +246,7 @@ test('promise queue', async () => {
     queue.add(
         new Promise((resolve) => setTimeout(resolve, 1000)).then(() => console.log('resolved'))
     );
+    queue.add(new Promise((resolve) => setTimeout(resolve, 1000)).then(() => 4444));
 
     queue.add(() => {
         return new Promise((resolve, reject) => setTimeout(reject, 500))
@@ -257,16 +258,15 @@ test('promise queue', async () => {
             });
     });
     queue.on('completed', () => {
-        console.log('All promises resolved or rejected.');
+        console.log('All promises queue resolved or rejected.');
     });
 
     const done = await vi.waitUntil(
         () => {
             console.log('----', queue.status());
             if (queue.status() === 'done') {
-                console.log('______promise done  ______');
-                console.log(queue.status());
-
+                console.log('______promise queue done  ______');
+                console.log(queue.stats());
                 return true;
             }
         },
