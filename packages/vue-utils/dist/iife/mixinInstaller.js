@@ -46,9 +46,7 @@ var mixinInstaller = (function (exports) {
         return {
             install: (app, options) => {
                 // Support for Options API in Vue 2 and 3
-                Object.entries(object).forEach(([key, value]) => {
-                    app.config.globalProperties[key] = value;
-                });
+                app.config.globalProperties[name] = { ...object };
 
                 // Support for Composition API only in Vue 3
                 app.provide(name, object);

@@ -306,6 +306,9 @@ function typeOf(input, test) {
 //     uniqueId,
 // };
 
+// @resources: look at the workerpool library for more advanced promise/worker handling
+// https://github.com/josdejong/workerpool?tab=readme-ov-file
+
 // =========================================
 // --> promiseQueue
 // --------------------------
