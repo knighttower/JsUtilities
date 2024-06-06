@@ -112,7 +112,16 @@ const urlHelper = () => {
          * Retrieves the URL's query string.
          * @return {string} The query string of the current URL.
          */
-        getQuery: () => parseURLParams().queryString,
+        getQueryString: () => parseURLParams().queryString,
+
+        /**
+         * Retrieves the URL's query parameters as an object.
+         * @return {Object} An object containing the current query parameters.
+         * @alias getParams().collection
+         * @see {@link getParams}
+         * @see {@link getParams().collection}
+         */
+        getQuery: () => parseURLParams().collection,
 
         /**
          * Adds new parameters to the current URL's query string.
