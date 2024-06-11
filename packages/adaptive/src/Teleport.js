@@ -84,7 +84,7 @@ class Teleport {
                 settings = ['default', settings];
                 break;
             case 'object':
-                // eslint-disable-next-line no-case-declarations
+                 
                 const key = Object.keys(settings)[0];
                 settings = [key, settings[key]];
                 break;

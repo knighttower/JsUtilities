@@ -1,6 +1,6 @@
 {
   "name": "@knighttower/type-check",
-  "version": "5.3.0",
+  "version": "5.5.0",
   "type": "module",
   "description": "typeCheck JS",
   "main": "index.cjs",
@@ -51,6 +51,9 @@
     "type": "git",
     "url": "git://github.com/knighttower/JsUtility.git",
     "directory": "packages/type-check"
+  },
+  "peerDependencies": {
+    "@knighttower/utility": "*"
   },
   "dependencies": {
     "@knighttower/utility": "*"

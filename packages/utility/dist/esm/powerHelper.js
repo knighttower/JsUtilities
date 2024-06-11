@@ -485,7 +485,7 @@ function getArrObjFromString(strExp) {
 
     const loopNested = (objects = false) => {
         // ignore eslint comment
-        // eslint-disable-next-line no-constant-condition
+         
         while (true) {
             //find any nested arrays or objects
             let matched = objects ? findNested(newStrExp, '{', '}') : findNested(newStrExp);
@@ -556,9 +556,9 @@ function getDirectivesFromString(stringDirective) {
     };
     const matchArrayTypes = /^\[((.|\n)*?)\]$/gm;
     // comment eslint to ignore
-    // eslint-disable-next-line no-useless-escape
+     
     const matchObjectTypes = /^\{((.|\n)*?)\:((.|\n)*?)\}/gm;
-    // eslint-disable-next-line no-useless-escape
+     
     const matchFunctionString = /^([a-zA-Z]+)(\()(\.|\#)(.*)(\))/g;
     const regexDotObjectString = /([a-zA-Z]+)\.(.*?)\(((.|\n)*?)\)/gm;
     const regexExObjectString = /([a-zA-Z]+)\[((.|\n)*?)\]\(((.|\n)*?)\)/gm;
@@ -584,7 +584,7 @@ function getDirectivesFromString(stringDirective) {
             case !!str.match(matchFunctionString):
                 // Mathes simple directive function style: directive(#idOr.Class)
                 // regexFunctionString
-                // eslint-disable-next-line
+                 
                 const directive = str.split('(')[0].trim();
                 return results('idOrClassWithDirective', {
                     [directive]: getMatchInBetween(str, '(', ')'),
@@ -819,7 +819,7 @@ function setWildCardString(str, matchStart = false, matchEnd = false) {
     }
     matchStart = convertToBool(matchStart);
     matchEnd = convertToBool(matchEnd);
-    // eslint-disable-next-line no-useless-escape
+     
     let regexStr = str.replace(/([.+?^${}()|\[\]\/\\])/g, '\\$&'); // escape all regex special chars
     let regStart = matchStart ? '^' : '';
     let regEnd = matchEnd ? '$' : '';

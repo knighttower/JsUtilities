@@ -52,7 +52,7 @@ class HandleObjects {
             case !isEmpty(this.testFew):
                 // '{key1: type, any: type}'; // specific key, and all other "any"
                 // test the testFew fist so that we can remove them from the inputObject
-                /* eslint-disable-next-line */
+                 
                 const testFewResults = this.testObjFew();
                 // remove the testFew from the inputObject
                 this.filterOutFew();
@@ -60,7 +60,7 @@ class HandleObjects {
             case !isEmpty(this.optionalKeys):
                 // '{key1?: type, key2?: type}'; // optional keys
                 // test the optionalKeys fist so that we can remove them from the inputObject
-                /* eslint-disable-next-line */
+                 
                 const optionalKeysResults = this.testObjOptionalKeys();
                 // remove the optionalKeys from the inputObject
                 this.filterOutOptionalKeys();

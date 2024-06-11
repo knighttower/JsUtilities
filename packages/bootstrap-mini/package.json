@@ -2,7 +2,7 @@
   "name": "@knighttower/bootstrap-mini",
   "author": "knighttower (https://github.com/knighttower)",
   "description": "Abstracted Bootstrap for utility prototypes",
-  "version": "0.1.17",
+  "version": "0.1.24",
   "keywords": [
     "css",
     "sass",
@@ -27,6 +27,9 @@
     "watch": "npm mix watch"
   },
   "peerDependencies": {
+    "bootstrap": "^5.3.3"
+  },
+  "dependencies": {
     "bootstrap": "^5.3.3"
   },
   "main": "index.js",

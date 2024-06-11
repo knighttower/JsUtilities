@@ -8,7 +8,7 @@ const rollupConfig = `${workingDir}/packages/utility/nodeUtils/rollup.config.cjs
 const buildExports = `${workingDir}/packages/utility/nodeUtils/BuildExports.cjs`;
 const bumpVersion = `${workingDir}/packages/utility/nodeUtils/BumpVersion.cjs`;
 const pretty = `${workingDir}/.prettierrc.json`;
-const eslint = `${workingDir}/.eslintrc.cjs`;
+const eslint = `${workingDir}/eslint.config.cjs`;
 const minify = `${workingDir}/packages/utility/nodeUtils/minify.cjs`;
 
 const local = getFlagValue('local');
@@ -18,7 +18,7 @@ const pkgOnly = getFlagValue('pkg');
 const utility = () => {
     runCommand(
         `cd ./packages/utility \
-    && eslint -c "${eslint}" --fix ./src --ext .js,.cjs,.mjs \
+    && eslint -c "${eslint}" --fix ./src \
     && npx webpack --mode production --config "${webpackConfig}" \
     && npx rollup -c "${rollupConfig}" \
     && node "${buildExports}" --dir ./dist/cjs --type=cjs \
@@ -36,7 +36,7 @@ const typeCheck = () => {
     runCommand(
         `\
     cd ./packages/type-check \
-    && eslint -c "${eslint}" --fix ./src --ext .js,.cjs,.mjs \
+    && eslint -c "${eslint}" --fix ./src \
     && npx webpack --mode production --config "${webpackConfig}" \
     && npx rollup -c "${rollupConfig}" \
     && node "${buildExports}" --file ./dist/cjs/typeCheck.cjs --type=cjs \
@@ -63,7 +63,7 @@ const adaptive = () => {
     runCommand(
         `\
     cd ./packages/adaptive \
-    && eslint -c "${eslint}" --fix ./src --ext .js,.cjs,.mjs \
+    && eslint -c "${eslint}" --fix ./src \
     && npx webpack --mode production --config "${webpackConfig}" \
     && npx rollup -c "${rollupConfig}" \
     && prettier --config "${pretty}" --write ./index.js \
@@ -85,7 +85,7 @@ const vueUtils = () => {
     runCommand(
         `\
     cd ./packages/vue-utils \
-    && eslint -c "${eslint}" --fix ./src --ext .js,.cjs,.mjs \
+    && eslint -c "${eslint}" --fix ./src \
     && npx webpack --mode production --config "${webpackConfig}" \
     && npx rollup -c "${rollupConfig}" \
     && node "${buildExports}" --dir ./dist/cjs --type=cjs \

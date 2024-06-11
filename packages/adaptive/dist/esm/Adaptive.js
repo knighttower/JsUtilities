@@ -1,250 +1,3 @@
-// Author Knighttower
-// MIT License
-// [2022] [Knighttower] https://github.com/knighttower
-/**
- * @module DomObserver
- * Detect DOM changes
- * @name DomObserver
- * @param {window} selector
- * @param {Function}
- * @return DomObserver
- * @example DomObserver.addOnNodeChange('elementIdentifier', () => { console.log('Node changed') })
- * @example DomObserver.removeOnNodeChange('elementIdentifier')
- */
-/**
- * Holds memory of registered functions
- * @private
- */
-const executeOnNodeChanged = {};
-let observer;
-/**
- * When node change
- * @param {String} id
- * @param {Function} callback Callback when any node changes/ add/deleted/modified
- * @memberof DomObserver
- * @usage domObserver.addOnNodeChange('elementIdentifier', () => { console.log('Node changed') })
- * @return {Void}
- */
-const addOnNodeChange = (id, callback) => {
-    if (callback) {
-        executeOnNodeChanged[id] = callback;
-    }
-};
-/**
- * Remove from node change
- * @param {String} id
- * @memberof DomObserver
- * @usage domObserver.removeOnNodeChange('elementIdentifier')
- * @return {Void}
- */
-const removeOnNodeChange = (id) => {
-    if (id) {
-        delete executeOnNodeChanged[id];
-    }
-};
-/**
- * Deep cleanup
- * @return {Void}
- */
-const cleanup = () => {
-    Object.keys(executeOnNodeChanged).forEach((key) => delete executeOnNodeChanged[key]);
-};
-/**
- * Observer
- * @private
- * @return {MutationObserver}
- */
-const start = () => {
-    if (typeof window !== 'undefined' && !observer) {
-        const callback = (mutationList) => {
-            for (const mutation of mutationList) {
-                if (mutation.type === 'childList') {
-                    for (const id in executeOnNodeChanged) {
-                        executeOnNodeChanged[id]();
-                    }
-                }
-            }
-        };
-        const config = {
-            childList: true,
-            subtree: true,
-        };
-
-        observer = new MutationObserver(callback);
-        if (document.body) {
-            return observer.observe(document.body, config);
-        }
-        document.addEventListener('DOMContentLoaded', (event) => {
-            return observer.observe(document.body, config);
-        });
-    }
-};
-/**
- * @exports domObserver
- * @type {Object}
- * @usage domObserver.addOnNodeChange('elementIdentifier', () => { console.log('Node changed') })
- * @usage domObserver.removeOnNodeChange('elementIdentifier')
- * @usage domObserver.cleanup()
- */
-const domObserver = {
-    start,
-    addOnNodeChange,
-    removeOnNodeChange,
-    cleanup,
-};
-
-// Author Knighttower
-// MIT License
-// Copyright (c) [2022] [Knighttower] https://github.com/knighttower
-
-
-/**
- * @class Adds some extra functionality to interact with a DOM element
- * @param {String|Object} selector Class or ID or DOM element
- * @param {String} scope The scope to search in, window, document, dom element. Defaults to document
- * @return {Object}
- * @example new ElementHelper('elementSelector')
- * @example new ElementHelper('elementSelector', domElement|window|document)
- *
- */
-class ElementHelper {
-    /**
-     * Constructor
-     * @param {String|Object} selector
-     * @return {Object}
-     */
-    constructor(selector, scope = document) {
-        domObserver.start();
-        this.selector = selector;
-        if (typeof selector === 'object') {
-            this.domElement = selector;
-        } else if (String(selector).includes('//')) {
-            this.domElement = this.getElementByXpath(selector);
-        } else {
-            this.domElement = scope.querySelector(selector);
-        }
-    }
-
-    // =========================================
-    // --> Public
-    // --------------------------
-
-    /**
-     * Check if the element exists or is visible. It will keep querying
-     * @return {Boolean}
-     */
-    isInDom() {
-        return Boolean(this.domElement?.outerHTML);
-    }
-
-    /**
-     * Wait for element exists or is visible. It will keep querying
-     * @function whenInDom
-     * @return {Promise}
-     */
-    whenInDom() {
-        let $this = this;
-        let callbackId = Date.now() + Math.floor(Math.random() * 1000);
-
-        return new Promise(function (resolveThis) {
-            if (!$this.isInDom()) {
-                domObserver.addOnNodeChange(callbackId, () => {
-                    let element = new ElementHelper($this.selector);
-                    if (element.isInDom()) {
-                        $this = element;
-                        resolveThis($this);
-                        domObserver.removeOnNodeChange(callbackId);
-                    }
-                });
-            } else {
-                resolveThis($this);
-            }
-        });
-    }
-
-    /**
-     * Find element by Xpath string
-     * @param {String} xpath
-     * @example getElementByXpath("//html[1]/body[1]/div[1]")
-     * @return {Object} DOM element
-     */
-    getElementByXpath(xpath) {
-        return document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
-            .singleNodeValue;
-    }
-
-    /**
-     * Get the element xpath string
-     * @author Based on https://stackoverflow.com/questions/2631820/how-do-i-ensure-saved-click-coordinates-can-be-reload-to-the-same-place-even-if/2631931#2631931
-     * @return {String}
-     */
-    getXpathTo() {
-        let element = this.domElement;
-
-        if (element.id) {
-            return `//*[@id='${element.id}']`;
-        }
-        if (element === document.body) {
-            return '//' + element.tagName;
-        }
-
-        let ix = 0;
-        let siblings = element.parentNode.childNodes;
-        for (let i = 0; i < siblings.length; i++) {
-            let sibling = siblings[i];
-            if (sibling === element) {
-                return (
-                    new ElementHelper(element.parentNode).getXpathTo() +
-                    '/' +
-                    element.tagName +
-                    '[' +
-                    (ix + 1) +
-                    ']'
-                );
-            }
-            if (sibling.nodeType === 1 && sibling.tagName === element.tagName) {
-                ix++;
-            }
-        }
-    }
-
-    /**
-     * Get the element attribute, but parse it if it is an object or array
-     * @param {String} attr Atrribute name
-     * @return {String|Array|Object|Null}
-     */
-    getAttribute(attr) {
-        return this.domElement.getAttribute(attr) || null;
-    }
-
-    /**
-     * Create a unique has for the element derived from its xpath
-     * @author Based on https://www.geeksforgeeks.org/how-to-create-hash-from-string-in-javascript/
-     * @return {String}
-     */
-    getHash() {
-        let string = String(this.getXpathTo());
-        let hash = 0;
-
-        if (string.length === 0) {
-            return hash;
-        }
-
-        for (let i = 0; i < string.length; i++) {
-            let char = string.charCodeAt(i);
-            hash = (hash << 5) - hash + char;
-            hash = hash & hash;
-        }
-
-        return hash;
-    }
-}
-
-// =========================================
-// --> Utilities
-// --------------------------
-const selectElement = (selector, scope = document) => new ElementHelper(selector, scope);
-
 // // -----------------------------------------
 // /**
 //  * @knighttower
@@ -498,6 +251,84 @@ function typeOf(input, test) {
 //     uniqueId,
 // };
 
+// [2023] [Knighttower] https://github.com/knighttower
+
+/**
+ * @module proxyObject
+ * Convert to proxy to protect objects
+ * Allows to declare _private, _protected and _mutable - all arrays with prop names
+ * @example proxyObject({objectProps..., _protected: array(...)})
+ * @param {Object} object
+ * @return {Proxy}
+ * @usage const proxy = proxyObject({objectProps..., _protected: array(...), _private: array(...), _mutable: array(...)})
+ * @usage _protected: array(...) -> Cannot be modified
+ * @usage _private: array(...) -> Cannot be accessed
+ * @usage _mutable: array(...) -> Can be modified
+ */
+function proxyObject(object) {
+
+    // Initialize property access control sets
+    const _private = new Set(['_private', ...(object._private || [])]);
+    const _protected = new Set(['_protected', ..._private, ...(object._protected || [])]);
+    const _mutable = new Set(object._mutable || []);
+
+    const canMutate = (prop) => {
+        if (_protected.has(prop) && !_mutable.has(prop)) {
+            console.error(`Attempt to modify protected property: ${prop}`);
+            return false;
+        }
+        if (_private.has(prop) && !_mutable.has(prop)) {
+            console.error(`Attempt to modify private property: ${prop}`);
+            return false;
+        }
+        return true;
+    };
+
+    return new Proxy(object, {
+        get(target, prop, receiver) {
+            if (_private.has(prop)) {
+                console.error(`Attempt to access private property: ${prop}`);
+                return undefined;
+            }
+            return Reflect.get(target, prop, receiver);
+        },
+        set(target, prop, value, receiver) {
+            if (!canMutate(prop)) {
+                return false;
+            }
+            return Reflect.set(target, prop, value, receiver);
+        },
+        deleteProperty(target, prop) {
+            if (!canMutate(prop)) {
+                return false;
+            }
+            return Reflect.deleteProperty(target, prop);
+        },
+        defineProperty(target, prop, descriptor) {
+            if (!canMutate(prop)) {
+                return false;
+            }
+            return Reflect.defineProperty(target, prop, descriptor);
+        },
+        ownKeys(target) {
+            return Reflect.ownKeys(target).filter((key) => !_private.has(key));
+        },
+        enumerate(target) {
+            const keys = Reflect.enumerate(target);
+            return keys.filter((key) => !_private.has(key));
+        },
+        has(target, prop) {
+            return !_private.has(prop) && Reflect.has(target, prop);
+        },
+        getOwnPropertyDescriptor(target, prop) {
+            if (_private.has(prop)) {
+                return undefined;
+            }
+            return Reflect.getOwnPropertyDescriptor(target, prop);
+        },
+    });
+}
+
 // Author Knighttower
 // MIT License
 // Copyright (c) [2022] [Knighttower] https://github.com/knighttower
@@ -622,7 +453,7 @@ function getArrObjFromString(strExp) {
 
     const loopNested = (objects = false) => {
         // ignore eslint comment
-        // eslint-disable-next-line no-constant-condition
+         
         while (true) {
             //find any nested arrays or objects
             let matched = objects ? findNested(newStrExp, '{', '}') : findNested(newStrExp);
@@ -693,9 +524,9 @@ function getDirectivesFromString(stringDirective) {
     };
     const matchArrayTypes = /^\[((.|\n)*?)\]$/gm;
     // comment eslint to ignore
-    // eslint-disable-next-line no-useless-escape
+     
     const matchObjectTypes = /^\{((.|\n)*?)\:((.|\n)*?)\}/gm;
-    // eslint-disable-next-line no-useless-escape
+     
     const matchFunctionString = /^([a-zA-Z]+)(\()(\.|\#)(.*)(\))/g;
     const regexDotObjectString = /([a-zA-Z]+)\.(.*?)\(((.|\n)*?)\)/gm;
     const regexExObjectString = /([a-zA-Z]+)\[((.|\n)*?)\]\(((.|\n)*?)\)/gm;
@@ -721,7 +552,7 @@ function getDirectivesFromString(stringDirective) {
             case !!str.match(matchFunctionString):
                 // Mathes simple directive function style: directive(#idOr.Class)
                 // regexFunctionString
-                // eslint-disable-next-line
+                 
                 const directive = str.split('(')[0].trim();
                 return results('idOrClassWithDirective', {
                     [directive]: getMatchInBetween(str, '(', ')'),
@@ -957,83 +788,252 @@ function setLookUpExp(...args) {
 //     wildCardStringSearch,
 // };
 
-// [2023] [Knighttower] https://github.com/knighttower
+// Author Knighttower
+// MIT License
+// [2022] [Knighttower] https://github.com/knighttower
+/**
+ * @module DomObserver
+ * Detect DOM changes
+ * @name DomObserver
+ * @param {window} selector
+ * @param {Function}
+ * @return DomObserver
+ * @example DomObserver.addOnNodeChange('elementIdentifier', () => { console.log('Node changed') })
+ * @example DomObserver.removeOnNodeChange('elementIdentifier')
+ */
+/**
+ * Holds memory of registered functions
+ * @private
+ */
+const executeOnNodeChanged = {};
+let observer;
+/**
+ * When node change
+ * @param {String} id
+ * @param {Function} callback Callback when any node changes/ add/deleted/modified
+ * @memberof DomObserver
+ * @usage domObserver.addOnNodeChange('elementIdentifier', () => { console.log('Node changed') })
+ * @return {Void}
+ */
+const addOnNodeChange = (id, callback) => {
+    if (callback) {
+        executeOnNodeChanged[id] = callback;
+    }
+};
+/**
+ * Remove from node change
+ * @param {String} id
+ * @memberof DomObserver
+ * @usage domObserver.removeOnNodeChange('elementIdentifier')
+ * @return {Void}
+ */
+const removeOnNodeChange = (id) => {
+    if (id) {
+        delete executeOnNodeChanged[id];
+    }
+};
+/**
+ * Deep cleanup
+ * @return {Void}
+ */
+const cleanup = () => {
+    Object.keys(executeOnNodeChanged).forEach((key) => delete executeOnNodeChanged[key]);
+};
+/**
+ * Observer
+ * @private
+ * @return {MutationObserver}
+ */
+const start = () => {
+    if (typeof window !== 'undefined' && !observer) {
+        const callback = (mutationList) => {
+            for (const mutation of mutationList) {
+                if (mutation.type === 'childList') {
+                    for (const id in executeOnNodeChanged) {
+                        executeOnNodeChanged[id]();
+                    }
+                }
+            }
+        };
+        const config = {
+            childList: true,
+            subtree: true,
+        };
+
+        observer = new MutationObserver(callback);
+        if (document.body) {
+            return observer.observe(document.body, config);
+        }
+        document.addEventListener('DOMContentLoaded', (event) => {
+            return observer.observe(document.body, config);
+        });
+    }
+};
+/**
+ * @exports domObserver
+ * @type {Object}
+ * @usage domObserver.addOnNodeChange('elementIdentifier', () => { console.log('Node changed') })
+ * @usage domObserver.removeOnNodeChange('elementIdentifier')
+ * @usage domObserver.cleanup()
+ */
+const domObserver = {
+    start,
+    addOnNodeChange,
+    removeOnNodeChange,
+    cleanup,
+};
+
+// Author Knighttower
+// MIT License
+// Copyright (c) [2022] [Knighttower] https://github.com/knighttower
+
 
 /**
- * @module proxyObject
- * Convert to proxy to protect objects
- * Allows to declare _private, _protected and _mutable - all arrays with prop names
- * @example proxyObject({objectProps..., _protected: array(...)})
- * @param {Object} object
- * @return {Proxy}
- * @usage const proxy = proxyObject({objectProps..., _protected: array(...), _private: array(...), _mutable: array(...)})
- * @usage _protected: array(...) -> Cannot be modified
- * @usage _private: array(...) -> Cannot be accessed
- * @usage _mutable: array(...) -> Can be modified
+ * @class Adds some extra functionality to interact with a DOM element
+ * @param {String|Object} selector Class or ID or DOM element
+ * @param {String} scope The scope to search in, window, document, dom element. Defaults to document
+ * @return {Object}
+ * @example new ElementHelper('elementSelector')
+ * @example new ElementHelper('elementSelector', domElement|window|document)
+ *
  */
-function proxyObject(object) {
-
-    // Initialize property access control sets
-    const _private = new Set(['_private', ...(object._private || [])]);
-    const _protected = new Set(['_protected', ..._private, ...(object._protected || [])]);
-    const _mutable = new Set(object._mutable || []);
-
-    const canMutate = (prop) => {
-        if (_protected.has(prop) && !_mutable.has(prop)) {
-            console.error(`Attempt to modify protected property: ${prop}`);
-            return false;
+class ElementHelper {
+    /**
+     * Constructor
+     * @param {String|Object} selector
+     * @return {Object}
+     */
+    constructor(selector, scope = document) {
+        domObserver.start();
+        this.selector = selector;
+        if (typeof selector === 'object') {
+            this.domElement = selector;
+        } else if (String(selector).includes('//')) {
+            this.domElement = this.getElementByXpath(selector);
+        } else {
+            this.domElement = scope.querySelector(selector);
         }
-        if (_private.has(prop) && !_mutable.has(prop)) {
-            console.error(`Attempt to modify private property: ${prop}`);
-            return false;
-        }
-        return true;
-    };
+    }
 
-    return new Proxy(object, {
-        get(target, prop, receiver) {
-            if (_private.has(prop)) {
-                console.error(`Attempt to access private property: ${prop}`);
-                return undefined;
+    // =========================================
+    // --> Public
+    // --------------------------
+
+    /**
+     * Check if the element exists or is visible. It will keep querying
+     * @return {Boolean}
+     */
+    isInDom() {
+        return Boolean(this.domElement?.outerHTML);
+    }
+
+    /**
+     * Wait for element exists or is visible. It will keep querying
+     * @function whenInDom
+     * @return {Promise}
+     */
+    whenInDom() {
+        let $this = this;
+        let callbackId = Date.now() + Math.floor(Math.random() * 1000);
+
+        return new Promise(function (resolveThis) {
+            if (!$this.isInDom()) {
+                domObserver.addOnNodeChange(callbackId, () => {
+                    let element = new ElementHelper($this.selector);
+                    if (element.isInDom()) {
+                        $this = element;
+                        resolveThis($this);
+                        domObserver.removeOnNodeChange(callbackId);
+                    }
+                });
+            } else {
+                resolveThis($this);
             }
-            return Reflect.get(target, prop, receiver);
-        },
-        set(target, prop, value, receiver) {
-            if (!canMutate(prop)) {
-                return false;
+        });
+    }
+
+    /**
+     * Find element by Xpath string
+     * @param {String} xpath
+     * @example getElementByXpath("//html[1]/body[1]/div[1]")
+     * @return {Object} DOM element
+     */
+    getElementByXpath(xpath) {
+        return document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null)
+            .singleNodeValue;
+    }
+
+    /**
+     * Get the element xpath string
+     * @author Based on https://stackoverflow.com/questions/2631820/how-do-i-ensure-saved-click-coordinates-can-be-reload-to-the-same-place-even-if/2631931#2631931
+     * @return {String}
+     */
+    getXpathTo() {
+        let element = this.domElement;
+
+        if (element.id) {
+            return `//*[@id='${element.id}']`;
+        }
+        if (element === document.body) {
+            return '//' + element.tagName;
+        }
+
+        let ix = 0;
+        let siblings = element.parentNode.childNodes;
+        for (let i = 0; i < siblings.length; i++) {
+            let sibling = siblings[i];
+            if (sibling === element) {
+                return (
+                    new ElementHelper(element.parentNode).getXpathTo() +
+                    '/' +
+                    element.tagName +
+                    '[' +
+                    (ix + 1) +
+                    ']'
+                );
             }
-            return Reflect.set(target, prop, value, receiver);
-        },
-        deleteProperty(target, prop) {
-            if (!canMutate(prop)) {
-                return false;
+            if (sibling.nodeType === 1 && sibling.tagName === element.tagName) {
+                ix++;
             }
-            return Reflect.deleteProperty(target, prop);
-        },
-        defineProperty(target, prop, descriptor) {
-            if (!canMutate(prop)) {
-                return false;
-            }
-            return Reflect.defineProperty(target, prop, descriptor);
-        },
-        ownKeys(target) {
-            return Reflect.ownKeys(target).filter((key) => !_private.has(key));
-        },
-        enumerate(target) {
-            const keys = Reflect.enumerate(target);
-            return keys.filter((key) => !_private.has(key));
-        },
-        has(target, prop) {
-            return !_private.has(prop) && Reflect.has(target, prop);
-        },
-        getOwnPropertyDescriptor(target, prop) {
-            if (_private.has(prop)) {
-                return undefined;
-            }
-            return Reflect.getOwnPropertyDescriptor(target, prop);
-        },
-    });
+        }
+    }
+
+    /**
+     * Get the element attribute, but parse it if it is an object or array
+     * @param {String} attr Atrribute name
+     * @return {String|Array|Object|Null}
+     */
+    getAttribute(attr) {
+        return this.domElement.getAttribute(attr) || null;
+    }
+
+    /**
+     * Create a unique has for the element derived from its xpath
+     * @author Based on https://www.geeksforgeeks.org/how-to-create-hash-from-string-in-javascript/
+     * @return {String}
+     */
+    getHash() {
+        let string = String(this.getXpathTo());
+        let hash = 0;
+
+        if (string.length === 0) {
+            return hash;
+        }
+
+        for (let i = 0; i < string.length; i++) {
+            let char = string.charCodeAt(i);
+            hash = (hash << 5) - hash + char;
+            hash = hash & hash;
+        }
+
+        return hash;
+    }
 }
+
+// =========================================
+// --> Utilities
+// --------------------------
+const selectElement = (selector, scope = document) => new ElementHelper(selector, scope);
 
 // typeOf is used here insteand of the native typeof because it can handle better the identifications of arrays and objects
 
@@ -1250,7 +1250,7 @@ function testBuilder(strExp) {
             testUnit.set('tests', arrayTypes(strExp));
             break;
         case 'object':
-            /* eslint-disable-next-line */
+             
             const objTypes = objectTypes(strExp);
             testUnit = new Map([...testUnit, ...objTypes]);
             break;
@@ -1311,7 +1311,7 @@ class HandleObjects {
             case !isEmpty(this.testFew):
                 // '{key1: type, any: type}'; // specific key, and all other "any"
                 // test the testFew fist so that we can remove them from the inputObject
-                /* eslint-disable-next-line */
+                 
                 const testFewResults = this.testObjFew();
                 // remove the testFew from the inputObject
                 this.filterOutFew();
@@ -1319,7 +1319,7 @@ class HandleObjects {
             case !isEmpty(this.optionalKeys):
                 // '{key1?: type, key2?: type}'; // optional keys
                 // test the optionalKeys fist so that we can remove them from the inputObject
-                /* eslint-disable-next-line */
+                 
                 const optionalKeysResults = this.testObjOptionalKeys();
                 // remove the optionalKeys from the inputObject
                 this.filterOutOptionalKeys();
@@ -1615,7 +1615,7 @@ class Teleport {
                 settings = ['default', settings];
                 break;
             case 'object':
-                // eslint-disable-next-line no-case-declarations
+                 
                 const key = Object.keys(settings)[0];
                 settings = [key, settings[key]];
                 break;
@@ -2002,11 +2002,11 @@ class AdaptiveElement {
         return QH.add(
             queries,
             ($styles) => {
-                // eslint-disable-next-line no-return-assign
+                 
                 return (this.props.domElement.style.cssText += $styles);
             },
             () => {
-                // eslint-disable-next-line no-return-assign
+                 
                 return (this.props.domElement.style.cssText = this.props.originalStyle);
             },
             this.Adaptive

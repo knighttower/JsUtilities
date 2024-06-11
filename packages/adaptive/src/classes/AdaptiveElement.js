@@ -59,11 +59,11 @@ export default class AdaptiveElement {
         return QueryHandler.add(
             queries,
             ($styles) => {
-                // eslint-disable-next-line no-return-assign
+                 
                 return (this.props.domElement.style.cssText += $styles);
             },
             () => {
-                // eslint-disable-next-line no-return-assign
+                 
                 return (this.props.domElement.style.cssText = this.props.originalStyle);
             },
             this.Adaptive
