@@ -122,7 +122,7 @@ const urlHelper = (__request) => {
          * @see {@link getParams}
          * @see {@link getParams().collection}
          */
-        getQuery: () => parseURLParams().collection,
+        getQuery: (key) => (key ? parseURLParams().collection[key] : parseURLParams().collection),
 
         /**
          * Adds new parameters to the current URL's query string.
