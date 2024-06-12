@@ -1,9 +1,10 @@
 /**
  * URL Object Class with public methods for URL functions and manipulation.
+ * @param {Object} __request - optional: The request object from the server.
  *
  * @module urlHelper
  */
-const urlHelper = () => {
+const urlHelper = (__request) => {
     'use strict';
     /**
      * The window object from the global scope.
@@ -17,7 +18,7 @@ const urlHelper = () => {
      */
     const doc = typeof document !== 'undefined' ? document : {};
 
-    const LOCATION = win?.location;
+    const LOCATION = win?.location ?? __request?.uri;
     let hash = LOCATION?.hash;
     let HREF = LOCATION?.href;
     const SEARCH = LOCATION?.search;
@@ -179,7 +180,7 @@ const urlHelper = () => {
          * @param {string} [params=''] Parameters for the new window.
          * @return {Window} The window object of the newly opened window.
          */
-        open: (url, name = '_blank', params = '') => win.open(url, name, params),
+        open: (url, name = '_blank', params = '') => win?.open(url, name, params),
 
         /**
          * Sets up a listener to execute a callback function when the URL hash changes.
@@ -187,7 +188,7 @@ const urlHelper = () => {
          */
         onChange: (callback) => {
             if (typeof callback === 'function') {
-                win.addEventListener('hashchange', callback);
+                win?.addEventListener('hashchange', callback);
             }
         },
 
