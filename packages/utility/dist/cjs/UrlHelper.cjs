@@ -4,10 +4,11 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 /**
  * URL Object Class with public methods for URL functions and manipulation.
+ * @param {Object} __request - optional: The request object from the server.
  *
  * @module urlHelper
  */
-const urlHelper = () => {
+const urlHelper = (__request) => {
     /**
      * The window object from the global scope.
      * @type {Window}
@@ -20,7 +21,7 @@ const urlHelper = () => {
      */
     const doc = typeof document !== 'undefined' ? document : {};
 
-    const LOCATION = win?.location;
+    const LOCATION = win?.location ?? __request?.uri;
     let hash = LOCATION?.hash;
     let HREF = LOCATION?.href;
     const SEARCH = LOCATION?.search;
@@ -115,7 +116,16 @@ const urlHelper = () => {
          * Retrieves the URL's query string.
          * @return {string} The query string of the current URL.
          */
-        getQuery: () => parseURLParams().queryString,
+        getQueryString: () => parseURLParams().queryString,
+
+        /**
+         * Retrieves the URL's query parameters as an object.
+         * @return {Object} An object containing the current query parameters.
+         * @alias getParams().collection
+         * @see {@link getParams}
+         * @see {@link getParams().collection}
+         */
+        getQuery: (key) => (key ? parseURLParams().collection[key] : parseURLParams().collection),
 
         /**
          * Adds new parameters to the current URL's query string.
@@ -173,7 +183,7 @@ const urlHelper = () => {
          * @param {string} [params=''] Parameters for the new window.
          * @return {Window} The window object of the newly opened window.
          */
-        open: (url, name = '_blank', params = '') => win.open(url, name, params),
+        open: (url, name = '_blank', params = '') => win?.open(url, name, params),
 
         /**
          * Sets up a listener to execute a callback function when the URL hash changes.
@@ -181,7 +191,7 @@ const urlHelper = () => {
          */
         onChange: (callback) => {
             if (typeof callback === 'function') {
-                win.addEventListener('hashchange', callback);
+                win?.addEventListener('hashchange', callback);
             }
         },
 

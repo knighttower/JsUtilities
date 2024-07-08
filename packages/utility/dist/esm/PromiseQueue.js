@@ -145,9 +145,9 @@ class EventBus {
         return filteredList.length === 0 ? null : filteredList;
     }
     setWildCardString(string) {
-        // eslint-disable-next-line
+         
         let regexStr = string.replace(/([.+?^${}()|\[\]\/\\])/g, '\\$&'); // escape all regex special chars
-        // eslint-disable-next-line
+         
         regexStr = regexStr.replace(/\*/g, '(.*?)');
         return `^${regexStr}`;
     }
@@ -162,7 +162,7 @@ class EventBus {
         let context = null;
         for (let i = 0; i < args.length; i++) {
             const arg = args[i];
-            // eslint-disable-next-line
+             
             if (arg && typeof arg === 'object' && arg.hasOwnProperty('__context')) {
                 context = arg.__context;
                 args.splice(i, 1);

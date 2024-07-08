@@ -283,7 +283,7 @@ function includes(collection, value, fromIndex = 0) {
     if (typeof collection === 'object') {
         // Search in object values
         for (let key in collection) {
-            if (collection[key] === value) {
+            if (collection[key] && collection[key].includes(value, fromIndex)) {
                 return true;
             }
         }
