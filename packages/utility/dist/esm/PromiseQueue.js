@@ -236,6 +236,7 @@ function getDynamicId() {
  * @example typeOf('hello', 'number') // returns false
  * @example typeOf('hello', 'string') // returns true
  * @example typeOf('hello') // returns 'string'
+ * @example typeOf(123, 'number|int') // returns 'number'
  * @example typeOf({}) // returns 'object'
  */
 function typeOf(input, test) {
@@ -821,6 +822,8 @@ function doTimeout(idOrDelay, delayOrCallback, callback, ...args) {
     } else if (typeof idOrDelay === 'number' && typeof delayOrCallback === 'function') {
         delay = idOrDelay;
         callback = delayOrCallback;
+    } else if (!delayOrCallback && typeof idOrDelay === 'string') {
+        id = idOrDelay;
     } else {
         throw new Error('Invalid parameters');
     }

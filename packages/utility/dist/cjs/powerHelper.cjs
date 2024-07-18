@@ -208,6 +208,7 @@ function isNumber(value) {
  * @example typeOf('hello', 'number') // returns false
  * @example typeOf('hello', 'string') // returns true
  * @example typeOf('hello') // returns 'string'
+ * @example typeOf(123, 'number|int') // returns 'number'
  * @example typeOf({}) // returns 'object'
  */
 function typeOf(input, test) {

@@ -516,6 +516,8 @@ export function doTimeout(idOrDelay, delayOrCallback, callback, ...args) {
     } else if (typeof idOrDelay === 'number' && typeof delayOrCallback === 'function') {
         delay = idOrDelay;
         callback = delayOrCallback;
+    } else if (!delayOrCallback && typeof idOrDelay === 'string') {
+        id = idOrDelay;
     } else {
         throw new Error('Invalid parameters');
     }

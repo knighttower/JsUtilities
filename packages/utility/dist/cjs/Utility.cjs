@@ -270,28 +270,43 @@ function getGoogleMapsAddress(address) {
 }
 
 /**
- * Check if a value is in a collection (array, string, object)
+ * Check recusively if a value is in a collection (array, string, object)
  * @param {collection} collection - The collection to search in
  * @param {value} value - The value to search for
  * @param {fromIndex} fromIndex - The index to start searching from
  * @return {boolean} - True if the value is in the collection, false otherwise
+ * @example includes('hello there', 'hello') // true
+ * @example includes({ hello: 'dos', other: { hello: 'uno' } }, 'uno') // true
+ * @note This function is case-insensitive and since native includes is not recursive, this function is
  */
 function includes(collection, value, fromIndex = 0) {
-    if (Array.isArray(collection) || typeof collection === 'string') {
-        // Use native includes for arrays and strings
-        return collection.includes(value, fromIndex);
-    }
-
-    if (typeof collection === 'object') {
-        // Search in object values
-        for (let key in collection) {
-            if (collection[key] && collection[key].includes(value, fromIndex)) {
-                return true;
-            }
+    const isString = typeof value === 'string';
+    value = isString ? value.toLowerCase() : value;
+    const collectionType = typeOf(collection);
+    const find = (target) => {
+        const isType = typeOf(target);
+        if (isType === 'object' || isType === 'array') {
+            return includes(target, value, fromIndex);
         }
+        if (isType === 'number' || isType === 'boolean') {
+            return collection.toString().includes(value.toString(), fromIndex);
+        }
+        // any other case
+        return target.includes(value, fromIndex);
+    };
+    switch (collectionType) {
+        case 'array':
+            return collection.some((item) => find(item));
+        case 'string':
+            return collection.toLowerCase().includes(value, fromIndex);
+        case 'number':
+        case 'boolean':
+            return collection.toString().includes(value.toString(), fromIndex);
+        case 'object':
+            return Object.values(collection).some((item) => find(item));
     }
-
-    return false;
+    // any other case
+    return collection.includes(value, fromIndex);
 }
 
 /**
@@ -482,6 +497,7 @@ function toDollarString(amount) {
  * @example typeOf('hello', 'number') // returns false
  * @example typeOf('hello', 'string') // returns true
  * @example typeOf('hello') // returns 'string'
+ * @example typeOf(123, 'number|int') // returns 'number'
  * @example typeOf({}) // returns 'object'
  */
 function typeOf(input, test) {

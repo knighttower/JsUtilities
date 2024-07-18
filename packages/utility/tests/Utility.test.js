@@ -21,7 +21,27 @@ import {
     instanceOf,
     convertToNumber,
     uuid,
+    includes,
 } from '../src/utility';
+test('includes', () => {
+    assert.equal(includes('hello there', 'hello'), true);
+    assert.equal(includes('Up there', 'Hello'), false);
+    assert.equal(includes('Up there', 'Up'), true);
+    assert.equal(includes('Up there', 'up'), true);
+    assert.equal(includes('Up there', 'there', 1), true);
+    assert.equal(includes('Up there again', 'there', 4), false);
+    assert.equal(includes({ hello: 'uno' }, 'uno'), true);
+    assert.equal(includes({ hello: 'dos' }, 'uno'), false);
+    assert.equal(includes({ hello: 'dos', other: { hello: 'uno' } }, 'uno'), true);
+    assert.equal(includes({ hello: 'dos', other: { hello: 'uno' } }, 'tres'), false);
+    assert.equal(includes([1, 2, 3], 2), true);
+    assert.equal(includes([1, 2, 3], 4), false);
+    assert.equal(includes([1, 2, 3], 1), true);
+    assert.equal(includes([1, 2, 3, [5]], 5), true);
+    assert.equal(includes(15200, 4), false);
+    assert.equal(includes(15200, 5), true);
+    assert.equal(includes([true], true), true);
+});
 
 test('uuid - should return a string', () => {
     const result = uuid(40);
