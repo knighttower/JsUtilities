@@ -168,7 +168,7 @@ const urlHelper = (__request) => {
          * @return {boolean} Always returns false to prevent default browser behavior.
          */
         goTo: (url) => {
-            HREF = url;
+            LOCATION.href = url;
             return false;
         },
 
