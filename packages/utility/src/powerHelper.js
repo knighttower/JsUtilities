@@ -24,44 +24,52 @@ import { doPoll } from './promises.js';
  * @param {Boolean} options.isFalsy - if the value is falsy
  * @return Object/Boolean
  */
-export function getObjectValue(obj, name, callback, options) {
-    const { queryTime = 15000, isFalsy = false } = options || {};
-    if (typeof callback === 'function') {
-        doPoll(
+export function getObjectValue(obj, name, async = false, options = {}) {
+    options = typeOf(options, 'number') ? { queryTime: options } : options;
+    const { queryTime = 15000, isFalsy = false } = options;
+
+    if (async) {
+        return doPoll(
             () => {
                 const value = getObjectValue(obj, name);
                 if (isFalsy && value === false) {
-                    return callback(value);
-                } else if (value) {
-                    return callback(value);
+                    return value;
+                } else if (value && value !== false) {
+                    return value;
                 }
             },
             {
                 timeout: queryTime, // 15 seconds
                 interval: 100,
-                timeoutMsg: 'Object prop no found:' + name,
+                msg: false,
             }
-        );
+        ).promise;
     }
 
     if (!obj) {
         return false;
     }
 
-    for (const key in obj) {
-        if (key === name) {
-            return obj[key];
-        } else if (typeof obj[key] === 'object') {
-            let result = getObjectValue(obj[key], name);
-
-            if (result) {
-                return result;
+    const keys = name.split('.');
+    let index = 0;
+    while (index < keys.length) {
+        const target = keys[index];
+        for (const key in obj) {
+            if (key === target) {
+                if (keys[index + 1]) {
+                    return getObjectValue(obj[key], keys[index + 1]);
+                }
+                return obj[key];
+            } else if (typeof obj[key] === 'object') {
+                let result = getObjectValue(obj[key], target);
+                if (result) {
+                    return result;
+                }
+                return false;
             }
-            return false;
         }
+        return false;
     }
-
-    return false;
 }
 
 // @private

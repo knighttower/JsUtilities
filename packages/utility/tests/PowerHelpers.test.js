@@ -1,7 +1,7 @@
 /**
  * @vitest-environment jsdom
  */
-import { test } from 'vitest';
+import { test, vi, expect } from 'vitest';
 import assert from 'assert';
 import {
     getDirectivesFromString,
@@ -20,9 +20,45 @@ import {
     setWildCardString,
     getArrObjFromString,
     proxyObject,
+    getObjectValue,
 } from '../src/powerHelper.js';
 // console.log(proxyObject({ a: 1, b: 2, c: 3 }));
+
+vi.setConfig({
+    testTimeout: 50000,
+});
 let results = '';
+
+// getDirectivesFromString
+
+test('getObjectValue', async () => {
+    const object = { hello: 'this', world: { one: 1, two: 'two' } };
+    results = getObjectValue(object, 'hello');
+    assert.equal(results, 'this');
+    results = getObjectValue(object.world, 'one');
+    assert.equal(results, 1);
+    results = getObjectValue(object.world, 'two', (value) => {
+        console.log('______ value ______', value);
+        assert.equal(value, 'two');
+    });
+    results = getObjectValue(object, 'world.one', (value) => {
+        console.log('______ value ______', value);
+        assert.equal(value, 1);
+    });
+    results = false;
+    return;
+});
+
+test('getObjectValue2', async () => {
+    const object = { hello: 'this', world: { one: 1, two: 'two' } };
+    const result = await getObjectValue(object, 'world.tree', true, 200).catch((error) => {
+        // console.log('______ error ______', error);
+        // assert.equal(error, 'Property not found');
+    });
+    // console.log('______ result ______', result);
+    assert.equal(result, undefined);
+});
+
 // getDirectivesFromString
 test('getDirectivesFromString - quoted single', () => {
     results = getDirectivesFromString("{'hello': 'this', 'world': {'one': 1, 'two': 'two'}}");

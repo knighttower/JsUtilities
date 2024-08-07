@@ -185,9 +185,10 @@ export const doPoll = (fn, options = {}) => {
     }
     const isPromise = (promise) => promise instanceof Promise;
     const {
+        msg,
         interval = 200,
         timeout = 1000,
-        timeoutMsg = '===> doPoll: cancelled or timed out.',
+        timeoutMsg = msg ?? '===> doPoll: cancelled or timed out.',
     } = options;
     let timeoutId, intervalId;
     let resolvePromise, rejectPromise;
@@ -196,7 +197,13 @@ export const doPoll = (fn, options = {}) => {
 
     const stop = () => {
         clearTimers();
-        rejectPromise(console.info(timeoutMsg));
+        if (typeOf(timeoutMsg, 'string')) {
+            console.info(timeoutMsg);
+            rejectPromise(timeoutMsg);
+            return;
+        }
+
+        rejectPromise();
     };
 
     const done = (result) => {
