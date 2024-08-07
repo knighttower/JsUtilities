@@ -1,6 +1,6 @@
 import { test, vi, expect } from 'vitest';
 import assert from 'assert';
-import { promisePool, doPoll, promiseQueue, doTimeout, doAsync } from '../src/promiseQueue';
+import { promisePool, doPoll, promiseQueue, doTimeout, doAsync } from '../src/promises';
 
 vi.setConfig({
     testTimeout: 50000,

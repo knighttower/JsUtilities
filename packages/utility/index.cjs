@@ -30,6 +30,14 @@ const {
 const { urlHelper } = require('./dist/cjs/urlHelper.cjs');
 // Single Modules and Aliases from: proxyObject
 const { proxyClass, proxyObject } = require('./dist/cjs/proxyObject.cjs');
+// Single Modules and Aliases from: promises
+const {
+    doAsync,
+    doPoll,
+    doTimeout,
+    promisePool,
+    promiseQueue,
+} = require('./dist/cjs/promises.cjs');
 // Single Modules and Aliases from: promiseQueue
 const {
     doAsync,
@@ -52,6 +60,7 @@ const {
     getMatchBlock,
     getMatchInBetween,
     getObjectFromPath,
+    getObjectValue,
     removeQuotes,
     setExpString,
     setLookUpExp,
@@ -100,6 +109,11 @@ module.exports = {
     doTimeout,
     promisePool,
     promiseQueue,
+    doAsync,
+    doPoll,
+    doTimeout,
+    promisePool,
+    promiseQueue,
     addQuotes,
     cleanStr,
     convertKeysToSymbols,
@@ -112,6 +126,7 @@ module.exports = {
     getMatchBlock,
     getMatchInBetween,
     getObjectFromPath,
+    getObjectValue,
     removeQuotes,
     setExpString,
     setLookUpExp,

@@ -11,6 +11,59 @@ import {
     convertToNumber,
 } from './utility.js';
 
+import { doPoll } from './promises.js';
+
+/**
+ * Get the value of an object property by name or wait for it to be available
+ *
+ * @param {Object} obj
+ * @param {String} name
+ * @param {Function} callback
+ * @param {Object} options
+ * @param {Number} options.queryTime - time to wait for the object to be available. default 15000 ms
+ * @param {Boolean} options.isFalsy - if the value is falsy
+ * @return Object/Boolean
+ */
+export function getObjectValue(obj, name, callback, options) {
+    const { queryTime = 15000, isFalsy = false } = options || {};
+    if (typeof callback === 'function') {
+        doPoll(
+            () => {
+                const value = getObjectValue(obj, name);
+                if (isFalsy && value === false) {
+                    return callback(value);
+                } else if (value) {
+                    return callback(value);
+                }
+            },
+            {
+                timeout: queryTime, // 15 seconds
+                interval: 100,
+                timeoutMsg: 'Object prop no found:' + name,
+            }
+        );
+    }
+
+    if (!obj) {
+        return false;
+    }
+
+    for (const key in obj) {
+        if (key === name) {
+            return obj[key];
+        } else if (typeof obj[key] === 'object') {
+            let result = getObjectValue(obj[key], name);
+
+            if (result) {
+                return result;
+            }
+            return false;
+        }
+    }
+
+    return false;
+}
+
 // @private
 function _removeBrackets(strExp) {
     const regex = /^(\[|\{)(.*?)(\]|\})$/; // Match brackets at start and end
@@ -212,7 +265,7 @@ export function getArrObjFromString(strExp) {
 
     const loopNested = (objects = false) => {
         // ignore eslint comment
-         
+
         while (true) {
             //find any nested arrays or objects
             let matched = objects ? findNested(newStrExp, '{', '}') : findNested(newStrExp);
@@ -283,9 +336,9 @@ export function getDirectivesFromString(stringDirective) {
     };
     const matchArrayTypes = /^\[((.|\n)*?)\]$/gm;
     // comment eslint to ignore
-     
+
     const matchObjectTypes = /^\{((.|\n)*?)\:((.|\n)*?)\}/gm;
-     
+
     const matchFunctionString = /^([a-zA-Z]+)(\()(\.|\#)(.*)(\))/g;
     const regexDotObjectString = /([a-zA-Z]+)\.(.*?)\(((.|\n)*?)\)/gm;
     const regexExObjectString = /([a-zA-Z]+)\[((.|\n)*?)\]\(((.|\n)*?)\)/gm;
@@ -311,7 +364,7 @@ export function getDirectivesFromString(stringDirective) {
             case !!str.match(matchFunctionString):
                 // Mathes simple directive function style: directive(#idOr.Class)
                 // regexFunctionString
-                 
+
                 const directive = str.split('(')[0].trim();
                 return results('idOrClassWithDirective', {
                     [directive]: getMatchInBetween(str, '(', ')'),
@@ -546,7 +599,7 @@ export function setWildCardString(str, matchStart = false, matchEnd = false) {
     }
     matchStart = convertToBool(matchStart);
     matchEnd = convertToBool(matchEnd);
-     
+
     let regexStr = str.replace(/([.+?^${}()|\[\]\/\\])/g, '\\$&'); // escape all regex special chars
     let regStart = matchStart ? '^' : '';
     let regEnd = matchEnd ? '$' : '';

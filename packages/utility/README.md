@@ -50,6 +50,7 @@ export {
     doTimeout,
     promisePool,
     promiseQueue,
+    promises,
     proxyClass,
     proxyObject,
     urlHelper,
@@ -86,7 +87,7 @@ export {
 - `@knighttower/utility/proxyObject` (default export)
 - `@knighttower/utility/proxyClass` (default export)
 - `@knighttower/utility/powerHelpers` (default export)
-- `@knighttower/utility/promiseQueue` (default export)
+- `@knighttower/utility/promises` (default export)
 - `@knighttower/utility/EventBus` (default export)
 - `@knighttower/utility/event-bus` (default export)
 ```
@@ -125,14 +126,14 @@ see all available in the CDN here --> https://cdn.jsdelivr.net/npm/@knighttower/
   - class EventBus
 <br/> 
 
-- [promiseQueue](https://github.com/knighttower/JsUtility/blob/development/packages/utility/src/promiseQueue.js): A class for managing promises in a queue and polling
+- [promises](https://github.com/knighttower/JsUtility/blob/development/packages/utility/src/promises.js): A class for managing promises in a queue and polling
 
   @imports 
   - doAsync,
     doPoll,
     doTimeout,
     promisePool,
-    promiseQueue,
+    promises,
 
 <br/>  
 

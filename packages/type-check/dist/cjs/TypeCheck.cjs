@@ -182,6 +182,7 @@ function isNumber(value) {
  * @example typeOf('hello', 'number') // returns false
  * @example typeOf('hello', 'string') // returns true
  * @example typeOf('hello') // returns 'string'
+ * @example typeOf(123, 'number|int') // returns 'number'
  * @example typeOf({}) // returns 'object'
  */
 function typeOf(input, test) {
@@ -363,7 +364,7 @@ function getArrObjFromString(strExp) {
 
     const loopNested = (objects = false) => {
         // ignore eslint comment
-        // eslint-disable-next-line no-constant-condition
+
         while (true) {
             //find any nested arrays or objects
             let matched = objects ? findNested(newStrExp, '{', '}') : findNested(newStrExp);

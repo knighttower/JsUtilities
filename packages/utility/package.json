@@ -1,6 +1,6 @@
 {
   "name": "@knighttower/utility",
-  "version": "7.20.0",
+  "version": "7.21.0",
   "main": "index.cjs",
   "module": "index.js",
   "type": "module",
@@ -40,9 +40,17 @@
       "import": "./dist/esm/powerHelper.js",
       "require": "./dist/cjs/powerHelper.cjs"
     },
+    "./helpers": {
+      "import": "./dist/esm/powerHelper.js",
+      "require": "./dist/cjs/powerHelper.cjs"
+    },
     "./promiseQueue": {
-      "import": "./dist/esm/promiseQueue.js",
-      "require": "./dist/cjs/promiseQueue.cjs"
+      "import": "./dist/esm/promises.js",
+      "require": "./dist/cjs/promises.cjs"
+    },
+    "./promises": {
+      "import": "./dist/esm/promises.js",
+      "require": "./dist/cjs/promises.cjs"
     },
     "./EventBus": {
       "import": "./dist/esm/EventBus.js",

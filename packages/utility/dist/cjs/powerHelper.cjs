@@ -282,10 +282,159 @@ function typeOf(input, test) {
 //     uniqueId,
 // };
 
+// =========================================
+// --> doPoll
+// --------------------------
+/**
+ * Creates a poll function that continuously calls a given function until it returns true or a promise resolves.
+ * @param {Function} fn - The function to be polled. It can return a promise or a boolean.
+ * @param {Object} options - Configuration options for polling.
+ * @param {number} [options.interval=200] - The interval in milliseconds between each poll.
+ * @param {number} [options.timeout=1000] - The maximum time in milliseconds to continue polling.
+ * @returns {Object} { promise, stop } - An object containing the polling promise and a cancel function.
+ * @fails returns 'failed' if the polling times out or is cancelled.
+ * @options: {}
+ * - interval: The interval in milliseconds between each poll.
+ * - timeout: The maximum time in milliseconds to continue polling.
+ * @example
+ * const { promise, stop } = doPoll(() => {
+ *    // Polling logic here
+ *   return true; // or return a promise
+ * }
+ */
+const doPoll = (fn, options = {}) => {
+    if (typeof fn !== 'function') {
+        if (typeof fn !== 'object') {
+            throw new Error('doPoll: The first argument must be a function or Promise.');
+        }
+    }
+    const isPromise = (promise) => promise instanceof Promise;
+    const {
+        interval = 200,
+        timeout = 1000,
+        timeoutMsg = '===> doPoll: cancelled or timed out.',
+    } = options;
+    let timeoutId, intervalId;
+    let resolvePromise, rejectPromise;
+    let stopped = false;
+    let promiseRunning = false;
+
+    const stop = () => {
+        clearTimers();
+        rejectPromise(console.info(timeoutMsg));
+    };
+
+    const done = (result) => {
+        clearTimers();
+        resolvePromise(result);
+    };
+
+    function clearTimers() {
+        stopped = true;
+        clearTimeout(timeoutId);
+        clearInterval(intervalId);
+    }
+
+    const promise = new Promise((resolve, reject) => {
+        resolvePromise = resolve;
+        rejectPromise = reject;
+
+        const poll = () => {
+            if (stopped || promiseRunning) {
+                return;
+            }
+
+            const pollThis = isPromise(fn) ? fn : fn();
+            // double test if the pollThis returns a promise
+            if (isPromise(pollThis)) {
+                promiseRunning = true;
+                pollThis
+                    .then((resolvedValue) => {
+                        promiseRunning = false;
+                        if (resolvedValue) {
+                            done(resolvedValue);
+                        }
+                    })
+                    .catch(rejectPromise);
+            } else {
+                if (Boolean(pollThis) || pollThis) {
+                    done(pollThis);
+                }
+            }
+        };
+
+        intervalId = setInterval(poll, interval);
+        poll(); // Initial call to handle any immediate resolution
+
+        timeoutId = setTimeout(() => {
+            if (!stopped) {
+                stop();
+            }
+        }, timeout);
+    });
+
+    promise.catch(() => {
+        stop();
+    });
+
+    return { promise, stop };
+};
+
 // Author Knighttower
 // MIT License
 // Copyright (c) [2022] [Knighttower] https://github.com/knighttower
 
+
+/**
+ * Get the value of an object property by name or wait for it to be available
+ *
+ * @param {Object} obj
+ * @param {String} name
+ * @param {Function} callback
+ * @param {Object} options
+ * @param {Number} options.queryTime - time to wait for the object to be available. default 15000 ms
+ * @param {Boolean} options.isFalsy - if the value is falsy
+ * @return Object/Boolean
+ */
+function getObjectValue(obj, name, callback, options) {
+    const { queryTime = 15000, isFalsy = false } = options || {};
+    if (typeof callback === 'function') {
+        doPoll(
+            () => {
+                const value = getObjectValue(obj, name);
+                if (isFalsy && value === false) {
+                    return callback(value);
+                } else if (value) {
+                    return callback(value);
+                }
+            },
+            {
+                timeout: queryTime, // 15 seconds
+                interval: 100,
+                timeoutMsg: 'Object prop no found:' + name,
+            }
+        );
+    }
+
+    if (!obj) {
+        return false;
+    }
+
+    for (const key in obj) {
+        if (key === name) {
+            return obj[key];
+        } else if (typeof obj[key] === 'object') {
+            let result = getObjectValue(obj[key], name);
+
+            if (result) {
+                return result;
+            }
+            return false;
+        }
+    }
+
+    return false;
+}
 
 // @private
 function _removeBrackets(strExp) {
@@ -488,7 +637,7 @@ function getArrObjFromString(strExp) {
 
     const loopNested = (objects = false) => {
         // ignore eslint comment
-         
+
         while (true) {
             //find any nested arrays or objects
             let matched = objects ? findNested(newStrExp, '{', '}') : findNested(newStrExp);
@@ -559,9 +708,9 @@ function getDirectivesFromString(stringDirective) {
     };
     const matchArrayTypes = /^\[((.|\n)*?)\]$/gm;
     // comment eslint to ignore
-     
+
     const matchObjectTypes = /^\{((.|\n)*?)\:((.|\n)*?)\}/gm;
-     
+
     const matchFunctionString = /^([a-zA-Z]+)(\()(\.|\#)(.*)(\))/g;
     const regexDotObjectString = /([a-zA-Z]+)\.(.*?)\(((.|\n)*?)\)/gm;
     const regexExObjectString = /([a-zA-Z]+)\[((.|\n)*?)\]\(((.|\n)*?)\)/gm;
@@ -587,7 +736,7 @@ function getDirectivesFromString(stringDirective) {
             case !!str.match(matchFunctionString):
                 // Mathes simple directive function style: directive(#idOr.Class)
                 // regexFunctionString
-                 
+
                 const directive = str.split('(')[0].trim();
                 return results('idOrClassWithDirective', {
                     [directive]: getMatchInBetween(str, '(', ')'),
@@ -822,7 +971,7 @@ function setWildCardString(str, matchStart = false, matchEnd = false) {
     }
     matchStart = convertToBool(matchStart);
     matchEnd = convertToBool(matchEnd);
-     
+
     let regexStr = str.replace(/([.+?^${}()|\[\]\/\\])/g, '\\$&'); // escape all regex special chars
     let regStart = matchStart ? '^' : '';
     let regEnd = matchEnd ? '$' : '';
@@ -896,6 +1045,7 @@ exports.getDirectivesFromString = getDirectivesFromString;
 exports.getMatchBlock = getMatchBlock;
 exports.getMatchInBetween = getMatchInBetween;
 exports.getObjectFromPath = getObjectFromPath;
+exports.getObjectValue = getObjectValue;
 exports.removeQuotes = removeQuotes;
 exports.setExpString = setExpString;
 exports.setLookUpExp = setLookUpExp;

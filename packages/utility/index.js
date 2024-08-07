@@ -32,10 +32,11 @@ import urlHelper from './src/urlHelper.js';
 import { proxyClass } from './src/proxyObject.js';
 // Default Module from: proxyObject
 import proxyObject from './src/proxyObject.js';
-// Single Modules and Aliases from: promiseQueue
-import { promiseQueue, doPoll, promisePool, doTimeout, doAsync } from './src/promiseQueue.js';
+// Single Modules and Aliases from: promises
+import { promiseQueue, doPoll, promisePool, doTimeout, doAsync } from './src/promises.js';
 // Single Modules and Aliases from: powerHelper
 import {
+    getObjectValue,
     addQuotes,
     cleanStr,
     convertKeysToSymbols,
@@ -100,6 +101,7 @@ export {
     promisePool,
     doTimeout,
     doAsync,
+    getObjectValue,
     addQuotes,
     cleanStr,
     convertKeysToSymbols,
