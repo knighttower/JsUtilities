@@ -14,40 +14,19 @@ import {
 import { doPoll } from './promises.js';
 
 /**
- * Get the value of an object property by name or wait for it to be available
- *
- * @param {Object} obj
- * @param {String} name
- * @param {Function} callback
- * @param {Object} options
- * @param {Number} options.queryTime - time to wait for the object to be available. default 15000 ms
- * @param {Boolean} options.isFalsy - if the value is falsy
- * @return Object/Boolean
+ * Get the value of an object from a string path
+ * @function getObjectValue
+ * @param {Object} obj - The object to search in
+ * @param {String} name - The path to the value
+ * @return {Any} - The value found at the path
+ * @example getObjectValue({a: {b: {c: 'value'}}}, 'a.b.c') // 'value'
+ * @example getObjectValue({a: {b: {c: 'value'}}}, 'a.b') // {c: 'value'}
+ * @example getObjectValue({a: {b: {c: 'value'}}}, 'a') // {b: {c: 'value'}}
+ * @example getObjectValue({a: {b: {c: 'value'}}}, 'a.b.d') // undefined
  */
-export function getObjectValue(obj, name, async = false, options = {}) {
-    options = typeOf(options, 'number') ? { queryTime: options } : options;
-    const { queryTime = 15000, isFalsy = false } = options;
-
-    if (async) {
-        return doPoll(
-            () => {
-                const value = getObjectValue(obj, name);
-                if (isFalsy && value === false) {
-                    return value;
-                } else if (value && value !== false) {
-                    return value;
-                }
-            },
-            {
-                timeout: queryTime, // 15 seconds
-                interval: 100,
-                msg: false,
-            }
-        ).promise;
-    }
-
-    if (!obj) {
-        return false;
+export function getObjectValue(obj, name) {
+    if (!obj || !name) {
+        return;
     }
 
     const keys = name.split('.');
@@ -65,10 +44,9 @@ export function getObjectValue(obj, name, async = false, options = {}) {
                 if (result) {
                     return result;
                 }
-                return false;
             }
+            return;
         }
-        return false;
     }
 }
 

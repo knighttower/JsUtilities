@@ -49,16 +49,6 @@ test('getObjectValue', async () => {
     return;
 });
 
-test('getObjectValue2', async () => {
-    const object = { hello: 'this', world: { one: 1, two: 'two' } };
-    const result = await getObjectValue(object, 'world.tree', true, 200).catch((error) => {
-        // console.log('______ error ______', error);
-        // assert.equal(error, 'Property not found');
-    });
-    // console.log('______ result ______', result);
-    assert.equal(result, undefined);
-});
-
 // getDirectivesFromString
 test('getDirectivesFromString - quoted single', () => {
     results = getDirectivesFromString("{'hello': 'this', 'world': {'one': 1, 'two': 'two'}}");
