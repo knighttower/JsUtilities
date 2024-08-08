@@ -23,7 +23,6 @@ const targets = [
     { file: 'powerHelper.js', exportType: 'named' },
     { file: 'powerHelper.js', exportType: 'named', exportName: 'helpers' },
     { file: 'promises.js', exportType: 'named', exportName: 'promises' },
-    { file: 'promises.js', exportType: 'named', exportName: 'promiseQueue' },
     { file: 'event-bus/EventBus.js', exportType: 'named', windowExport: 'EventBus' },
 ];
 

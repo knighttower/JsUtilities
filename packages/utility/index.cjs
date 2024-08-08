@@ -38,14 +38,6 @@ const {
     promisePool,
     promiseQueue,
 } = require('./dist/cjs/promises.cjs');
-// Single Modules and Aliases from: promiseQueue
-const {
-    doAsync,
-    doPoll,
-    doTimeout,
-    promisePool,
-    promiseQueue,
-} = require('./dist/cjs/promiseQueue.cjs');
 // Single Modules and Aliases from: powerHelper
 const {
     addQuotes,
@@ -104,11 +96,6 @@ module.exports = {
     urlHelper,
     proxyClass,
     proxyObject,
-    doAsync,
-    doPoll,
-    doTimeout,
-    promisePool,
-    promiseQueue,
     doAsync,
     doPoll,
     doTimeout,
