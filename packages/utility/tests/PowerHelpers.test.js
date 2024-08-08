@@ -31,24 +31,6 @@ let results = '';
 
 // getDirectivesFromString
 
-test('getObjectValue', async () => {
-    const object = { hello: 'this', world: { one: 1, two: 'two' } };
-    results = getObjectValue(object, 'hello');
-    assert.equal(results, 'this');
-    results = getObjectValue(object.world, 'one');
-    assert.equal(results, 1);
-    results = getObjectValue(object.world, 'two', (value) => {
-        console.log('______ value ______', value);
-        assert.equal(value, 'two');
-    });
-    results = getObjectValue(object, 'world.one', (value) => {
-        console.log('______ value ______', value);
-        assert.equal(value, 1);
-    });
-    results = false;
-    return;
-});
-
 // getDirectivesFromString
 test('getDirectivesFromString - quoted single', () => {
     results = getDirectivesFromString("{'hello': 'this', 'world': {'one': 1, 'two': 'two'}}");

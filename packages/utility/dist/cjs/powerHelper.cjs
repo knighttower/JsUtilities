@@ -287,43 +287,6 @@ function typeOf(input, test) {
 // Copyright (c) [2022] [Knighttower] https://github.com/knighttower
 
 
-/**
- * Get the value of an object from a string path
- * @function getObjectValue
- * @param {Object} obj - The object to search in
- * @param {String} name - The path to the value
- * @return {Any} - The value found at the path
- * @example getObjectValue({a: {b: {c: 'value'}}}, 'a.b.c') // 'value'
- * @example getObjectValue({a: {b: {c: 'value'}}}, 'a.b') // {c: 'value'}
- * @example getObjectValue({a: {b: {c: 'value'}}}, 'a') // {b: {c: 'value'}}
- * @example getObjectValue({a: {b: {c: 'value'}}}, 'a.b.d') // undefined
- */
-function getObjectValue(obj, name) {
-    if (!obj || !name) {
-        return;
-    }
-
-    const keys = name.split('.');
-    let index = 0;
-    while (index < keys.length) {
-        const target = keys[index];
-        for (const key in obj) {
-            if (key === target) {
-                if (keys[index + 1]) {
-                    return getObjectValue(obj[key], keys[index + 1]);
-                }
-                return obj[key];
-            } else if (typeof obj[key] === 'object') {
-                let result = getObjectValue(obj[key], target);
-                if (result) {
-                    return result;
-                }
-            }
-            return;
-        }
-    }
-}
-
 // @private
 function _removeBrackets(strExp) {
     const regex = /^(\[|\{)(.*?)(\]|\})$/; // Match brackets at start and end
@@ -933,7 +896,6 @@ exports.getDirectivesFromString = getDirectivesFromString;
 exports.getMatchBlock = getMatchBlock;
 exports.getMatchInBetween = getMatchInBetween;
 exports.getObjectFromPath = getObjectFromPath;
-exports.getObjectValue = getObjectValue;
 exports.removeQuotes = removeQuotes;
 exports.setExpString = setExpString;
 exports.setLookUpExp = setLookUpExp;

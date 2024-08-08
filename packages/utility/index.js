@@ -36,7 +36,6 @@ import proxyObject from './src/proxyObject.js';
 import { promiseQueue, doPoll, promisePool, doTimeout, doAsync } from './src/promises.js';
 // Single Modules and Aliases from: powerHelper
 import {
-    getObjectValue,
     addQuotes,
     cleanStr,
     convertKeysToSymbols,
@@ -101,7 +100,6 @@ export {
     promisePool,
     doTimeout,
     doAsync,
-    getObjectValue,
     addQuotes,
     cleanStr,
     convertKeysToSymbols,
