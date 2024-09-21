@@ -178,6 +178,7 @@ function isNumber(value) {
  * @example typeOf('hello', 'number') // returns false
  * @example typeOf('hello', 'string') // returns true
  * @example typeOf('hello') // returns 'string'
+ * @example typeOf(123, 'number|int') // returns 'number'
  * @example typeOf({}) // returns 'object'
  */
 function typeOf(input, test) {
@@ -375,7 +376,7 @@ function getArrObjFromString(strExp) {
 
     const loopNested = (objects = false) => {
         // ignore eslint comment
-         
+
         while (true) {
             //find any nested arrays or objects
             let matched = objects ? findNested(newStrExp, '{', '}') : findNested(newStrExp);
@@ -446,9 +447,9 @@ function getDirectivesFromString(stringDirective) {
     };
     const matchArrayTypes = /^\[((.|\n)*?)\]$/gm;
     // comment eslint to ignore
-     
+
     const matchObjectTypes = /^\{((.|\n)*?)\:((.|\n)*?)\}/gm;
-     
+
     const matchFunctionString = /^([a-zA-Z]+)(\()(\.|\#)(.*)(\))/g;
     const regexDotObjectString = /([a-zA-Z]+)\.(.*?)\(((.|\n)*?)\)/gm;
     const regexExObjectString = /([a-zA-Z]+)\[((.|\n)*?)\]\(((.|\n)*?)\)/gm;
@@ -474,7 +475,7 @@ function getDirectivesFromString(stringDirective) {
             case !!str.match(matchFunctionString):
                 // Mathes simple directive function style: directive(#idOr.Class)
                 // regexFunctionString
-                 
+
                 const directive = str.split('(')[0].trim();
                 return results('idOrClassWithDirective', {
                     [directive]: getMatchInBetween(str, '(', ')'),

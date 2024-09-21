@@ -68,6 +68,8 @@ const adaptive = () => {
     && npx rollup -c "${rollupConfig}" \
     && prettier --config "${pretty}" --write ./index.js \
     && prettier --config "${pretty}" --write ./index.cjs \
+    && node "${buildExports}" --dir ./dist/cjs --type=cjs \
+    && node "${buildExports}" --dir ./dist/esm --type=esm \
     && node "${bumpVersion}" --exe --minor \
     ` + (local ? '' : '&& npm publish --access public')
     );
