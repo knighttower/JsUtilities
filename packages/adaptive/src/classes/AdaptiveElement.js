@@ -24,6 +24,7 @@ export default class AdaptiveElement {
 
         for (let directive in props.settings) {
             // Matches the method name and passes the directives
+            // ex: addClass, removeClass, addStyle, teleport, execute
             this[directive](props.settings[directive]);
         }
     }
@@ -59,11 +60,9 @@ export default class AdaptiveElement {
         return QueryHandler.add(
             queries,
             ($styles) => {
-                 
                 return (this.props.domElement.style.cssText += $styles);
             },
             () => {
-                 
                 return (this.props.domElement.style.cssText = this.props.originalStyle);
             },
             this.Adaptive

@@ -1968,6 +1968,7 @@ class AdaptiveElement {
 
         for (let directive in props.settings) {
             // Matches the method name and passes the directives
+            // ex: addClass, removeClass, addStyle, teleport, execute
             this[directive](props.settings[directive]);
         }
     }
@@ -2003,11 +2004,9 @@ class AdaptiveElement {
         return QH.add(
             queries,
             ($styles) => {
-                 
                 return (this.props.domElement.style.cssText += $styles);
             },
             () => {
-                 
                 return (this.props.domElement.style.cssText = this.props.originalStyle);
             },
             this.Adaptive
@@ -2158,31 +2157,31 @@ const _adaptive = (function () {
      * Flag for isMounted
      * @private
      */
-    var isMounted = false;
+    let isMounted = false;
 
     /**
      * Flag for using Vue
      * @private
      */
-    var useVue = false;
+    let useVue = false;
 
     /**
      * Flag for using React
      * @private
      */
-    var useReact = false;
+    let useReact = false;
 
     /**
      * Flag for using React
      * @private
      */
-    var useWeb = false;
+    let useWeb = false;
 
     /**
      * Flag for using Hybrid
      * @private
      */
-    var isHybrid = false;
+    let isHybrid = false;
 
     /**
      * queries possible sizes
@@ -2467,7 +2466,7 @@ const _adaptive = (function () {
             .forEach(function (element) {
                 $this.registerElement(element);
             });
-
+        addHtmlCoreClasses();
         QH.init();
         if (useVue || useReact) {
             // hybrid mode
@@ -2479,6 +2478,27 @@ const _adaptive = (function () {
             // vanilla js
             TeleportGlobal();
         }
+    }
+
+    /**
+     * Add helper classes to the body element
+     * @private
+     * @return {Void}
+     */
+    function addHtmlCoreClasses() {
+        const html = document.querySelector('body');
+        const classes = {};
+        for (let key in screens) {
+            classes[key] = 'screen-' + key;
+        }
+        for (let key in devices) {
+            classes[key] = 'is-' + key;
+        }
+        for (let key in broadMediaQueries) {
+            classes[key] = 'type-' + key;
+        }
+
+        $this.registerElement(html, { addClass: classes });
     }
 
     /**

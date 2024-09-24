@@ -7,4 +7,11 @@ import { Adaptive, adaptive } from './dist/esm/Adaptive.js';
 // Default Module from: Adaptive
 import _adaptive from './dist/esm/Adaptive.js';
 
-export { TeleportGlobal, teleport, Teleport, Adaptive, adaptive, _adaptive };
+ export { 
+ TeleportGlobal,
+teleport,
+Teleport,
+Adaptive,
+adaptive,
+_adaptive 
+ };
