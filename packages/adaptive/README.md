@@ -25,7 +25,7 @@ It Uses/Offers:
 -   [Implementation](#implementation)
 -   [Features and examples](#features)
 -   [Full Description](#description)
--   DOCS: [https://knighttower.github.io/adaptive.js/](https://knighttower.github.io/adaptive.js/)
+-   DOCS: [https://knighttower.github.io/adaptive.js/](https://knighttower.github.io/adaptive.js/) (outdated)
 
 <br><br>
 
@@ -194,6 +194,12 @@ Use it to trigger functions or methods at specific breakpoints.
 	// or
 	this.Adaptive.if('tablet', this.nameOfMethod);
 	// ...See more use cases in the example files!
+
+    //or
+
+    this.Adaptive.if('tablet', function () {
+        // code... run only once
+    }).onlyOnce();
 }
 </script>
 ```
@@ -202,10 +208,85 @@ Use it to trigger functions or methods at specific breakpoints.
 
 <br/>
 <br/>
+---
 
 ## Features <a name="features"></a>
 
-### -- It can be used directly with the markup or as part of the JS code
+- **Markup Integration**: Easily integrate directly into your HTML markup or within JavaScript.
+- **Breakdown-Specific Class and Style Management**: Modify classes and styles dynamically based on screen size.
+- **Custom Queries**: Define custom media queries to tailor layouts to specific needs.
+- **Hybrid Mode**: Combine Adaptive.js with Vue or React, allowing static and dynamic content to coexist seamlessly.
+
+---
+
+## API <a name="api"></a>
+### `getMinMaxQueries()`
+- **Description**: Returns all available min-max queries.
+- **Example**:
+  ```javascript
+  const minMaxQueries = Adaptive.getMinMaxQueries();
+  ```
+
+### `getExpQueries()`
+- **Description**: Returns all available expression queries.
+- **Example**:
+  ```javascript
+  const expQueries = Adaptive.getExpQueries();
+  ```
+
+### `registerElement(elementOrSelector, data)`
+- **Description**: Registers an element for adaptive behavior.
+- **Example**:
+  ```javascript
+  Adaptive.registerElement('#myElement', { directive: 'value' });
+  ```
+
+### `addQueryMinMax(id, min, max)`
+- **Description**: Registers a custom min-max query.
+- **Example**:
+  ```javascript
+  Adaptive.addQueryMinMax('customQuery', 500, 800);
+  ```
+
+### `addQueryExpression(id, query)`
+- **Description**: Registers a custom expression query.
+- **Example**:
+  ```javascript
+  Adaptive.addQueryExpression('customQuery', 'screen and (max-width: 600px)');
+  ```
+ ## `if(breakdownId, callback)`
+- **Description**: Executes a callback function based on the media query match.
+- **Example**:
+  ```javascript
+  Adaptive.if('mobile', () => { console.log('Mobile view'); });
+  ```
+
+### `init()`
+- **Description**: Initializes Adaptive.js after the DOM has loaded.
+- **Example**:
+  ```javascript
+  Adaptive.init();
+  ```
+
+### `useVue(Vue, hybrid)`
+- **Description**: Configures Adaptive.js for use with Vue.
+- **Example**:
+  ```javascript
+  Adaptive.useVue(VueInstance, true);
+  ```
+
+### `useReact(React, hybrid)`
+- **Description**: Configures Adaptive.js for use with React.
+- **Example**:
+  ```javascript
+  Adaptive.useReact(ReactInstance, true);
+  ```
+
+---
+---
+
+**Note**: For a complete overview, refer to the examples in the `example` and `test` directories and explore the live demos.
+
 
 #### Directly in markup
 

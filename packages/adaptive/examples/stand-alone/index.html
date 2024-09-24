@@ -168,6 +168,11 @@
         <script src="../../dist/browser/Adaptive.js"></script>
         <script>
             $adaptive.init();
+            $adaptive
+                .if('tablet', function () {
+                    console.log('Tablet');
+                })
+                .onlyOnce();
         </script>
         <style>
             .laura {

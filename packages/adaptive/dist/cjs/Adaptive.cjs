@@ -1800,10 +1800,12 @@ const QH = (function QueryHandler() {
                 // LookUp by the prop value when the second array element is an object
                 if (prop && type === 'object') {
                     if (prop in reg[1] && reg[1][prop] === value) {
-                        console.log(domQueriesMatch[expression]);
-                        domQueriesMatch[expression] = domQueriesMatch[expression].filter(function (o) {
-                            return o[1][prop] !== value;
-                        });
+                        // console.log(domQueriesMatch[expression]);
+                        domQueriesMatch[expression] = domQueriesMatch[expression].filter(
+                            function (o) {
+                                return o[1][prop] !== value;
+                            }
+                        );
                     }
                     // LookUp by the value (function) and prop when the second array element is a string
                 } else if (type === 'string' && reg[1] === prop) {
@@ -1835,7 +1837,9 @@ const QH = (function QueryHandler() {
      */
     $this.reset = () => {
         Object.keys(registeredQueries).forEach((queryExpression) => {
-            $window.matchMedia(queryExpression).removeEventListener('change', registeredQueries[queryExpression]);
+            $window
+                .matchMedia(queryExpression)
+                .removeEventListener('change', registeredQueries[queryExpression]);
             delete registeredQueries[queryExpression];
         });
         Object.keys(domQueriesMatch).forEach((key) => delete domQueriesMatch[key]);
