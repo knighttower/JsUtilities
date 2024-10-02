@@ -78,13 +78,18 @@ class Teleport {
     beam(settings) {
         settings = GetSettings(settings).directive;
 
+        if (typeOf(settings, 'object') && settings.teleport) {
+            // to make it responsive
+            this.props.domElement.removeAttribute('data-adaptive-id');
+            $adaptive.registerElement(this.props.domElement, settings);
+            return;
+        }
         // Transform settings to an array format
         switch (typeOf(settings)) {
             case 'string':
                 settings = ['default', settings];
                 break;
             case 'object':
-                 
                 const key = Object.keys(settings)[0];
                 settings = [key, settings[key]];
                 break;

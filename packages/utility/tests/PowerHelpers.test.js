@@ -61,6 +61,30 @@ test('getDirectivesFromString - Get directives from string', () => {
         directive: { hello: 'this', world: { one: 1, two: 'two' } },
     });
 });
+test('getDirectivesFromString - Deep nested', () => {
+    results = getDirectivesFromString('{hello: "this"}');
+    console.log('______ result ______', results);
+    results = getDirectivesFromString('{hello: "this", world: {one: 1, two: "two"}}');
+    console.log('______ result ______', results);
+    results = getDirectivesFromString('{hello: "this", world: {one: 1, two: {three: 3, four: 4}}}');
+    console.log('______ result ______', results);
+    results = getDirectivesFromString(
+        '{hello: "this", world: [[value,value],{inner: "other"}, otherValue]}'
+    );
+    console.log('______ result ______', results);
+    results = getDirectivesFromString(
+        '[{hello: "this", world: {one: 1, two: {three: 3, four: [1,2,3]}}}]'
+    );
+    results = getDirectivesFromString(
+        '[{hello: "this", world: [[value,value],{inner: "other"}, otherValue]}]'
+    );
+    console.log('______ result ______', results);
+    // results = getDirectivesFromString('{hello: "this", world: {one: 1, two: {three: 3, four: 4}}}');
+    // assert.deepEqual(results, {
+    //     type: 'object',
+    //     directive: { hello: 'this', world: { one: 1, two: { three: 3, four: 4 } } },
+    // });
+});
 
 test('getDirectivesFromString - should convert string formats into objects', () => {
     //test for const regexIdOrClass = /^(\.|\#)([a-zA-Z]+)/g;

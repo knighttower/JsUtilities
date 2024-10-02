@@ -341,11 +341,11 @@ function proxyObject(object) {
 
 // @private
 function _removeBrackets(strExp) {
-    const regex = /^(\[|\{)(.*?)(\]|\})$/; // Match brackets at start and end
+    const regex = /^(\{.*\}|\[.*\])$/; // Match only if both brackets are the same type
     const match = strExp.match(regex);
 
     if (match) {
-        return match[2].trim(); // Extract and trim the content between brackets
+        return match[0].slice(1, -1).trim(); // Extract and trim the content between brackets
     }
 
     return strExp; // Return the original string if no brackets found at start and end
@@ -394,6 +394,7 @@ function findNested(str, start = '[', end = ']') {
     if (typeof str !== 'string') {
         return str;
     }
+    // return lastMatch;
     // Find the last index of '['
     const lastIndex = str.lastIndexOf(start);
     // If '[' is not found, return null or some default value
@@ -440,59 +441,82 @@ function fixQuotes(str, q = '"') {
  */
 function getArrObjFromString(strExp) {
     // alredy typeof object or array just return it
-    if (typeOf(strExp, 'object') || typeOf(strExp, 'array')) {
+    if (typeOf(strExp, 'object') || typeOf(strExp, 'array') || !strExp) {
         return strExp;
     }
-    const isObject = startAndEndWith(strExp, '{', '}');
-    const isArray = startAndEndWith(strExp, '[', ']');
+    const isObject = (str) => startAndEndWith(str, '{', '}');
+    const isArray = (str) => startAndEndWith(str, '[', ']');
+
+    const collectionType =
+        (isObject(strExp) ? 'object' : null) || (isArray(strExp) ? 'array' : null);
     // If it is other type of string, return it
-    if (!isObject && !isArray) {
+    if (!collectionType) {
         return strExp;
     }
 
-    const newCollection = isObject ? {} : [];
     const nestedElements = {};
 
-    //remove the brackets
-    let newStrExp = _removeBrackets(strExp);
+    const getNested = (str) => {
+        const match1 = findNested(str, '{', '}');
+        const match2 = findNested(str, '[', ']');
 
-    const loopNested = (objects = false) => {
-        // ignore eslint comment
-
-        while (true) {
-            //find any nested arrays or objects
-            let matched = objects ? findNested(newStrExp, '{', '}') : findNested(newStrExp);
-
-            if (!matched) {
-                break;
-            }
-
-            //replace the nested array or object with a marker so that we can safely split the string
-            let marker = `__${getRandomId()}__`;
-            nestedElements[marker] = matched;
-
-            newStrExp = newStrExp.replace(matched, marker);
+        if (str.indexOf(match1) > str.indexOf(match2)) {
+            return match1 || null;
         }
+        return match2 || null;
     };
 
-    loopNested();
-    loopNested(true);
-
-    getChunks(newStrExp).forEach((chunk, index) => {
-        const isObjectKey = chunk.includes(':') && isObject;
-        const chunkParts = isObjectKey ? getChunks(chunk, ':') : [];
-        const chunkKey = removeQuotes(emptyOrValue(chunkParts[0], index));
-        chunk = isObjectKey ? chunkParts[1] : chunk;
-        if (chunk in nestedElements) {
-            chunk = getArrObjFromString(nestedElements[chunk]);
+    const loopNested = (str) => {
+        if (!str) {
+            return;
         }
-        chunk = convertToNumber(removeQuotes(chunk));
-        // set back in the collection either as an object or array
-        isObject ? (newCollection[chunkKey] = chunk) : newCollection.push(chunk);
-    });
-    // uncomment to debug
-    // console.log('___ log ___', newCollection);
-    return newCollection;
+
+        let matched = getNested(_removeBrackets(str));
+
+        if (!matched) {
+            return;
+        }
+        const addMarker = (_str, matched) => {
+            let marker = `__${getRandomId()}__`;
+            let type =
+                (isObject(matched) ? 'object' : null) ||
+                (isArray(matched) ? 'array' : null) ||
+                'string';
+            _str = _str.replace(matched, marker);
+            nestedElements[marker] = {
+                type,
+                matched,
+            };
+            return _str;
+        };
+
+        str = addMarker(str, matched);
+
+        return loopNested(str) || str;
+    };
+
+    const buildNested = (str, type) => {
+        str = _removeBrackets(str);
+        let output = type === 'object' ? {} : [];
+
+        getChunks(str).forEach((chunk, index) => {
+            const isObjectKey = chunk.includes(':') && type === 'object';
+            const chunkParts = isObjectKey ? getChunks(chunk, ':') : [];
+            const chunkKey = removeQuotes(emptyOrValue(chunkParts[0], index));
+            chunk = isObjectKey ? chunkParts[1] : chunk;
+
+            if (chunk in nestedElements) {
+                const nested = nestedElements[chunk];
+                chunk = buildNested(nested.matched, nested.type);
+            }
+            chunk = convertToNumber(removeQuotes(chunk));
+            // set back in the collection either as an object or array
+            type === 'object' ? (output[chunkKey] = chunk) : output.push(chunk);
+        });
+        return output;
+    };
+
+    return buildNested(loopNested(strExp) || strExp, collectionType);
 }
 
 /**
@@ -517,6 +541,7 @@ function getArrObjFromString(strExp) {
  */
 function getDirectivesFromString(stringDirective) {
     const str = stringDirective;
+
     if (!emptyOrValue(str)) {
         return null;
     }
@@ -530,7 +555,7 @@ function getDirectivesFromString(stringDirective) {
     const matchArrayTypes = /^\[((.|\n)*?)\]$/gm;
     // comment eslint to ignore
 
-    const matchObjectTypes = /^\{((.|\n)*?)\:((.|\n)*?)\}/gm;
+    const matchObjectTypes = /^\{((.|\n)*?)\:((.|\n)*?)\}$/gm;
 
     const matchFunctionString = /^([a-zA-Z]+)(\()(\.|\#)(.*)(\))/g;
     const regexDotObjectString = /([a-zA-Z]+)\.(.*?)\(((.|\n)*?)\)/gm;
@@ -575,9 +600,9 @@ function getDirectivesFromString(stringDirective) {
                 return results('string', str);
         }
     }
-
     if (type === 'array' || type === 'object') {
         let strQ = fixQuotes(str);
+
         try {
             return results(type, JSON.parse(strQ));
         } catch (error) {
@@ -1614,13 +1639,18 @@ class Teleport {
     beam(settings) {
         settings = getDirectivesFromString(settings).directive;
 
+        if (typeOf(settings, 'object') && settings.teleport) {
+            // to make it responsive
+            this.props.domElement.removeAttribute('data-adaptive-id');
+            $adaptive.registerElement(this.props.domElement, settings);
+            return;
+        }
         // Transform settings to an array format
         switch (typeOf(settings)) {
             case 'string':
                 settings = ['default', settings];
                 break;
             case 'object':
-                 
                 const key = Object.keys(settings)[0];
                 settings = [key, settings[key]];
                 break;

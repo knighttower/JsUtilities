@@ -291,6 +291,11 @@ Ex: $container (for the container module), $grid-gutter-width (for the grid modu
 
 <br>  
 
+## Gotchas
+
+- when using the @import in a sass file, make sure to use the tilde (~) to point to the node_modules folder and add resolvers to the 'node_modules' folder in the sass-loader configuration in webpack or vite.
+
+<br>
 
 ### Why?
 
