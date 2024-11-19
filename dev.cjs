@@ -31,7 +31,7 @@ const bootstrapMini = () => {
     runCommand(
         `\
     cd ./packages/bootstrap-mini \
-    && npx mix ${once}
+    && npx mix watch
     `
     );
 };

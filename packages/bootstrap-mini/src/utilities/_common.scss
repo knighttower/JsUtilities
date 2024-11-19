@@ -1,0 +1,39 @@
+// =========================================
+// --> Core settings
+// --------------------------
+// avoids the "flash of unstyled content"
+[un-cloak] {
+    display: none;
+}
+
+html,
+body {
+    min-height: 100vh;
+    color: var(--x-body-color, #212529);
+    background: var(--x-body-bg, #fff);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.max-div-width {
+    width: 100%;
+    max-width: clamp(320px, 100%, 1040px);
+    margin: 0 auto;
+}
+
+img {
+    margin: auto;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+}
+
+svg {
+    fill: currentColor;
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    overflow: hidden;
+}

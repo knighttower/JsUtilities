@@ -18,7 +18,10 @@ $sparkUtil: (
 $sparkOptionalUtils: (
     margin:
         mapMerge(
-            map-get-multiple($utilities, ("margin", "margin-bottom", "margin-top", "margin-x", "margin-y")),
+            map-get-multiple(
+                $utilities,
+                ("margin", "margin-bottom", "margin-top", "margin-x", "margin-y")
+            ),
             (
                 "margin-right": (
                     responsive: true,
@@ -48,7 +51,10 @@ $sparkOptionalUtils: (
         ),
     padding:
         mapMerge(
-            map-get-multiple($utilities, ("padding", "padding-bottom", "padding-top", "padding-x", "padding-y")),
+            map-get-multiple(
+                $utilities,
+                ("padding", "padding-bottom", "padding-top", "padding-x", "padding-y")
+            ),
             (
                 "padding-right": (
                     responsive: true,
@@ -158,5 +164,120 @@ $responsiveClasses: ();
                 @include generate-utility($value, $suffix);
             }
         }
+    }
+}
+
+.container,
+.container-fluid {
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 0;
+    width: 100%;
+    padding-right: calc(var(--bs-gutter-x) * 0.5);
+    padding-left: calc(var(--bs-gutter-x) * 0.5);
+    margin-right: auto;
+    margin-left: auto;
+}
+
+:root {
+    --bs-max-width-xs: 540px;
+    --bs-max-width-sm: 720px;
+    --bs-max-width-md: 960px;
+    --bs-max-width-lg: 1140px;
+    --bs-max-width-xl: 1320px;
+    --bs-max-width-xxl: 1400px;
+}
+.container-fluid {
+    max-width: 100%;
+}
+@media (min-width: 0) {
+    .container {
+        max-width: var(--bs-max-width-xs);
+    }
+}
+@media (min-width: 576px) {
+    .container {
+        max-width: var(--bs-max-width-sm);
+    }
+}
+@media (min-width: 768px) {
+    .container {
+        max-width: var(--bs-max-width-md);
+    }
+}
+@media (min-width: 992px) {
+    .container {
+        max-width: var(--bs-max-width-lg);
+    }
+}
+@media (min-width: 1200px) {
+    .container {
+        max-width: var(--bs-max-width-xl);
+    }
+}
+@media (min-width: 1400px) {
+    .container {
+        max-width: var(--bs-max-width-xxl);
+    }
+}
+
+// =========================================
+// --> Font Sizes
+// --------------------------
+:root {
+    --x-base-font-size: 1;
+    --x-base-line-height: 1.5;
+    --x-font-size: 15px;
+    --x-base-div-width: 1040;
+    --input-height: 40px;
+}
+// TABLETS
+@include breakpoint(tablet) {
+    :root {
+        --x-base-font-size: 0.85;
+        --x-base-div-width: 740;
+    }
+}
+// MOBILES UNDER 600PX;
+@include breakpoint(mobile) {
+    :root {
+        --x-base-font-size: 0.75;
+        --x-base-div-width: 360;
+    }
+}
+
+.spacer {
+    display: block;
+    &.--100 {
+        height: calc(100px / var(--x-base-font-size));
+    }
+    &.--90 {
+        height: calc(90px / var(--x-base-font-size));
+    }
+    &.--80 {
+        height: calc(80px / var(--x-base-font-size));
+    }
+    &.--70 {
+        height: calc(70px / var(--x-base-font-size));
+    }
+    &.--60 {
+        height: calc(60px / var(--x-base-font-size));
+    }
+    &.--50 {
+        height: calc(50px / var(--x-base-font-size));
+    }
+    &.--40 {
+        height: calc(40px / var(--x-base-font-size));
+    }
+    &.--30 {
+        height: calc(30px / var(--x-base-font-size));
+    }
+    &.--20 {
+        height: calc(20px / var(--x-base-font-size));
+    }
+    &.--10 {
+        height: calc(10px / var(--x-base-font-size));
+    }
+    &.--5 {
+        height: calc(10px / var(--x-base-font-size));
     }
 }

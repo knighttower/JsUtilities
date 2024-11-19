@@ -57,3 +57,42 @@
 .--text-justify {
     text-align: justify !important;
 }
+
+//----------------------------------------
+// SPECIAL TEXT EFFECTS
+//----------------------------------------
+.list {
+    ul {
+        padding: var(--x-ul-padding, 7px 0 10px 20px);
+    }
+    &--inline,
+    &--unstyled {
+        @include list-unstyled();
+    }
+    &--inline {
+        li {
+            display: inline-block;
+            &:not(:last-child) {
+                margin-right: 10px;
+            }
+        }
+    }
+}
+
+hr,
+.hr {
+    border: 0;
+    display: block;
+    clear: both;
+    width: 100%;
+    border-top: 1px dashed var(--x-hr-color, #333333);
+    margin: 20px 0;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    font-weight: normal;
+}

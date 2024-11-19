@@ -2,7 +2,8 @@
 
 Built on top of Bootstrap but modified to have only the basic utilities classes and the grid system. This is a (very) lightweight CSS version that can be used to build websites and web applications.
 <br>
-It is not meant to replace the full functionality of Bootstrap, only to abstract the basic utilities to use in quick prototypes, small projects or to compliment other frameworks since it does not add any root styles, resets or normalize, colors or other theme styles that would override or conflict. It can also be customized with a few variables before importing the file to load only a few utilities or the full set.
+It is not meant to replace the full functionality of Bootstrap, only to abstract the basic utilities to use in quick prototypes, small projects or to compliment other frameworks since it does not add any root styles, resets or normalize, colors or other theme styles that would override or conflict. It can also be customized with a few variables before importing the file to load only a few utilities or the full set.  
+Out the box it can be used from the cdn but to further reduce the size, it can be installed as a node module and imported as a sass file to be compiled with postcss.
 <br>
 Compressed: 72.5 KiB  
 Uncompressed: 104 KiB  
@@ -273,6 +274,7 @@ Ex: $container (for the container module), $grid-gutter-width (for the grid modu
     -- xl: 1200 (targets from here up (bootstrap default behavior))  
     -- xxl: 1400 (targets from here up (bootstrap default behavior))  
     <br>
+    Utils:  
     <br>
     - `.--nounderline`: Removes text underline.
     - `.--underline`: Adds text underline.
@@ -288,8 +290,32 @@ Ex: $container (for the container module), $grid-gutter-width (for the grid modu
     - `.--text-right`: Aligns text to the right.
     - `.--text-center`: Centers text.
     - `.--text-justify`: Justifies text.
+    - `.list`:  list style.
+    - `.list--inline`:  list style inline.
+    - `.list--unstyled`:  list style unstyled.
 
 <br>  
+
+<br>
+## Root vars
+
+-   --bs-disabled-bg: #e9ecef;
+-   --bs-disabled-text: #6c757d;
+-   --bs-disabled-border: #c8cbcf; 
+-   --x-body-color: #212529; 
+-   --x-body-bg: #fff;
+-   --x-base-font-size: 1rem;
+-   --x-base-line-height: 1.5;
+- --x-font-size
+- --input-height  
+
+max container width  
+-   --bs-max-width-xs: 540px;
+-   --bs-max-width-sm: 720px;
+-   --bs-max-width-md: 960px;
+-   --bs-max-width-lg: 1140px;
+-   --bs-max-width-xl: 1320px;
+-   --bs-max-width-xxl: 1400px;
 
 ## Gotchas
 
