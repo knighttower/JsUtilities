@@ -5,7 +5,7 @@ Built on top of Bootstrap but modified to have only the basic utilities classes 
 It is not meant to replace the full functionality of Bootstrap, only to abstract the basic utilities to use in quick prototypes, small projects or to compliment other frameworks since it does not add any root styles, resets or normalize, colors or other theme styles that would override or conflict. It can also be customized with a few variables before importing the file to load only a few utilities or the full set.  
 Out the box it can be used from the cdn but to further reduce the size, it can be installed as a node module and imported as a sass file to be compiled with postcss.
 <br>
-Compressed: 72.5 KiB  
+Compressed: 70 KiB  
 Uncompressed: 104 KiB  
 GZip: 8 KiB  
 Brotli: 5 KiB
@@ -17,7 +17,10 @@ Usage (stand-alone):
 ```
 npm install @knighttower/bootstrap-mini -D
 ```
-
+```scss
+@import '~@knighttower/bootstrap-mini/dist/bootstrap-mini.css';
+```  
+Or to use the sass file, and use the sass functions and utilities:  
 ```scss
 @import '~@knighttower/bootstrap-mini/src/bootstrap-mini.scss';
 ```
