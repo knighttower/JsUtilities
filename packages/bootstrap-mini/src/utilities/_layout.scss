@@ -179,44 +179,54 @@ $responsiveClasses: ();
 }
 
 :root {
-    --bs-max-width-xs: 540px;
-    --bs-max-width-sm: 720px;
-    --bs-max-width-md: 960px;
-    --bs-max-width-lg: 1140px;
-    --bs-max-width-xl: 1320px;
+    --bs-max-width: 100%;
+    --bs-max-width-lg: 1024px;
+    --bs-max-width-xl: 1200px;
     --bs-max-width-xxl: 1400px;
+    --bs-container-pad-xs: 15px;
+    --bs-container-pad-sm: 20px;
+    --bs-container-pad-md: 30px;
+    --bs-container-pad-lg: 40px;
+    --bs-container-pad-xl: 40px;
+    --bs-container-pad-xxl: 40px;
 }
 .container-fluid {
     max-width: 100%;
 }
 @media (min-width: 0) {
     .container {
-        max-width: var(--bs-max-width-xs);
+        max-width: var(--bs-max-width);
+        padding: 0 var(--bs-container-pad-xs);
     }
 }
 @media (min-width: 576px) {
     .container {
-        max-width: var(--bs-max-width-sm);
+        max-width: var(--bs-max-width);
+        padding: 0 var(--bs-container-pad-sm);
     }
 }
 @media (min-width: 768px) {
     .container {
-        max-width: var(--bs-max-width-md);
+        max-width: var(--bs-max-width);
+        padding: 0 var(--bs-container-pad-md);
     }
 }
 @media (min-width: 992px) {
     .container {
         max-width: var(--bs-max-width-lg);
+        padding: 0 var(--bs-container-pad-lg);
     }
 }
 @media (min-width: 1200px) {
     .container {
         max-width: var(--bs-max-width-xl);
+        padding: 0 var(--bs-container-pad-xl);
     }
 }
 @media (min-width: 1400px) {
     .container {
         max-width: var(--bs-max-width-xxl);
+        padding: 0 var(--bs-container-pad-xxl);
     }
 }
 

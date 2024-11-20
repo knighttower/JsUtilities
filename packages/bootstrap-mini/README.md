@@ -307,18 +307,26 @@ Ex: $container (for the container module), $grid-gutter-width (for the grid modu
 -   --bs-disabled-border: #c8cbcf; 
 -   --x-body-color: #212529; 
 -   --x-body-bg: #fff;
--   --x-base-font-size: 1rem;
--   --x-base-line-height: 1.5;
-- --x-font-size
-- --input-height  
+- --x-ul-padding: 7px 0 10px 20px;
+- --x-base-font-size: 1;
+- --x-base-line-height: 1.5;
+- --x-font-size: 15px;
+- --x-base-div-width: 1040;
+- --input-height: 40px;
+- --bs-gutter-x: 1.5rem;
+- --bs-gutter-y: 0;
 
 max container width  
--   --bs-max-width-xs: 540px;
--   --bs-max-width-sm: 720px;
--   --bs-max-width-md: 960px;
--   --bs-max-width-lg: 1140px;
--   --bs-max-width-xl: 1320px;
--   --bs-max-width-xxl: 1400px;
+- --bs-max-width: 100%;
+- --bs-max-width-lg: 1024px;
+- --bs-max-width-xl: 1200px;
+- --bs-max-width-xxl: 1400px;
+- --bs-container-pad-xs: 15px;
+- --bs-container-pad-sm: 20px;
+- --bs-container-pad-md: 30px;
+- --bs-container-pad-lg: 40px;
+- --bs-container-pad-xl: 40px;
+- --bs-container-pad-xxl: 40px;
 
 ## Gotchas
 
