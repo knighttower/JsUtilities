@@ -2,24 +2,24 @@
 
 @import "settings/variables";
 
-@import "node_modules/bootstrap/scss/functions";
-@import "node_modules/bootstrap/scss/variables";
-// @import "node_modules/bootstrap/scss/variables-dark";
-@import "node_modules/bootstrap/scss/maps";
-@import "node_modules/bootstrap/scss/mixins";
-@import "node_modules/bootstrap/scss/utilities";
-// @import "node_modules/bootstrap/scss/helpers/ratio";
-// @import "node_modules/bootstrap/scss/helpers/position";
-// @import "node_modules/bootstrap/scss/containers";
-@import "node_modules/bootstrap/scss/grid";
-// @import "node_modules/bootstrap/scss/root";
-// @import "node_modules/bootstrap/scss/reboot";
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+// @import "~bootstrap/scss/variables-dark";
+@import "~bootstrap/scss/maps";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/utilities";
+// @import "~bootstrap/scss/helpers/ratio";
+// @import "~bootstrap/scss/helpers/position";
+// @import "~bootstrap/scss/containers";
+@import "~bootstrap/scss/grid";
+// @import "~bootstrap/scss/root";
+// @import "~bootstrap/scss/reboot";
 // // If you need to use any of the following, the above need to load first
-// @import "node_modules/bootstrap/scss/tables";
-// @import "node_modules/bootstrap/scss/forms";
-// @import "node_modules/bootstrap/scss/buttons";
-// @import "node_modules/bootstrap/scss/button-group";
-// @import "node_modules/bootstrap/scss/list-group";
+// @import "~bootstrap/scss/tables";
+// @import "~bootstrap/scss/forms";
+// @import "~bootstrap/scss/buttons";
+// @import "~bootstrap/scss/button-group";
+// @import "~bootstrap/scss/list-group";
 @import "utilities/common";
 @import "utilities/utility";
 @import "utilities/breakpoints";

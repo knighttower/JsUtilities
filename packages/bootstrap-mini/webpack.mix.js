@@ -21,8 +21,8 @@ mix.sass('src/bootstrap-mini.scss', 'dist')
             ],
             alias: {
                 // Alias for easier imports from src and parent node_modules
-                '~': path.resolve(__dirname, 'src'),
-                node_modules: path.resolve(__dirname, '../../node_modules'),
+                // '~': path.resolve(__dirname, 'src'),
+                // node_modules: path.resolve(__dirname, '../../node_modules'),
             },
         },
         stats: 'errors-only',
