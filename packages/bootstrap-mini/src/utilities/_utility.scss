@@ -102,8 +102,15 @@
 
         // when a single unit is passed ex: 300px
         @else if $screen != null {
-            @media (min-width: $screen) {
-                @content;
+            @if type-of($screen) == "number" {
+                @media (min-width: ensure-px($screen)) {
+                    @content;
+                }
+            } @else {
+                // when there is a $param but no specific value
+                @media ($screen) {
+                    @content;
+                }
             }
         } // when no value
         @else {
