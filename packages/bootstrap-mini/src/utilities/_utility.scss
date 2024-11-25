@@ -4,6 +4,8 @@
 // /* ================================ */
 // /* ================================ */
 @use "sass:list";
+@use "sass:string";
+@use "sass:meta";
 
 // /**
 // * __comment__
@@ -77,6 +79,33 @@
         }
 
         // when a single unit is passed ex: 300px and extra param
+        @else if
+            $screen !=
+            null and
+            $param !=
+            null and
+            str-index($param, "px") and not
+            str-index($param, "max")
+        {
+            @media (min-width: $screen) and (max-width: $param) {
+                @content;
+            }
+        }
+        // when a single unit is passed as only a number ex: 300
+        @else if
+            $screen !=
+            null and
+            $param !=
+            null and
+            type-of($param) ==
+            "number" and not
+            str-index($param, "max")
+        {
+            @media (min-width: $screen) and (max-width: #{$param}px) {
+                @content;
+            }
+        }
+        // when there is a $param but no specific value
         @else if $screen != null and $param != null {
             @media (min-width: $screen) and ($param) {
                 @content;
