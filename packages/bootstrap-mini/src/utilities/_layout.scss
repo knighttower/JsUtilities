@@ -257,6 +257,8 @@ $responsiveClasses: ();
 
 .spacer {
     display: block;
+    width: 100%;
+    clear: both;
     &.--100 {
         height: calc(100px / var(--x-base-font-size));
     }
