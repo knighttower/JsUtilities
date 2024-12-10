@@ -152,6 +152,7 @@ Ex: $container (for the container module), $grid-gutter-width (for the grid modu
 * @include breakpoint(mobile){rules...}; or
 * @include breakpoint(000px,'max-width:800px'){rules...}; or
 * @include breakpoint(mobile,landscape){rules...}; 
+* Includded breakpoints: mobile, phone, 320, 480, 520, tablet, 600, 700, odd, 800, desktop, desk, 920, 1000, 1200, 1440, 1600, fullscreen, nondesktop, sm, md, lg, xl, xxl  
 */
 .ex-class {
     @include breakpoint(lg) {
@@ -162,6 +163,7 @@ Ex: $container (for the container module), $grid-gutter-width (for the grid modu
         // rules
     }
 }
+
 
 // /**
 // * Merge maps
@@ -296,6 +298,12 @@ Ex: $container (for the container module), $grid-gutter-width (for the grid modu
     - `.list`:  list style.
     - `.list--inline`:  list style inline.
     - `.list--unstyled`:  list style unstyled.
+    - `.spacer`:  makes a div into a spacer. sizes are added as classes, ex: .spacer --10, .spacer --20, etc...
+
+Automatic rules added rules:
+-   `img`: responsive images
+-   `hr`: horizontal ruler 1px dashed #ccc  
+-   `svg`: responsive svg images and maintain aspect ratio  
 
 <br>  
 

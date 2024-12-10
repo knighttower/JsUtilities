@@ -50,8 +50,8 @@
     $max: 0;
 
     @if $values != null {
-        $min: nth($values, 1);
-        $max: nth($values, 2);
+        $min: ensure-px(nth($values, 1));
+        $max: ensure-px(nth($values, 2));
     }
     @if $exclude == true {
         @if $values != null {
@@ -60,7 +60,7 @@
             }
         }
     } @else {
-        @if $values != null {
+        @if $values != null and type-of($param) != "number" {
             // when min-width and max-width are set
             // landscape queries only
             @if $param == landscape and $max != 0 {
@@ -89,12 +89,12 @@
             }
         } @else if $screen != null and $param != null {
             @if type-of($param) == "number" {
-                @media (min-width: $screen) and (max-width: ensure-px($param)) {
+                @media (min-width: ensure-px($screen)) and (max-width: ensure-px($param)) {
                     @content;
                 }
             } @else {
                 // when there is a $param but no specific value
-                @media (min-width: $screen) and ($param) {
+                @media (min-width: ensure-px($screen)) and ($param) {
                     @content;
                 }
             }
