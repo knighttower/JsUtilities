@@ -262,34 +262,61 @@ $responsiveClasses: ();
     &.--100 {
         height: calc(100px * var(--x-base-font-size));
     }
+    &.--95 {
+        height: calc(95px * var(--x-base-font-size));
+    }
     &.--90 {
         height: calc(90px * var(--x-base-font-size));
+    }
+    &.--85 {
+        height: calc(85px * var(--x-base-font-size));
     }
     &.--80 {
         height: calc(80px * var(--x-base-font-size));
     }
+    &.--75 {
+        height: calc(75px * var(--x-base-font-size));
+    }
     &.--70 {
         height: calc(70px * var(--x-base-font-size));
+    }
+    &.--65 {
+        height: calc(65px * var(--x-base-font-size));
     }
     &.--60 {
         height: calc(60px * var(--x-base-font-size));
     }
+    &.--55 {
+        height: calc(55px * var(--x-base-font-size));
+    }
     &.--50 {
         height: calc(50px * var(--x-base-font-size));
+    }
+    &.--45 {
+        height: calc(45px * var(--x-base-font-size));
     }
     &.--40 {
         height: calc(40px * var(--x-base-font-size));
     }
+    &.--35 {
+        height: calc(35px * var(--x-base-font-size));
+    }
     &.--30 {
         height: calc(30px * var(--x-base-font-size));
     }
+    &.--25 {
+        height: calc(25px * var(--x-base-font-size));
+    }
     &.--20 {
         height: calc(20px * var(--x-base-font-size));
+    }
+    &.--15 {
+        height: calc(15px * var(--x-base-font-size));
     }
     &.--10 {
         height: calc(10px * var(--x-base-font-size));
     }
     &.--5 {
-        height: calc(10px * var(--x-base-font-size));
+        height: calc(5px * var(--x-base-font-size));
     }
 }
