@@ -18,7 +18,7 @@ body {
 
 .max-div-width {
     width: 100%;
-    max-width: clamp(320px, 100%, 1040px);
+    max-width: clamp(320px, 100%, 1200px);
     margin: 0 auto;
 }
 
@@ -27,6 +27,8 @@ img {
     width: auto;
     max-width: 100%;
     height: auto;
+    object-fit: cover;
+    display: block;
 }
 
 svg {

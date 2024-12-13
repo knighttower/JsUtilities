@@ -156,10 +156,27 @@ Ex: $container (for the container module), $grid-gutter-width (for the grid modu
 */
 .ex-class {
     @include breakpoint(lg) {
-        // rules
+        // only applies to 992px and up
     }
     @include breakpoint(mobile) {
         // only applies to 0-599 px
+        // rules
+    }
+    @include breakpoint(mobile, landscape) {
+        // only applies to 0-599 px in landscape
+        // rules
+    }
+    @include breakpoint(200, 'max-width:800px') {
+        // only applies to 0-800 px
+        // rules
+    }
+    @include breakpoint(200, 800) {
+        // only applies to 0-800 px
+        // rules
+    }
+    //advance
+    @include breakpoint(200, 800, true) {
+        // negates the query, like "not"
         // rules
     }
 }
@@ -205,32 +222,7 @@ Ex: $container (for the container module), $grid-gutter-width (for the grid modu
 // * @example
 // * // .class{ @include disabled();}
 // */
-@mixin disabled() {
-    &,
-    &:hover {
-        background: var(--bs-disabled-bg);
-        color: var(--bs-disabled-text);
-        border-color: var(--bs-disabled-border);
-        position: relative;
-    }
-
-    &:before {
-        position: absolute;
-        height: 1px;
-        width: 100%;
-        top: 50%;
-        left: 0;
-
-        display: block;
-        border-bottom: 1px solid var(--bs-disabled-line);
-        content: " ";
-        transform: rotate(15deg);
-    }
-
-    &:hover {
-        cursor: not-allowed;
-    }
-}
+@mixin disabled()
 
 // /**
 // * add transition effect to an element
@@ -243,12 +235,16 @@ Ex: $container (for the container module), $grid-gutter-width (for the grid modu
 // * @example
 // * // .class{ @include transitionProp(all, 0.5s, ease, 0s);}
 // */
-@mixin transitionProp($property, $duration: 0.5s, $method: ease, $delay: 0s) {
-    transition: $property $duration $method $delay;
-    -moz-transition: $property $duration $method $delay;
-    -webkit-transition: $property $duration $method $delay;
-    -o-transition: $property $duration $method $delay;
-}
+@mixin transitionProp($property, $duration: 0.5s, $method: ease, $delay: 0s)  
+
+// /**
+// * ensure the is a px unit
+// * @param {String|Number} $value
+// * @return {String} {value}px
+// */
+@function ensure-px($value)  
+
+
 ```` 
 
 <br>
@@ -267,7 +263,7 @@ Ex: $container (for the container module), $grid-gutter-width (for the grid modu
     --- Widht special: w-25, w-33, w-50, w-66, w-75, w-100 (25%, 33%, 50%, 66%, 75%, 100%)  
     -- Height (h-) increments in 10, ex: h-10, h-20, h-30, etc... up to 100% and 'vh' for viewport height  
     -- Zindex (z-) increments in 10, ex: z-10, z-20, z-30, etc... up to 50
-    
+
 
 -   Screen Sizes:  
     -- mobile: 0-599px (targets only this braket)  
@@ -299,11 +295,15 @@ Ex: $container (for the container module), $grid-gutter-width (for the grid modu
     - `.list--inline`:  list style inline.
     - `.list--unstyled`:  list style unstyled.
     - `.spacer`:  makes a div into a spacer. sizes are added as classes, ex: .spacer --10, .spacer --20, etc...
+    - `.hr`: horizontal ruler.
+    - `.img`: responsive images.
+    - `..max-div-width`: max width for a div. min 320px, max 1200px.
 
 Automatic rules added rules:
 -   `img`: responsive images
 -   `hr`: horizontal ruler 1px dashed #ccc  
 -   `svg`: responsive svg images and maintain aspect ratio  
+-   `hr`: horizontal ruler 1px dashed #ccc
 
 <br>  
 

@@ -21,6 +21,11 @@
     }
 }
 
+// /**
+// * ensure the is a px unit
+// * @param {String|Number} $value
+// * @return {String} {value}px
+// */
 @function ensure-px($value) {
     @if type-of($value) == "number" and unitless($value) {
         @return $value * 1px; // Convert number to px
