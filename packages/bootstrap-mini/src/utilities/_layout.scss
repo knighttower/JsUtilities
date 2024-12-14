@@ -255,68 +255,64 @@ $responsiveClasses: ();
     }
 }
 
+hr,
+.hr .ruler,
+.divider {
+    margin: 0;
+    border-top: 1px dashed var(--x-hr-color, #333333);
+    display: block;
+    height: 1px;
+    width: 100%;
+    clear: both;
+    &.--mid {
+        width: 50%;
+    }
+    &.--small {
+        width: 30%;
+    }
+}
+
+hr,
+.hr {
+    border: 0;
+    background-color: var(--x-hr-color, #333333);
+    margin: 20px 0;
+}
+
+$modifiers: 100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5;
+$devices: (
+    mobile: m,
+    tablet: t,
+    desktop: d,
+);
+
+:root {
+    // Define spacer variables dynamically based on modifiers
+    @each $modifier in $modifiers {
+        --dim-#{$modifier}: calc(#{$modifier}px * var(--x-base-font-size));
+    }
+}
+
 .spacer {
     display: block;
     width: 100%;
     clear: both;
-    &.--100 {
-        height: calc(100px * var(--x-base-font-size));
+
+    // Base modifiers
+    @each $modifier in $modifiers {
+        &.--#{$modifier} {
+            height: var(--dim-#{$modifier});
+        }
     }
-    &.--95 {
-        height: calc(95px * var(--x-base-font-size));
-    }
-    &.--90 {
-        height: calc(90px * var(--x-base-font-size));
-    }
-    &.--85 {
-        height: calc(85px * var(--x-base-font-size));
-    }
-    &.--80 {
-        height: calc(80px * var(--x-base-font-size));
-    }
-    &.--75 {
-        height: calc(75px * var(--x-base-font-size));
-    }
-    &.--70 {
-        height: calc(70px * var(--x-base-font-size));
-    }
-    &.--65 {
-        height: calc(65px * var(--x-base-font-size));
-    }
-    &.--60 {
-        height: calc(60px * var(--x-base-font-size));
-    }
-    &.--55 {
-        height: calc(55px * var(--x-base-font-size));
-    }
-    &.--50 {
-        height: calc(50px * var(--x-base-font-size));
-    }
-    &.--45 {
-        height: calc(45px * var(--x-base-font-size));
-    }
-    &.--40 {
-        height: calc(40px * var(--x-base-font-size));
-    }
-    &.--35 {
-        height: calc(35px * var(--x-base-font-size));
-    }
-    &.--30 {
-        height: calc(30px * var(--x-base-font-size));
-    }
-    &.--25 {
-        height: calc(25px * var(--x-base-font-size));
-    }
-    &.--20 {
-        height: calc(20px * var(--x-base-font-size));
-    }
-    &.--15 {
-        height: calc(15px * var(--x-base-font-size));
-    }
-    &.--10 {
-        height: calc(10px * var(--x-base-font-size));
-    }
-    &.--5 {
-        height: calc(5px * var(--x-base-font-size));
+
+    // Responsive modifiers
+    @each $device, $suffix in $devices {
+        @include breakpoint(#{$device}) {
+            @each $modifier in $modifiers {
+                &.--#{$modifier}-#{$suffix} {
+                    height: var(--dim-#{$modifier});
+                }
+            }
+        }
     }
 }
