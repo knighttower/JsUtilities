@@ -16,27 +16,23 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-.max-div-width {
-    width: 100%;
-    max-width: clamp(320px, 100%, 1200px);
-    margin: 0 auto;
+img,
+picture,
+svg {
+    display: block;
+    margin: auto;
+    max-width: 100%;
+    height: auto;
 }
 
 img,
 picture {
-    margin: auto;
     width: auto;
-    max-width: 100%;
-    height: auto;
     object-fit: cover;
-    display: block;
 }
 
 svg {
     fill: currentColor;
-    display: block;
     width: 100%;
-    height: auto;
-    max-width: 100%;
     overflow: hidden;
 }

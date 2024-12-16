@@ -50,10 +50,8 @@ $miniEnableHeight: true !default;
 $miniEnableZIndex: true !default;
 $miniEnableFlex: true !default;
 $miniEnableFloat: true !default;
-$miniEnablePosition: true !default;
 $miniEnableDisplay: true !default;
 $miniEnableVisibility: true !default;
-$miniEnableContainer: true !default;
 $miniEnableGridClasses: true !default;
 $miniEnableCssGrid: true !default;
 
@@ -67,7 +65,6 @@ $grid-columns: $miniColumns;
 $grid-gutter-width: $miniGutterWidth;
 $grid-row-columns: $miniRowColumns;
 $enable-grid-classes: $miniEnableGridClasses;
-$enable-container-classes: $miniEnableContainer;
 $enable-cssgrid: $miniEnableCssGrid;
 
 $font-size-base: $miniFontSizeBase;
@@ -82,7 +79,6 @@ $miniUtilsMapping: (
     z-index: $miniEnableZIndex,
     flex: $miniEnableFlex,
     float: $miniEnableFloat,
-    position: $miniEnablePosition,
     display: $miniEnableDisplay,
     visibility: $miniEnableVisibility,
 );
