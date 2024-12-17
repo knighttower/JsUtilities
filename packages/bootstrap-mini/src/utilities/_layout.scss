@@ -167,7 +167,8 @@ $responsiveClasses: ();
 }
 
 .container,
-.container-fluid {
+.container-fluid,
+.container-full {
     --bs-gutter-x: 1.5rem;
     --bs-gutter-y: 0;
     width: 100%;
@@ -190,25 +191,52 @@ $responsiveClasses: ();
     --bs-container-pad-xl: 40px;
     --bs-container-pad-xxl: 40px;
 }
-.container-fluid {
+.container-fluid,
+.container-full {
     max-width: 100%;
 }
-@each $breakpoint, $max-width, $padding in (
-    0: (--bs-max-width, --bs-container-pad-xs),
-    576px: (--bs-max-width, --bs-container-pad-sm),
-    768px: (--bs-max-width, --bs-container-pad-md),
-    992px: (--bs-max-width-lg, --bs-container-pad-lg),
-    1200px: (--bs-max-width-xl, --bs-container-pad-xl),
-    1400px: (--bs-max-width-xxl, --bs-container-pad-xxl)
-) {
-    @media (min-width: $breakpoint) {
-        .container {
-            max-width: var(#{$max-width});
-            padding: 0 var(#{$padding});
-        }
+
+@media (min-width: 0) {
+    :root {
+        --x-container-max-width: var(--bs-max-width);
+        --x-container-pad: var(--bs-container-pad-xs);
+    }
+}
+@media (min-width: 576px) {
+    :root {
+        --x-container-max-width: var(--bs-max-width);
+        --x-container-pad: var(--bs-container-pad-sm);
+    }
+}
+@media (min-width: 768px) {
+    :root {
+        --x-container-max-width: var(--bs-max-width);
+        --x-container-pad: var(--bs-container-pad-md);
+    }
+}
+@media (min-width: 992px) {
+    :root {
+        --x-container-max-width: var(--bs-max-width-lg);
+        --x-container-pad: var(--bs-container-pad-lg);
+    }
+}
+@media (min-width: 1200px) {
+    :root {
+        --x-container-max-width: var(--bs-max-width-xl);
+        --x-container-pad: var(--bs-container-pad-xl);
+    }
+}
+@media (min-width: 1400px) {
+    :root {
+        --x-container-max-width: var(--bs-max-width-xxl);
+        --x-container-pad: var(--bs-container-pad-xxl);
     }
 }
 
+.container {
+    max-width: var(--x-container-max-width);
+    padding: 0 var(--x-container-pad);
+}
 // =========================================
 // --> Font Sizes
 // --------------------------
@@ -217,7 +245,7 @@ $responsiveClasses: ();
     --x-base-line-height: 1.5;
     --x-font-size: 15px;
     --x-base-div-width: 1040;
-    --input-height: 40px;
+    --x-input-height: 40px;
 }
 // TABLETS
 @include breakpoint(tablet) {

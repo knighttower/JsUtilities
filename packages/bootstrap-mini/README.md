@@ -294,7 +294,6 @@ Ex: $container (for the container module), $grid-gutter-width (for the grid modu
     - `.list`:  list style.
     - `.list--inline`:  list style inline.
     - `.list--unstyled`:  list style unstyled.
-    - `.spacer`:  makes a div into a spacer. sizes are added as classes, ex: .spacer --10, .spacer --20, etc...
     - `.hr`: horizontal ruler.
     - `.img`: responsive images.
     - `..max-div-width`: max width for a div. min 320px, max 1200px.
@@ -320,7 +319,7 @@ Automatic rules added rules:
 - --x-base-line-height: 1.5;
 - --x-font-size: 15px;
 - --x-base-div-width: 1040;
-- --input-height: 40px;
+- --x-input-height: 40px;
 - --bs-gutter-x: 1.5rem;
 - --bs-gutter-y: 0;
 
