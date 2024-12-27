@@ -263,7 +263,8 @@ $responsiveClasses: ();
 }
 
 hr,
-.hr .ruler,
+.hr,
+.ruler,
 .divider {
     margin: 0;
     border-top: 1px dashed var(--x-hr-color, #333333);
@@ -271,10 +272,15 @@ hr,
     height: 1px;
     width: 100%;
     clear: both;
-    &.--mid {
+    &.--semi {
+        width: 75%;
+    }
+    &.--mid,
+    &.--half {
         width: 50%;
     }
-    &.--small {
+    &.--small,
+    &.--third {
         width: 30%;
     }
 }
