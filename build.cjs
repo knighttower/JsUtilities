@@ -99,6 +99,18 @@ const vueUtils = () => {
     );
 };
 
+const generic = (genDir) => {
+    runCommand(
+        `\
+    cd ./packages/${genDir} \
+    && eslint -c "${eslint}" --fix ./src \
+    && npx webpack --mode production --config "${webpackConfig}" \
+    && npx rollup -c "${rollupConfig}" \
+    && node "${bumpVersion}" --exe --minor \
+    ` + (local ? '' : '&& npm publish --access public')
+    );
+};
+
 const workspaces = {
     'bootstrap-mini': bootstrapMini,
     'type-check': typeCheck,
@@ -106,6 +118,7 @@ const workspaces = {
     adaptive,
     'vue-utils': vueUtils,
     mono,
+    'block-ui': () => generic('block-ui'),
     all: () => {
         bootstrapMini();
         typeCheck();
@@ -113,6 +126,7 @@ const workspaces = {
         adaptive();
         vueUtils();
         mono();
+        generic('block-ui');
     },
 };
 
@@ -132,8 +146,14 @@ doUpdate.then((doUpdate) => {
         }),
     });
     choice.then((choice) => {
-        workspaces[choice]();
-        if (choice !== 'mono' && !pkgOnly) {
+        let errorFound = false;
+        try {
+            workspaces[choice]();
+        } catch (error) {
+            errorFound = true;
+        }
+
+        if (!errorFound && choice !== 'mono' && !pkgOnly) {
             workspaces['mono']();
         }
         return;

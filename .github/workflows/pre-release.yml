@@ -33,7 +33,7 @@ jobs:
               uses: marvinpinto/action-automatic-releases@latest
               with:
                   repo_token: ${{ secrets.GIT_TOKEN }}
-                  automatic_release_tag: 'v${{ steps.package_version.outputs.version }}'
+                  automatic_release_tag: '${{ steps.package_version.outputs.version }}'
                   prerelease: false
                   files: ./*
                   body: ${{ steps.commit_message.outputs.message }}

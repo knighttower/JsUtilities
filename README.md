@@ -8,7 +8,8 @@ It holds the following packages:
 - [**BootsTrap Mini**](https://github.com/knighttower/JsUtility/tree/development/packages/bootstrap-mini): Built on top of Bootstrap but modified to have only the basic utilities classes and the grid system.
 - [**Adaptive Js**](https://github.com/knighttower/JsUtility/tree/development/packages/adaptive): daptive.js: Enhancing Layout Adaptability Beyond CSS, Navigating the Complexities of Modern Web Development
 - [**Vue Utils**](https://github.com/knighttower/JsUtility/tree/development/packages/vue-utils): Vue utilities for Vue.js applications. 
-
+- [**BlockUi**](https://github.com/knighttower/JsUtility/tree/development/packages/block-ui): tiny UI blocking utility.  
+ 
 ### All pacckages are ESM and CJS compatible.
 
 ## Installation

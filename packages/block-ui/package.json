@@ -1,0 +1,51 @@
+{
+  "name": "@knighttower/block-ui",
+  "version": "1.6.0",
+  "type": "module",
+  "description": "A simple block ui plugin for Jquery or CashJs",
+  "main": "dist/cjs/blockui.cjs",
+  "module": "dist/esm/blockui.js",
+  "unpkg": "dist/browser/blockui.js",
+  "jsdelivr": "dist/browser/blockui.js",
+  "browser": "dist/browser/blockui.js",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/esm/blockui.js",
+      "require": "./dist/cjs/blockui.cjs"
+    },
+    "./dist/*": "./dist/*"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "utility",
+    "library",
+    "plugin",
+    "URL",
+    "javascript",
+    "DOM",
+    "functions",
+    "helper",
+    "knighttower",
+    "blockui",
+    "blockUI",
+    "Jquery",
+    "CashJs"
+  ],
+  "scripts": {
+    "dev": "webpack --mode development",
+    "watch": "webpack --mode development --watch",
+    "test": "vitest"
+  },
+  "homepage": "https://github.com/knighttower/JsUtility",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/knighttower/JsUtility.git",
+    "directory": "packages/block-ui"
+  }
+}
