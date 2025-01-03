@@ -2,7 +2,7 @@
 @import "breakpoints";
 
 // it matches the breakpoint array key
-$screenSizes: (desktop, tablet, mobile, sm, md, lg, xl, xxl) !default;
+$screenSizes: (desk, tab, mob, xs, sm, md, lg, xl, xxl) !default;
 
 $percentSizes: (
     0: 0%,
