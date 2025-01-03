@@ -50,13 +50,18 @@
 // * // @include breakpoint(<breakdown name>,'max-width:800px'){rules...};, etc...
 // */
 @mixin breakpoint($screen, $param: null, $exclude: null) {
-    $values: map-get($sparkBreakpoints, $screen);
+    $values: map-get($xBreakpoints, $screen);
     $min: 0;
     $max: 0;
 
     @if $values != null {
         $min: ensure-px(nth($values, 1));
-        $max: ensure-px(nth($values, 2));
+
+        @if $max != 0 {
+            $max: ensure-px(nth($values, 2));
+        } @else {
+            $max: 0;
+        }
     }
     @if $exclude == true {
         @if $values != null {
@@ -120,7 +125,7 @@
         } // when no value
         @else {
             @warn "no value could be found for `#{$screen}`. "
-			+ "Please make sure it is defined in `$sparkBreakpoints` map.";
+			+ "Please make sure it is defined in `$xBreakpoints` map.";
         }
     }
 }

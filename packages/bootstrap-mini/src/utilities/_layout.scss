@@ -16,8 +16,7 @@ $sparkUtil: (
 );
 
 $sparkOptionalUtils: (
-    margin:
-        mapMerge(
+    margin: mapMerge(
             map-get-multiple(
                 $utilities,
                 ("margin", "margin-bottom", "margin-top", "margin-x", "margin-y")
@@ -27,8 +26,7 @@ $sparkOptionalUtils: (
                     responsive: true,
                     property: margin-right,
                     class: mr,
-                    values:
-                        map-merge(
+                    values: map-merge(
                             $spacers,
                             (
                                 auto: auto,
@@ -39,8 +37,7 @@ $sparkOptionalUtils: (
                     responsive: true,
                     property: margin-left,
                     class: ml,
-                    values:
-                        map-merge(
+                    values: map-merge(
                             $spacers,
                             (
                                 auto: auto,
@@ -49,8 +46,7 @@ $sparkOptionalUtils: (
                 ),
             )
         ),
-    padding:
-        mapMerge(
+    padding: mapMerge(
             map-get-multiple(
                 $utilities,
                 ("padding", "padding-bottom", "padding-top", "padding-x", "padding-y")
@@ -83,8 +79,7 @@ $sparkOptionalUtils: (
             responsive: true,
             property: height,
             class: h,
-            values:
-                map-merge(
+            values: map-merge(
                     $percentSizes,
                     (
                         vh: 100vh,
@@ -99,8 +94,7 @@ $sparkOptionalUtils: (
             values: $zIndex,
         ),
     ),
-    flex:
-        map-get-multiple(
+    flex: map-get-multiple(
             $utilities,
             (
                 "align-content",
@@ -140,7 +134,7 @@ $sparkOptionalUtils: (
 
 // -----------------------------------------
 // Start building the classes
-$targetBreakpoints: map-get-multiple($sparkBreakpoints, $screenSizes);
+$targetBreakpoints: map-get-multiple($xBreakpoints, $screenSizes);
 $responsiveClasses: ();
 
 // produce the standard utility classes

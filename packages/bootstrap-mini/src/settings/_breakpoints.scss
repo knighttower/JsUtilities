@@ -1,10 +1,6 @@
 //breakpoint array key: (min,max)
-$sparkBreakpoints: (
-    mobile: (
-        0px,
-        599px,
-    ),
-    phone: (
+$xBreakpoints: (
+    mob: (
         0px,
         599px,
     ),
@@ -20,7 +16,7 @@ $sparkBreakpoints: (
         520px,
         599px,
     ),
-    tablet: (
+    tab: (
         600px,
         1023px,
     ),
@@ -39,10 +35,6 @@ $sparkBreakpoints: (
     800: (
         800px,
         919px,
-    ),
-    desktop: (
-        1024px,
-        0,
     ),
     desk: (
         1024px,
@@ -68,13 +60,17 @@ $sparkBreakpoints: (
         1600px,
         1700px,
     ),
-    fullscreen: (
+    full: (
         1400px,
         0,
     ),
-    nondesktop: (
+    nondesk: (
         0,
         1024px,
+    ),
+    xs: (
+        1px,
+        0,
     ),
     sm: (
         576px,
