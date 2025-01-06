@@ -18,6 +18,7 @@ const pkgOnly = getFlagValue('pkg');
 const utility = () => {
     runCommand(
         `cd ./packages/utility \
+    && npm run test \    
     && eslint -c "${eslint}" --fix ./src \
     && npx webpack --mode production --config "${webpackConfig}" \
     && npx rollup -c "${rollupConfig}" \
@@ -25,7 +26,6 @@ const utility = () => {
     && node "${buildExports}" --dir ./src --type=esm \
     && prettier --config "${pretty}" --write ./index.js \
     && prettier --config "${pretty}" --write ./index.cjs \
-    && npm run test \
     && node "${bumpVersion}" --exe --minor \
     ` + (local ? '' : '&& npm publish --access public')
     );
@@ -36,6 +36,7 @@ const typeCheck = () => {
     runCommand(
         `\
     cd ./packages/type-check \
+    && npm run test \
     && eslint -c "${eslint}" --fix ./src \
     && npx webpack --mode production --config "${webpackConfig}" \
     && npx rollup -c "${rollupConfig}" \
@@ -43,7 +44,7 @@ const typeCheck = () => {
     && node "${buildExports}" --file ./src/typeCheck.js --type=esm \
     && prettier --config "${pretty}" --write ./index.js \
     && prettier --config "${pretty}" --write ./index.cjs \
-    && npm run test \
+    
     && node "${bumpVersion}" --exe --minor \
     ` + (local ? '' : '&& npm publish --access public')
     );
