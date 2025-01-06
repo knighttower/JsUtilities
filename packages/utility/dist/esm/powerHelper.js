@@ -27,7 +27,7 @@ function convertToBool(val) {
         case 'boolean':
             return val;
         case 'string':
-            return val === 'false' || val === '0' ? false : true;
+            return val.toLowerCase() !== 'false' && val !== '0';
         case 'number':
             return val !== 0;
         default:

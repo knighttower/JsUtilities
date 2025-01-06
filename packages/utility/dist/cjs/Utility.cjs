@@ -29,7 +29,7 @@ function convertToBool(val) {
         case 'boolean':
             return val;
         case 'string':
-            return val === 'false' || val === '0' ? false : true;
+            return val.toLowerCase() !== 'false' && val !== '0';
         case 'number':
             return val !== 0;
         default:
@@ -113,10 +113,14 @@ function dateFormat(dateTime, wTime) {
  * @example decimalToCurrency(2123.46) // 2,123.46
  */
 function decimalToCurrency(amount) {
-    const formatConfig = {
-        minimumFractionDigits: 2,
-    };
-    return new Intl.NumberFormat('en-GB', formatConfig).format(amount);
+    amount = convertToNumber(amount);
+    if (amount) {
+        return new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 2,
+        }).format(amount);
+    }
 }
 
 /**
@@ -173,25 +177,20 @@ function formatPhoneNumber(phoneNumber, template) {
     const cleaned = phoneNumber.replace(/\D/g, '');
 
     // Verify the length of the cleaned phone number
-    if (cleaned.length !== 10) {
+    if (cleaned.length < 10) {
         throw new Error('Invalid phone number length');
     }
-
-    // Initialize an array to hold the formatted phone number
-    let formatted = [];
 
     // Initialize a pointer for the cleaned phone number
     let cleanedPointer = 0;
 
-    // Loop through the template and replace placeholders with actual numbers
-    for (let i = 0; i < template.length; i++) {
-        if (template[i] === '0') {
-            formatted.push(cleaned[cleanedPointer]);
-            cleanedPointer++;
-        } else {
-            formatted.push(template[i]);
+    // Replace placeholders in the template with actual numbers
+    const formatted = template.split('').map((char) => {
+        if (char === '0' && cleanedPointer < cleaned.length) {
+            return cleaned[cleanedPointer++];
         }
-    }
+        return char;
+    });
 
     return formatted.join('');
 }
