@@ -236,6 +236,7 @@ const _blockUI = (function ($, undefined$1) {
         opts = merge($.blockui.defaults, opts);
         const full = el === window;
         const $el = $(el);
+        const $body = $('body');
         const content = [
             '<',
             opts.tag,
@@ -260,7 +261,7 @@ const _blockUI = (function ($, undefined$1) {
         if (opts.onOverlayClick) opts.overlayCSS.cursor = 'pointer';
 
         $el.data('x-block-ui.onUnblock', opts.onUnblock);
-        let z = typeof opts.zindex !== 'int' ? getHighestZIndex() : opts.zindex;
+        let z = typeof opts.zindex !== 'number' ? getHighestZIndex() : opts.zindex;
 
         let lyr1, lyr2, lyr3;
         if (opts.forceIframe) {
@@ -283,7 +284,7 @@ const _blockUI = (function ($, undefined$1) {
         if (opts.forceIframe) lyr1.css('opacity', 0.0);
 
         const layers = [lyr1, lyr2, lyr3];
-        const $par = full ? $('body') : $el;
+        const $par = full ? $body : $el;
         layers.forEach((layer) => layer && layer.appendTo($par));
 
         if (content) {
@@ -319,6 +320,7 @@ const _blockUI = (function ($, undefined$1) {
         if (full) {
             pageBlock = lyr3[0];
             pageBlockEls = $(opts.focusableElements, pageBlock);
+            $body.css('overflow', 'hidden');
             if (opts.focusInput) setTimeout(() => focus(false), 20);
         }
 
@@ -338,6 +340,7 @@ const _blockUI = (function ($, undefined$1) {
         $.blockui.isOn = false;
         const full = el === window;
         const $el = $(el);
+        const $body = $('body');
         const data = $el.data('x-block-ui.history');
         const to = $el.data('x-block-ui.timeout');
 
@@ -350,7 +353,7 @@ const _blockUI = (function ($, undefined$1) {
         bind(0, el, opts);
 
         // Prefer a single fade/hide pass
-        const els = full ? $('body').children('.x-block-ui') : $el.children('.x-block-ui');
+        const els = full ? $body.children('.x-block-ui') : $el.children('.x-block-ui');
 
         // Batch fade-out if required
         if (opts.fadeOut) {
@@ -362,6 +365,11 @@ const _blockUI = (function ($, undefined$1) {
             // Single pass hide
             els.hide();
             batchRemove(els, data, opts, el);
+        }
+        if (full) {
+            pageBlock = null;
+            pageBlockEls = [];
+            $body.css('overflow', '');
         }
     }
 
