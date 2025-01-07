@@ -1,6 +1,6 @@
 // Knighttower BlockUI v1.0.0
 // =========================================
-// --> Vendors config
+// --> config
 // --------------------------
 /**
 // -----------------------------------------
@@ -10,7 +10,6 @@ $.blockUI.defaults = {
     tag: 'div',
     message: '<h4>Please wait...</h4>',
     title: null,
-    draggable: true,
     css: {
         padding: 0,
         margin: 0,
@@ -35,7 +34,6 @@ $.blockUI.defaults = {
     forceIframe: false,
     baseZ: 9000,
 
-    allowBodyStretch: true,
     bindEvents: true,
     constrainTabKey: true,
     fadeIn: 200,
@@ -47,7 +45,6 @@ $.blockUI.defaults = {
     onBlock: null,
     onUnblock: null,
     onOverlayClick: null,
-    quirksmodeOffsetHack: 4,
     blockMsgClass: 'x-block-ui__message',
     ignoreIfBlocked: false,
 };
@@ -140,7 +137,6 @@ const _blockUI = (function ($, undefined$1) {
             tag: 'div',
             message: '<h4>Please wait...</h4>',
             title: null,
-            draggable: true,
             css: {
                 padding: 0,
                 margin: 0,
@@ -167,7 +163,6 @@ const _blockUI = (function ($, undefined$1) {
             forceIframe: false,
             baseZ: 9000,
 
-            allowBodyStretch: true,
             bindEvents: true,
             constrainTabKey: true,
             fadeIn: 200,
@@ -179,7 +174,6 @@ const _blockUI = (function ($, undefined$1) {
             onBlock: null,
             onUnblock: null,
             onOverlayClick: null,
-            quirksmodeOffsetHack: 4,
             blockMsgClass: 'x-block-ui__message',
             ignoreIfBlocked: false,
         },
@@ -222,6 +216,7 @@ const _blockUI = (function ($, undefined$1) {
         $.blockUI.isOn = true;
         opts = merge($.blockUI.defaults, opts);
         const full = el === window;
+        const $el = $(el);
         const textBox = [
             '<',
             opts.tag,
@@ -233,7 +228,7 @@ const _blockUI = (function ($, undefined$1) {
         ].join('');
         let msg = (typeof opts.loader === 'string' ? opts.loader : '') + textBox;
 
-        if (opts.ignoreIfBlocked && $(el).data('x-block-ui.isBlocked')) return;
+        if (opts.ignoreIfBlocked && $el.data('x-block-ui.isBlocked')) return;
 
         opts.overlayCSS = { ...$.blockUI.defaults.overlayCSS, ...(opts.overlayCSS || {}) };
 
@@ -242,7 +237,7 @@ const _blockUI = (function ($, undefined$1) {
         if (msg && typeof msg !== 'string' && (msg.parentNode || msg.jquery)) {
             const node = msg.jquery ? msg[0] : msg;
             const data = {};
-            $(el).data('x-block-ui.history', data);
+            $el.data('x-block-ui.history', data);
             data.el = node;
             data.parent = node.parentNode;
             data.display = node.style.display;
@@ -250,7 +245,7 @@ const _blockUI = (function ($, undefined$1) {
             if (data.parent) data.parent.removeChild(node);
         }
 
-        $(el).data('x-block-ui.onUnblock', opts.onUnblock);
+        $el.data('x-block-ui.onUnblock', opts.onUnblock);
         let z = opts.baseZ;
 
         let lyr1, lyr2, lyr3;
@@ -274,7 +269,7 @@ const _blockUI = (function ($, undefined$1) {
         if (opts.forceIframe) lyr1.css('opacity', 0.0);
 
         const layers = [lyr1, lyr2, lyr3];
-        const $par = full ? $('body') : $(el);
+        const $par = full ? $('body') : $el;
         layers.forEach((layer) => layer && layer.appendTo($par));
 
         if (msg) {
@@ -310,10 +305,10 @@ const _blockUI = (function ($, undefined$1) {
                 if (full) {
                     $.blockUI.off(opts);
                 } else {
-                    $(el).unblock(opts);
+                    $el.unblock(opts);
                 }
             }, opts.timeout);
-            $(el).data('x-block-ui.timeout', to);
+            $el.data('x-block-ui.timeout', to);
         }
     }
 

@@ -1,6 +1,6 @@
 # BlockUI.js Documentation
 
-**BlockUI.js** is a lightweight JavaScript library designed for blocking user interactions with a specific element or the entire page. This library can be used with jQuery or Cash.js (preferred due to its smaller size). It is heavily inspired by the [jQuery BlockUI plugin](https://malsup.com/jquery/block/).
+**BlockUI.js** is a lightweight JavaScript library designed for blocking user interactions with a specific element or the entire page. This library can be used with jQuery or Cash.js (the latter is preferred due to its smaller size). It is heavily inspired/based on the [jQuery BlockUI plugin](https://malsup.com/jquery/block/) but fully refactored and modified, although it retains most of its functionality API.
 
 ---
 
