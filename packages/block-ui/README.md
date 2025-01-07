@@ -19,15 +19,16 @@ npm i @knighttower/type-check
 ```   
 there are also EMS and CJS via jsdelivr https://www.jsdelivr.com/package/npm/@knighttower/block-ui
 
----
+---  
 
 ## Features
 
-- Block the entire page or a specific element.
-- Customizable messages, loaders, and CSS styles.
-- Fade-in and fade-out animations.
-- Configurable overlay styles and behavior.
-- Event callbacks for `onBlock`, `onUnblock`, and overlay clicks.
+- Block entire page or specific elements.
+- Customizable messages, loaders, and styles.
+- Configurable overlay, loader, and animations.
+- Supports `onBlock`, `onUnblock`, and `onOverlayClick` callbacks.
+- Handles keyboard navigation when blocked.
+- Automatic `z-index` adjustments for compatibility.
 
 ---
 
@@ -35,15 +36,13 @@ there are also EMS and CJS via jsdelivr https://www.jsdelivr.com/package/npm/@kn
 
 ### Blocking the Entire Page
 
-You can block the entire page by calling `$.blockUI.on()` with a message or configuration object.
-
 ```javascript
 // Basic usage
-$.blockUI.on('Please wait...');
+$.blockui.on('Please wait...');
 
-// Using a configuration object
-$.blockUI.on({
-    message: '<h4>Loading...</h4>',
+// With configuration
+$.blockui.on({
+    content: '<h4>Loading...</h4>',
     loader: '<div class="custom-loader"></div>',
     css: {
         color: '#fff',
@@ -55,33 +54,30 @@ $.blockUI.on({
 });
 ```
 
-To unblock the page:
+### Unblocking the Page
 
 ```javascript
-$.blockUI.off();
+$.blockui.off();
 ```
 
 ---
 
 ### Blocking Specific Elements
 
-You can block a specific element using the `block()` method on a jQuery or Cash.js element.
-
 ```javascript
-// Block an element with default options
+// Block an element
 $(element).block();
 
-// Block an element with custom options
+// Custom block message for an element
 $(element).block({
-    message: 'Loading...',
+    content: 'Loading...',
     css: {
-        border: 'none',
         color: '#888',
     },
 });
 ```
 
-To unblock the element:
+### Unblocking an Element
 
 ```javascript
 $(element).unblock();
@@ -89,13 +85,13 @@ $(element).unblock();
 
 ---
 
-## Default Configuration
+## Configuration Options
 
-The default options can be extended to customize the library's behavior globally:
+Extend the default configuration to apply custom styles globally.
 
 ```javascript
-$.extend(true, $.blockUI.defaults, {
-    message: '<h4>Processing, please wait...</h4>',
+$.extend(true, $.blockui.defaults, {
+    content: '<h4>Please wait...</h4>',
     loader: '<div class="spinner"></div>',
     css: {
         color: '#555',
@@ -106,29 +102,32 @@ $.extend(true, $.blockUI.defaults, {
 });
 ```
 
-### Default Options
+### Default Configuration
 
-| Option               | Type       | Default Value                     | Description                                   |
-|----------------------|------------|-----------------------------------|-----------------------------------------------|
-| `loader`             | `boolean` or `string` | `false` | HTML for the loader element.                 |
-| `message`            | `string`   | `<h4>Please wait...</h4>`         | The message to display.                      |
-| `css`                | `object`   | Various styles                   | CSS styles for the message container.        |
-| `overlayCSS`         | `object`   | Various styles                   | CSS styles for the overlay.                  |
-| `fadeIn`             | `number`   | `200`                             | Fade-in duration (ms).                       |
-| `fadeOut`            | `number`   | `400`                             | Fade-out duration (ms).                      |
-| `timeout`            | `number`   | `0`                               | Timeout duration (ms) to auto-unblock.       |
-| `onBlock`            | `function` | `null`                            | Callback triggered when blocking starts.     |
-| `onUnblock`          | `function` | `null`                            | Callback triggered when unblocking completes.|
+| Option            | Type              | Default Value                     | Description                                   |
+|-------------------|-------------------|-----------------------------------|-----------------------------------------------|
+| `content`         | `string`           | `<h4>Please wait...</h4>`         | The message displayed in the block UI.        |
+| `loader`          | `string`           | Custom HTML for loader.           | The loading animation content.                |
+| `tag`             | `string`           | `'div'`                           | The tag for the message container.            |
+| `css`             | `object`           | Styling for the block content.    | Styles for the blocking element.              |
+| `overlayCSS`      | `object`           | Styling for the overlay.          | Styles for the overlay background.            |
+| `fadeIn`          | `number`           | `200`                             | Fade-in duration in milliseconds.             |
+| `fadeOut`         | `number`           | `400`                             | Fade-out duration in milliseconds.            |
+| `timeout`         | `number`           | `0`                               | Auto unblock after `timeout` milliseconds.    |
+| `zindex`          | `string` or `number`| `'auto'`                         | Determines the `z-index` value.               |
+| `onBlock`         | `function`         | `null`                            | Callback when blocking starts.                |
+| `onUnblock`       | `function`         | `null`                            | Callback when unblocking completes.           |
+| `onOverlayClick`  | `function`         | `null`                            | Callback for overlay clicks.                  |
 
 ---
 
 ## Examples
 
-### Custom Loader and Overlay
+### Custom Loader and Overlay Styles
 
 ```javascript
-$.blockUI.on({
-    message: '<h3>Loading...</h3>',
+$.blockui.on({
+    content: '<h3>Loading...</h3>',
     loader: '<div class="my-loader"></div>',
     overlayCSS: {
         backgroundColor: '#333',
@@ -137,29 +136,74 @@ $.blockUI.on({
 });
 ```
 
-### Blocking an Element with a Timeout
+### Blocking with Timeout
 
 ```javascript
 $(element).block({
-    message: 'Please wait...',
-    timeout: 3000, // Auto unblock after 3 seconds
+    content: 'Please wait...',
+    timeout: 3000, // Unblock after 3 seconds
+});
+```
+
+### Custom Z-Index and Callbacks
+
+```javascript
+$.blockui.on({
+    content: '<h4>Processing...</h4>',
+    zindex: 9999,
+    onBlock: function () {
+        console.log('BlockUI activated');
+    },
+    onUnblock: function () {
+        console.log('BlockUI deactivated');
+    },
 });
 ```
 
 ---
 
+## Loader Styling Example
+
+By default, the library provides a minimal loader:
+
+```html
+<style>
+.x-ldr, .x-ldr div {
+    box-sizing: border-box;
+}
+.x-ldr {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 30px;
+}
+.x-ldr div {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #a6a8b5;
+    animation: x-ldr2 0.6s infinite;
+}
+</style>
+```
+
+Override it by providing custom `loader` HTML or CSS.
+
+---
+
 ## Event Callbacks
 
-| Event       | Description                                 |
-|-------------|---------------------------------------------|
-| `onBlock`   | Called when blocking starts.               |
-| `onUnblock` | Called when unblocking is complete.        |
-| `onOverlayClick` | Triggered when overlay is clicked.     |
+| Event           | Description                               |
+|-----------------|-------------------------------------------|
+| `onBlock`       | Invoked when blocking begins.             |
+| `onUnblock`     | Invoked after unblocking is completed.    |
+| `onOverlayClick`| Triggered when the overlay is clicked.     |
 
 Example:
 
 ```javascript
-$.blockUI.on({
+$.blockui.on({
     onBlock: function () {
         console.log('Blocking started');
     },
@@ -167,7 +211,7 @@ $.blockUI.on({
         console.log('Blocking ended');
     },
     onOverlayClick: function () {
-        console.log('Overlay clicked');
+        alert('Overlay clicked!');
     },
 });
 ```
@@ -176,12 +220,10 @@ $.blockUI.on({
 
 ## Notes
 
-- Cash.js is recommended due to its lightweight size compared to jQuery.
-- Also Cash.js is recommended for its flexibility to manipulate the DOM and easy sintax then vanilla JS.
-- The library automatically adjusts to quirks mode or standards mode of the browser.
+- Cash.js is recommended due to its smaller size compared to jQuery.
+- The library automatically handles browser quirks and sets proper `z-index` for seamless overlays.
+- Supports nested elements and ensures `tab` key constraint during blocking.
 - Extend the default configuration globally using `$.extend`.
-
 ---
 
-Enjoy using **BlockUI.js** for seamless UI blocking! 🎉
-
+Enjoy using **BlockUI.js** to create seamless UI interactions! 🎉

@@ -45,6 +45,15 @@ const adaptive = () => {
     );
 };
 
+const blockui = () => {
+    runCommand(
+        `\
+    cd ./packages/block-ui \
+    && npx webpack --config "${webpackConfig}" --mode=development ${once} --stats=minimal
+    `
+    );
+};
+
 // runCommand('ncu -u && npm i');
 
 const workspaces = {
@@ -52,6 +61,7 @@ const workspaces = {
     'type-check': typeCheck,
     utility,
     adaptive,
+    blockui,
 };
 
 const choice = select({

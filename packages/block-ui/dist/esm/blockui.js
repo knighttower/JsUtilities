@@ -5,11 +5,10 @@
 /**
 // -----------------------------------------
 // BlockUi defaults
-$.blockUI.defaults = {
+$.blockui.defaults = {
     loader: false,
     tag: 'div',
-    message: '<h4>Please wait...</h4>',
-    title: null,
+    content: '<h4>Please wait...</h4>',
     css: {
         padding: 0,
         margin: 0,
@@ -32,7 +31,7 @@ $.blockUI.defaults = {
     cursorReset: 'default',
     iframeSrc: /^https/i.test(window.location.href || '') ? 'javascript:false' : 'about:blank',
     forceIframe: false,
-    baseZ: 9000,
+    zindex: 9000,
 
     bindEvents: true,
     constrainTabKey: true,
@@ -45,15 +44,15 @@ $.blockUI.defaults = {
     onBlock: null,
     onUnblock: null,
     onOverlayClick: null,
-    blockMsgClass: 'x-block-ui__message',
+    blockMsgClass: 'x-block-ui__content',
     ignoreIfBlocked: false,
 };
  */
 // Example of extending the defaults
 /**
-    $.extend(true, $.blockUI.defaults, {
+    $.extend(true, $.blockui.defaults, {
     loader: '<div class="loader__top"><div class="loader"></div></div>',
-    message: 'Processing, please wait...',
+    content: 'Processing, please wait...',
     tag: 'h5',
     css: {
         border: 'none',
@@ -62,24 +61,25 @@ $.blockUI.defaults = {
         // display: 'flex',
     },
     overlayCSS: {
+
         backgroundColor: '#000',
         opacity: 0.8,
     },
-    baseZ: 9999,
+    zindex: 9999,
 }); */
 
 /**
  * Installs the blocking UI on the given element.
  * @usage
  * --> block the whole page
- * $.blockUI.on('Please wait...');
- * $.blockUI.on({ message: 'Please wait...' });
- * $.blockUI.on({ message: 'Please wait...', loader: '<div class="loader"></div>' });
- * $.blockUI.on({ message: '<h4>Please wait...</h4>', title: 'Loading' });
- * $.blockUI.off();
+ * $.blockui.on('Please wait...');
+ * $.blockui.on({ content: 'Please wait...' });
+ * $.blockui.on({ content: 'Please wait...', loader: '<div class="loader"></div>' });
+ * $.blockui.on({ content: '<h4>Please wait...</h4>' });
+ * $.blockui.off();
  * --> block an element
  * $(element).block();
- * $(element).block({ message: 'Please wait...' });
+ * $(element).block({ content: 'Please wait...' });
  * $(element).unblock();
  */
 const _blockUI = (function ($, undefined$1) {
@@ -87,6 +87,8 @@ const _blockUI = (function ($, undefined$1) {
     $.fn._fadeIn = $.fn.fadeIn;
     const noOp = $.noop || function () {};
 
+    const loaderCss =
+        '<style>.x-ldr,.x-ldr div{box-sizing:border-box}.x-ldr{display:inline-block;position:relative;width:80px;height:30px}.x-ldr div{position:absolute;top:25%;width:12px;height:12px;border-radius:50%;background:#a6a8b5;animation-timing-function:cubic-bezier(0,1,1,0)}.x-ldr div:nth-child(1),.x-ldr div:nth-child(2){left:8px}.x-ldr div:nth-child(3){left:32px}.x-ldr div:nth-child(4){left:56px}.x-ldr div:nth-child(1){animation:x-ldr1 0.6s infinite}.x-ldr div:nth-child(2),.x-ldr div:nth-child(3){animation:x-ldr2 0.6s infinite}.x-ldr div:nth-child(4){animation:x-ldr3 0.6s infinite}@keyframes x-ldr1{0%{transform:scale(0)}100%{transform:scale(1)}}@keyframes x-ldr3{0%{transform:scale(1)}100%{transform:scale(0)}}@keyframes x-ldr2{0%{transform:translate(0,0)}100%{transform:translate(24px,0)}}</style>';
     // -----------------------------------------
     /**
      * Checks if the value is a plain object.
@@ -121,22 +123,37 @@ const _blockUI = (function ($, undefined$1) {
         );
     };
 
-    $.blockUI = $.blockui = {
-        on: function (message, options = {}) {
-            if (isPlainObject(message)) {
-                options = message;
-                message = null;
+    function getHighestZIndex() {
+        const elements = document.querySelectorAll(
+            'div, span, section, header, footer, aside, main, article'
+        );
+        let highestZIndex = 0;
+
+        elements.forEach((el) => {
+            const zIndex = window.getComputedStyle(el).zIndex;
+            if (!isNaN(zIndex) && zIndex !== 'auto') {
+                highestZIndex = Math.max(highestZIndex, Number(zIndex));
             }
-            install(window, { message, ...options });
+        });
+        return highestZIndex + 1;
+    }
+
+    $.blockUI = $.blockui = {
+        on: function (content, options = {}) {
+            if (isPlainObject(content)) {
+                options = content;
+                content = null;
+            }
+            install(window, { content, ...options });
         },
         off: function (options = {}) {
             remove(window, options);
         },
         defaults: {
-            loader: false,
+            loader: '<div class=x-ldr><div></div><div></div><div></div><div></div></div>',
+            showLoader: true,
             tag: 'div',
-            message: '<h4>Please wait...</h4>',
-            title: null,
+            content: '',
             css: {
                 padding: 0,
                 margin: 0,
@@ -150,18 +167,20 @@ const _blockUI = (function ($, undefined$1) {
                 backgroundColor: 'transparent',
                 cursor: 'wait',
                 display: 'flex',
+                position: 'fixed',
             },
             overlayCSS: {
                 backgroundColor: '#000',
                 opacity: 0.6,
                 cursor: 'default',
+                position: 'fixed',
             },
             cursorReset: 'default',
             iframeSrc: /^https/i.test(window.location.href || '')
                 ? 'javascript:false'
                 : 'about:blank',
             forceIframe: false,
-            baseZ: 9000,
+            zindex: 'auto',
 
             bindEvents: true,
             constrainTabKey: true,
@@ -174,17 +193,17 @@ const _blockUI = (function ($, undefined$1) {
             onBlock: null,
             onUnblock: null,
             onOverlayClick: null,
-            blockMsgClass: 'x-block-ui__message',
+            blockMsgClass: 'x-block-ui__content',
             ignoreIfBlocked: false,
         },
     };
 
     $.fn.block = function (opts) {
         if (this[0] === window) {
-            $.blockUI.on(opts);
+            $.blockui.on(opts);
             return this;
         }
-        const fullOpts = merge($.blockUI.defaults, opts || {});
+        const fullOpts = merge($.blockui.defaults, opts || {});
         this.each(function () {
             const $el = $(this);
             if (fullOpts.ignoreIfBlocked && $el.data('x-block-ui.isBlocked')) return;
@@ -201,7 +220,7 @@ const _blockUI = (function ($, undefined$1) {
 
     $.fn.unblock = function (opts) {
         if (this[0] === window) {
-            $.blockUI.off(opts);
+            $.blockui.off(opts);
             return this;
         }
         return this.each(function () {
@@ -213,46 +232,41 @@ const _blockUI = (function ($, undefined$1) {
     let pageBlockEls = [];
 
     function install(el, opts) {
-        $.blockUI.isOn = true;
-        opts = merge($.blockUI.defaults, opts);
+        $.blockui.isOn = true;
+        opts = merge($.blockui.defaults, opts);
         const full = el === window;
         const $el = $(el);
-        const textBox = [
+        const content = [
             '<',
             opts.tag,
-            ' class="block-ui-message-box" style="color: #FFF;">',
-            opts.message ?? $.blockUI.defaults.message,
+            ' class="block-ui-content-box" style="color: #FFF;">',
+            opts.content ?? $.blockui.defaults.content,
+            '<span style="display:block; width:100%; height:1px; clear:both;"></span>',
+            opts.showLoader ? opts.loader : '',
             '</',
             opts.tag,
             '>',
         ].join('');
-        let msg = (typeof opts.loader === 'string' ? opts.loader : '') + textBox;
 
         if (opts.ignoreIfBlocked && $el.data('x-block-ui.isBlocked')) return;
 
-        opts.overlayCSS = { ...$.blockUI.defaults.overlayCSS, ...(opts.overlayCSS || {}) };
-
+        opts.overlayCSS = { ...$.blockui.defaults.overlayCSS, ...(opts.overlayCSS || {}) };
+        if (!full) {
+            opts.overlayCSS = {
+                ...opts.overlayCSS,
+                ...{ position: 'absolute', width: $el.width(), height: $el.height() },
+            };
+        }
         if (opts.onOverlayClick) opts.overlayCSS.cursor = 'pointer';
 
-        if (msg && typeof msg !== 'string' && (msg.parentNode || msg.jquery)) {
-            const node = msg.jquery ? msg[0] : msg;
-            const data = {};
-            $el.data('x-block-ui.history', data);
-            data.el = node;
-            data.parent = node.parentNode;
-            data.display = node.style.display;
-            data.position = node.style.position;
-            if (data.parent) data.parent.removeChild(node);
-        }
-
         $el.data('x-block-ui.onUnblock', opts.onUnblock);
-        let z = opts.baseZ;
+        let z = typeof opts.zindex !== 'int' ? getHighestZIndex() : opts.zindex;
 
         let lyr1, lyr2, lyr3;
         if (opts.forceIframe) {
             // prettier-ignore
             lyr1 = $(
-                `<iframe class="x-block-ui" style="z-index:${z++};display:none;border:none;margin:0;padding:0;position:absolute;width:100%;height:100%;top:0;left:0" src="${opts.iframeSrc}"></iframe>`
+                `<iframe class="x-block-ui" style="z-index:${z++};display:none;border:none;margin:0;padding:0;position:absolute;width:100vw;height:100vh;top:0;left:0" src="${opts.iframeSrc}"></iframe>`
             );
         }
         // prettier-ignore
@@ -261,34 +275,42 @@ const _blockUI = (function ($, undefined$1) {
         );
         // prettier-ignore
         lyr3 = $(
-            `<div class="x-block-ui ${opts.blockMsgClass} ${full ? 'block-ui__page' : 'block-ui__element'}" style="z-index:${z + 10};display:none;position:${full ? 'fixed' : 'absolute'};${full ? 'flex-direction: column;align-items: center;justify-content: center;' : ''}"></div>`
+            `<div class="x-block-ui ${opts.blockMsgClass} ${full ? 'block-ui__page' : 'block-ui__element'}" style="z-index:${z + 10};display:none;${full ? 'flex-direction: column;align-items: center;justify-content: center;' : ''}"></div>`
         );
 
         lyr2.css(opts.overlayCSS);
-        lyr2.css('position', full ? 'fixed' : 'absolute');
+
         if (opts.forceIframe) lyr1.css('opacity', 0.0);
 
         const layers = [lyr1, lyr2, lyr3];
         const $par = full ? $('body') : $el;
         layers.forEach((layer) => layer && layer.appendTo($par));
 
-        if (msg) {
-            lyr3.css({ ...$.blockUI.defaults.css, ...(opts.css || {}) });
-            lyr3.append(msg);
+        if (content) {
+            lyr3.css({ ...$.blockui.defaults.css, ...(opts.css || {}) });
+            if (!full) {
+                lyr3.css({
+                    position: 'absolute',
+                    width: $el.width(),
+                    height: $el.height(),
+                });
+            }
 
-            if (msg.jquery || msg.nodeType) $(msg).show();
+            lyr3.append(content);
+
+            if (content.jquery || content.nodeType) $(content).show();
         }
 
         if (opts.forceIframe && opts.showOverlay) lyr1.show();
         if (opts.fadeIn) {
             const cb = opts.onBlock || noOp;
-            const cb1 = opts.showOverlay && !msg ? cb : noOp;
-            const cb2 = msg ? cb : noOp;
+            const cb1 = opts.showOverlay && !content ? cb : noOp;
+            const cb2 = content ? cb : noOp;
             if (opts.showOverlay) lyr2._fadeIn(opts.fadeIn, cb1);
-            if (msg) lyr3._fadeIn(opts.fadeIn, cb2);
+            if (content) lyr3._fadeIn(opts.fadeIn, cb2);
         } else {
             if (opts.showOverlay) lyr2.show();
-            if (msg) lyr3.show();
+            if (content) lyr3.show();
             if (opts.onBlock) opts.onBlock.bind(lyr3)();
         }
 
@@ -303,7 +325,7 @@ const _blockUI = (function ($, undefined$1) {
         if (opts.timeout) {
             const to = setTimeout(() => {
                 if (full) {
-                    $.blockUI.off(opts);
+                    $.blockui.off(opts);
                 } else {
                     $el.unblock(opts);
                 }
@@ -313,7 +335,7 @@ const _blockUI = (function ($, undefined$1) {
     }
 
     function remove(el, opts) {
-        $.blockUI.isOn = false;
+        $.blockui.isOn = false;
         const full = el === window;
         const $el = $(el);
         const data = $el.data('x-block-ui.history');
@@ -324,7 +346,7 @@ const _blockUI = (function ($, undefined$1) {
             $el.removeData('x-block-ui.timeout');
         }
 
-        opts = merge($.blockUI.defaults, opts);
+        opts = merge($.blockui.defaults, opts);
         bind(0, el, opts);
 
         // Prefer a single fade/hide pass
@@ -413,6 +435,10 @@ const _blockUI = (function ($, undefined$1) {
         const e = pageBlockEls[back === true ? pageBlockEls.length - 1 : 0];
         if (e) e.focus();
     }
+
+    $(document).ready(function () {
+        $('head').append(loaderCss);
+    });
 })(window.$);
 
 export { _blockUI as blockui, _blockUI as default };
