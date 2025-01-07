@@ -57,7 +57,7 @@
     @if $values != null {
         $min: ensure-px(nth($values, 1));
 
-        @if $max != 0 {
+        @if $max != 0 or $max != null {
             $max: ensure-px(nth($values, 2));
         } @else {
             $max: 0;
