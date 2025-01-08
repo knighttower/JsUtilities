@@ -15,9 +15,15 @@ To use BlockUI.js, include the library and either jQuery or Cash.js in your proj
 #### Via npm
 
 ```javascript
-npm i @knighttower/type-check
+npm i @knighttower/block-ui
 ```   
 there are also EMS and CJS via jsdelivr https://www.jsdelivr.com/package/npm/@knighttower/block-ui
+
+
+or from the monorepo
+```javascript
+npm i knighttower
+```
 
 ---  
 
