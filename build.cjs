@@ -120,6 +120,7 @@ const workspaces = {
     'vue-utils': vueUtils,
     mono,
     'block-ui': () => generic('block-ui'),
+    toast: () => generic('toast'),
     all: () => {
         bootstrapMini();
         typeCheck();
@@ -128,6 +129,7 @@ const workspaces = {
         vueUtils();
         mono();
         generic('block-ui');
+        generic('toast');
     },
 };
 

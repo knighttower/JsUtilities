@@ -4,6 +4,7 @@ const { input, select, rawlist } = require('@inquirer/prompts');
 const { runCommand, getFlagValue } = require('./packages/utility/nodeUtils/index.cjs');
 const workingDir = process.cwd();
 const webpackConfig = `${workingDir}/packages/utility/nodeUtils/webpack.config.cjs`;
+const rollupConfig = `${workingDir}/packages/utility/nodeUtils/rollup.config.cjs`;
 // const minify = `${workingDir}/packages/utility/nodeUtils/Minify.cjs`;
 
 const once = getFlagValue('once') ? '' : '--watch';
@@ -54,6 +55,15 @@ const blockui = () => {
     );
 };
 
+const toast = () => {
+    runCommand(
+        `\
+    cd ./packages/toast \
+    && npx webpack --config "${webpackConfig}" --mode=development ${once} --stats=minimal 
+    `
+    );
+};
+
 // runCommand('ncu -u && npm i');
 
 const workspaces = {
@@ -62,6 +72,7 @@ const workspaces = {
     utility,
     adaptive,
     blockui,
+    toast,
 };
 
 const choice = select({

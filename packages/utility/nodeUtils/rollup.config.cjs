@@ -83,6 +83,13 @@ function extractFileName(path) {
 function getAllConfigs() {
     const configs = [];
     targets.forEach((target) => {
+        if (Array.isArray(target.file) || target.bundle) {
+            return;
+        }
+        const isCss = ['.css', '.scss'].some((ext) => target.file.endsWith(ext));
+        if (isCss) {
+            return;
+        }
         const fileName = extractFileName(target.file);
         // Generate multiple configurations
         for (const format of formats) {

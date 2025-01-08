@@ -1,0 +1,47 @@
+{
+  "name": "@knighttower/toast",
+  "version": "1.1.0",
+  "type": "module",
+  "description": "A dead simple toast library",
+  "main": "dist/cjs/toast.cjs",
+  "module": "dist/esm/toast.js",
+  "unpkg": "dist/browser/toast.js",
+  "jsdelivr": "dist/browser/toast.js",
+  "browser": "dist/browser/toast.js",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/esm/toast.js",
+      "require": "./dist/cjs/toast.cjs"
+    },
+    "./dist/*": "./dist/*"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "utility",
+    "library",
+    "plugin",
+    "javascript",
+    "DOM",
+    "functions",
+    "helper",
+    "knighttower",
+    "toast"
+  ],
+  "scripts": {
+    "dev": "webpack --mode development",
+    "watch": "webpack --mode development --watch",
+    "test": "vitest"
+  },
+  "homepage": "https://github.com/knighttower/JsUtility",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/knighttower/JsUtility.git",
+    "directory": "packages/toast"
+  }
+}

@@ -1,0 +1,208 @@
+/* the main container: */
+.x-toast__container {
+    position: fixed;
+    z-index: 999999;
+    pointer-events: none;
+    line-height: initial;
+    -webkit-transition: all 1s ease-in-out;
+    -moz-transition: all 1s ease-in-out;
+    -ms-transition: all 1s ease-in-out;
+    -o-transition: all 1s ease-in-out;
+    transition: all 1s ease-in-out;
+    width: 100%;
+    max-width: 600px;
+}
+/* the wrapper where the toast messages appends: */
+.x-toast__wrapper {
+    position: relative;
+    padding: 0.5em;
+}
+
+.x-toast__container.--top-center {
+    transform: translate(calc(50vw - 50%));
+}
+.x-toast__container.--top-left {
+    top: 0;
+    left: 0;
+}
+.x-toast__container.--top-right {
+    top: 0;
+    right: 0;
+}
+.x-toast__container.--bottom-left {
+    bottom: 0;
+    left: 0;
+}
+.x-toast__container.--bottom-right {
+    bottom: 0;
+    right: 0;
+}
+.x-toast__container.--bottom-center {
+    bottom: 0;
+    transform: translate(calc(50vw - 50%));
+}
+
+/**
+ * Toast messages styles:
+ * -------------------------------------------------- */
+
+/* each toast message gets this style: */
+.x-toast {
+    position: relative;
+    padding: 16px;
+    border: 1px solid;
+    margin: 0.5em 0em;
+    border-left: 6px solid transparent;
+    border-radius: 2px;
+    pointer-events: none;
+    -webkit-transition: all 0.32s ease-in-out;
+    -moz-transition: all 0.32s ease-in-out;
+    -ms-transition: all 0.32s ease-in-out;
+    -o-transition: all 0.32s ease-in-out;
+    transition: all 0.32s ease-in-out;
+    -webkit-box-shadow: 0px 0px 9px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 0px 9px rgba(0, 0, 0, 0.25);
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    width: auto;
+    text-wrap: normal;
+}
+
+/* informational toast class: */
+.x-toast--info {
+    color: #31708f;
+    background-color: #eaf2fa;
+    border-color: #91c5f2;
+}
+
+/* successful toast class: */
+.x-toast--success {
+    color: #3c763d;
+    background-color: #e9ffd9;
+    border-color: #a6ca8a;
+}
+
+/* warning toast class: */
+.x-toast--warning {
+    color: #8a6d3b;
+    background-color: #fff8c4;
+    border-color: #f2c779;
+}
+
+/* error toast class: */
+.x-toast--error {
+    color: #a94442;
+    background-color: #ffecec;
+    border-color: #f5aca6;
+}
+
+/* this class is assigned to each toast message when autoClose
+ * plugin option is set to BOOLEAN false. */
+/* Normally, this is a pointer events handler:*/
+.x-toast.close-on-click {
+    cursor: pointer;
+    pointer-events: auto;
+    padding-right: 30px;
+}
+.x-toast.close-on-click::before {
+    content: '×';
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    padding: 0.5em;
+    cursor: pointer;
+    font-size: 1.5em;
+}
+
+/**
+ * Progress bar styles:
+ * ------------------------------------------------------------------------- */
+
+/* each progress bar gets this style: */
+.x-toast__progress {
+    position: absolute;
+    height: 4px;
+    width: 0%;
+    left: 0px;
+    bottom: 0px;
+    opacity: 0.5;
+    -webkit-transition: width 0s ease;
+    -moz-transition: width 0s ease;
+    -ms-transition: width 0s ease;
+    -o-transition: width 0s ease;
+    transition: width 0s ease;
+}
+
+/* progress bar color for each toast type: */
+.x-toast__progress--info {
+    background-color: #91c5f2;
+}
+.x-toast__progress--success {
+    background-color: #a6ca8a;
+}
+.x-toast__progress--warning {
+    background-color: #f2c779;
+}
+.x-toast__progress--error {
+    background-color: #f5aca6;
+}
+
+/* default */
+.x-toast[class*='--init'],
+.x-toast[class*='--hide'] {
+    opacity: 0;
+}
+.x-toast[class*='--show'] {
+    opacity: 1;
+}
+
+/* ------------------------------------------------------------------------- */
+
+/* TRANSITION 03 - a [slide-right-left] transition: */
+.x-toast.slide-left-right--init {
+    right: -100%;
+}
+.x-toast.slide-left-right--show {
+    right: 0%;
+}
+.x-toast.slide-left-right--hide {
+    right: -100%;
+}
+/* ------------------------------------------------------------------------- */
+
+/* TRANSITION 03 - a [slide-left-right] transition: */
+.x-toast.slide-right-left--init {
+    left: -100%;
+}
+.x-toast.slide-right-left--show {
+    left: 0%;
+}
+.x-toast.slide-right-left--hide {
+    left: -100%;
+}
+
+/* ------------------------------------------------------------------------- */
+
+/* TRANSITION 09 - a [slide-up-down] transition: */
+.x-toast.slide-up-down--init {
+    top: -100%;
+}
+.x-toast.slide-up-down--show {
+    top: 0%;
+}
+.x-toast.slide-up-down--hide {
+    top: -100%;
+}
+
+/* ------------------------------------------------------------------------- */
+
+/* TRANSITION 09 - a [slide-down-up] transition: */
+.x-toast.slide-down-up--init {
+    bottom: -100%;
+}
+.x-toast.slide-down-up--show {
+    bottom: 0%;
+}
+.x-toast.slide-down-up--hide {
+    bottom: -100%;
+}

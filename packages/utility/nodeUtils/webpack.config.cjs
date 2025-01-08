@@ -3,18 +3,50 @@ const workingDir = process.cwd();
 const TerserPlugin = require('terser-webpack-plugin');
 const { targets, webpackFormats } = require(`${workingDir}/source-files.cjs`);
 const { getFlagValue } = require('./NodeHelpers.cjs');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const mode = getFlagValue('mode') ?? 'production';
+const isProduction = mode === 'production';
 
 const formats = webpackFormats ?? [
     { type: 'umd', dir: 'umd', ext: 'js' },
     { type: 'commonjs2', dir: 'cjs', ext: 'cjs' },
     { type: 'window', dir: 'browser', ext: 'js' },
 ];
+const cssRulesUse = (isBundle) => {
+    const use = [
+        {
+            loader: 'css-loader',
+            options: {
+                importLoaders: 2,
+                url: false, // Do not handle URLs in your CSS
+            },
+        },
+    ];
+    if (!isBundle) {
+        use.unshift(MiniCssExtractPlugin.loader);
+    } else {
+        use.unshift('style-loader');
+    }
+
+    return use;
+};
+
+const postCss = {
+    loader: 'postcss-loader',
+    options: {
+        postcssOptions: {
+            plugins: [require('autoprefixer'), isProduction ? require('cssnano') : false].filter(
+                Boolean
+            ),
+        },
+    },
+};
+
 /**
  * Generates a Webpack configuration for a given library name and target.
  *
- * @param {string} fileSrc - The file source.
+ * @param {string} entry - The file source.
  * @param {string} target - The target name.
  * @param {string} dir - The directory name.
  * @param {string} libraryTarget - The library target format.
@@ -23,7 +55,7 @@ const formats = webpackFormats ?? [
  */
 const getWebpackConfig = (config) => ({
     mode: mode,
-    entry: `${workingDir}/src/${config.fileSrc}`,
+    entry: config.entry,
     resolve: {
         modules: [
             'node_modules',
@@ -33,6 +65,16 @@ const getWebpackConfig = (config) => ({
         ],
         extensions: ['.mjs', '.js', '.json', '.cjs'],
     },
+    plugins: (() => {
+        if (config.bundle) {
+            return [];
+        }
+        return [
+            new MiniCssExtractPlugin({
+                filename: config.exportName + '.css' || '[name].css',
+            }),
+        ];
+    })(),
     output: {
         path: path.resolve(__dirname, `${workingDir}/dist/${config.dir}`),
         filename: `${config.exportName}.${config.ext}`,
@@ -49,7 +91,7 @@ const getWebpackConfig = (config) => ({
         },
     },
     optimization: {
-        minimize: mode === 'production' ? true : false,
+        minimize: isProduction ? true : false,
         minimizer: [
             new TerserPlugin({
                 parallel: true,
@@ -84,7 +126,7 @@ const getWebpackConfig = (config) => ({
             }),
         ],
     },
-    stats: mode === 'production' ? 'normal' : 'minimal',
+    stats: isProduction ? 'normal' : 'minimal',
     module: {
         rules: [
             {
@@ -104,6 +146,26 @@ const getWebpackConfig = (config) => ({
                 },
                 exclude: /node_modules/,
             },
+            {
+                test: /\.css$/,
+                use: [...cssRulesUse(config.bundle), postCss],
+            },
+            {
+                test: /\.scss$/,
+                use: [
+                    ...cssRulesUse(config.bundle),
+                    postCss, // Make sure postcss.config.js is configured with your desired plugins
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sassOptions: {
+                                quietDeps: true,
+                                implementation: require('sass'), // Ensure Dart Sass is used
+                            },
+                        },
+                    },
+                ],
+            },
         ],
     },
 });
@@ -114,7 +176,7 @@ const getWebpackConfig = (config) => ({
  * @returns {string|null} The file name without extension or null if not a '.js' file.
  */
 function extractFileName(path) {
-    const match = /([^\/]+)\.js$/.exec(path);
+    const match = /([^\/]+)\.(js|css|sass|cjs|mjs|scss)$/.exec(path);
     return match ? match[1] : path;
 }
 
@@ -122,19 +184,30 @@ function extractFileName(path) {
 function getAllConfigs() {
     const configs = [];
     targets.forEach((target) => {
-        const fileName = extractFileName(target.file);
+        const isArray = Array.isArray(target.file);
+        const fileName = isArray ? 'bundle' : extractFileName(target.file);
         // Generate multiple configurations
         for (const format of formats) {
             const exportName = target.exportName ?? fileName;
+            const entry = (() => {
+                if (isArray) {
+                    return {
+                        [exportName]: target.file.map((file) => `${workingDir}/src/${file}`),
+                    };
+                }
+                return `${workingDir}/src/${target.file}`;
+            })();
+
             configs.push(
                 getWebpackConfig({
-                    fileSrc: target.file,
+                    entry,
                     fileName,
                     libraryTarget: format.type,
                     dir: format.dir,
                     ext: format.ext,
                     exportName: exportName,
                     windowExport: target.windowExport ?? undefined,
+                    bundle: target.bundle ?? false,
                 })
             );
         }
