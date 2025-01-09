@@ -380,7 +380,7 @@ var toast = (function ($win, $doc) {
                 offset = 0;
             const interval = setInterval(() => {
                 iterat++;
-                offset = Math.round((1000 * iterat) / duration);
+                offset = Math.round((1500 * iterat) / duration);
 
                 if (offset > 100) {
                     clearInterval(interval);
