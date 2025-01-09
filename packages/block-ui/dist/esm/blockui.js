@@ -1,3 +1,76 @@
+// // -----------------------------------------
+// /**
+//  * @knighttower
+//  * @url knighttower.io
+//  * @git https://github.com/knighttower/
+//  */
+// // -----------------------------------------
+
+
+// -----------------------------------------
+/**
+ * Checks if the value is a plain object.
+ *
+ * @param {any} value The value to check.
+ * @returns {boolean} True if the value is a plain object, false otherwise.
+ */
+const isPlainObject = (value) =>
+    value && typeof value === 'object' && value.constructor === Object;
+
+/**
+ * Merges two or more objects into a single new object. Arrays and other types are overwritten.
+ *
+ * @param {object} target The target object.
+ * @param {...object} sources The source objects.
+ * @returns {object} A new merged object.
+ */
+const extend = (target, ...sources) => {
+    return sources.reduce(
+        (acc, source) => {
+            if (isPlainObject(source)) {
+                Object.entries(source).forEach(([key, value]) => {
+                    acc[key] =
+                        isPlainObject(value) && isPlainObject(acc[key])
+                            ? extend(acc[key], value)
+                            : value; // If it's not an object, directly assign it
+                });
+            } else {
+                // If the source is not an object (like a number), just merge directly
+                Object.assign(acc, source);
+            }
+            return acc;
+        },
+        { ...target }
+    );
+};
+
+// //   utility; {
+//     convertToBool,
+//     currencyToDecimal,
+//     convertToNumber,
+//     dateFormat,
+//     decimalToCurrency,
+//     emptyOrValue,
+//    extend,
+//     formatPhoneNumber,
+//     getDynamicId,
+//     getGoogleMapsAddress,
+//     getRandomId,
+//     includes,
+//     isEmpty, // from https://moderndash.io/
+//     isNumber,
+//     instanceOf,
+//     openGoogleMapsAddress,
+//     toCurrency,
+//     toDollarString,
+//     typeOf,
+//     validateEmail,
+//     validatePhone,
+//     makeArray,
+//     uuid,
+//     uniqueId,
+// };
+
 // Knighttower BlockUI v1.0.0
 // =========================================
 // --> config
@@ -89,39 +162,6 @@ const _blockUI = (function ($, undefined$1) {
 
     const loaderCss =
         '<style>.x-ldr,.x-ldr div{box-sizing:border-box}.x-ldr{display:inline-block;position:relative;width:80px;height:30px}.x-ldr div{position:absolute;top:25%;width:12px;height:12px;border-radius:50%;background:#a6a8b5;animation-timing-function:cubic-bezier(0,1,1,0)}.x-ldr div:nth-child(1),.x-ldr div:nth-child(2){left:8px}.x-ldr div:nth-child(3){left:32px}.x-ldr div:nth-child(4){left:56px}.x-ldr div:nth-child(1){animation:x-ldr1 0.6s infinite}.x-ldr div:nth-child(2),.x-ldr div:nth-child(3){animation:x-ldr2 0.6s infinite}.x-ldr div:nth-child(4){animation:x-ldr3 0.6s infinite}@keyframes x-ldr1{0%{transform:scale(0)}100%{transform:scale(1)}}@keyframes x-ldr3{0%{transform:scale(1)}100%{transform:scale(0)}}@keyframes x-ldr2{0%{transform:translate(0,0)}100%{transform:translate(24px,0)}}</style>';
-    // -----------------------------------------
-    /**
-     * Checks if the value is a plain object.
-     *
-     * @param {any} value The value to check.
-     * @returns {boolean} True if the value is a plain object, false otherwise.
-     */
-    const isPlainObject = (value) =>
-        value && typeof value === 'object' && value.constructor === Object;
-
-    /**
-     * Merges two or more objects into a single new object. Arrays and other types are overwritten.
-     *
-     * @param {object} target The target object.
-     * @param {...object} sources The source objects.
-     * @returns {object} A new merged object.
-     */
-    const merge = (target, ...sources) => {
-        return sources.reduce(
-            (acc, source) => {
-                if (isPlainObject(source)) {
-                    Object.entries(source).forEach(([key, value]) => {
-                        acc[key] =
-                            isPlainObject(value) && isPlainObject(acc[key])
-                                ? merge(acc[key], value)
-                                : value;
-                    });
-                }
-                return acc;
-            },
-            { ...target }
-        );
-    };
 
     function getHighestZIndex() {
         const elements = document.querySelectorAll(
@@ -203,7 +243,7 @@ const _blockUI = (function ($, undefined$1) {
             $.blockui.on(opts);
             return this;
         }
-        const fullOpts = merge($.blockui.defaults, opts || {});
+        const fullOpts = extend($.blockui.defaults, opts || {});
         this.each(function () {
             const $el = $(this);
             if (fullOpts.ignoreIfBlocked && $el.data('x-block-ui.isBlocked')) return;
@@ -233,7 +273,7 @@ const _blockUI = (function ($, undefined$1) {
 
     function install(el, opts) {
         $.blockui.isOn = true;
-        opts = merge($.blockui.defaults, opts);
+        opts = extend($.blockui.defaults, opts);
         const full = el === window;
         const $el = $(el);
         const $body = $('body');
@@ -349,7 +389,7 @@ const _blockUI = (function ($, undefined$1) {
             $el.removeData('x-block-ui.timeout');
         }
 
-        opts = merge($.blockui.defaults, opts);
+        opts = extend($.blockui.defaults, opts);
         bind(0, el, opts);
 
         // Prefer a single fade/hide pass

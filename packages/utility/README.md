@@ -4,8 +4,333 @@
 
 ### 💡 To see the API of each use the Built-in Github "Symbols" explorer in each source file. All files are fully documented with JSDocs comments to describe the purpose and usage of each function included. (the link will take you to each source file)
 
+Here’s the improved documentation, reorganized and with API usage examples for clarity and readability:
+
+---
+
+# JS Utility Library Documentation
+
+## Overview
+
+This is a collection of modular JavaScript utility functions and classes designed for seamless integration in various projects. It supports **ESM**, **CJS**, **UMD**, and **browser** environments.
+
+### Installation
+
+```bash
+npm install @knighttower/utility
+```
+
+Or via **CDN**:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@knighttower/utility@VERSION_NUMBER/dist/browser/LIBRARY_NAME.min.js"></script>
+<script type="module" src="https://esm.run/@knighttower/utility@VERSION_NUMBER/index.mjs"></script>
+```
+
+---
+
+## Imports
+
+- **Full library:**  
+  ```javascript
+  import utility from '@knighttower/utility';
+  ```
+- **Individual functions:**  
+  ```javascript
+  import { convertToBool, dateFormat } from '@knighttower/utility';
+  ```
+
+---
+
+## API Reference
+
+### **General Utility Functions**
+
+#### 1. `convertToBool(val)`
+
+Converts a value to a boolean.
+
+- **Params:**  
+  `val: String | Boolean | Number` - Input value to convert.
+- **Returns:**  
+  `Boolean` - Converted boolean value.
+- **Usage:**
+  ```javascript
+  convertToBool('true');  // true
+  convertToBool('0');     // false
+  convertToBool(1);       // true
+  ```
+
+---
+
+#### 2. `convertToNumber(input)`
+
+Converts a variable to a number, if possible.
+
+- **Params:**  
+  `input: String | Number` - Input value to convert.
+- **Returns:**  
+  `Number | String` - Converted number or original input.
+- **Usage:**
+  ```javascript
+  convertToNumber('123');  // 123
+  convertToNumber('abc');  // 'abc'
+  ```
+
+---
+
+#### 3. `currencyToDecimal(amount)`
+
+Converts a currency string to a decimal.
+
+- **Params:**  
+  `amount: String | Number` - Currency input.
+- **Returns:**  
+  `Number` - Decimal representation.
+- **Usage:**
+  ```javascript
+  currencyToDecimal('$1,234.56');  // 1234.56
+  ```
+
+---
+
+#### 4. `dateFormat(dateTime, wTime)`
+
+Formats dates to **MM/DD/YYYY** with optional time.
+
+- **Params:**  
+  `dateTime: String` - Date string.  
+  `wTime: Boolean` - Whether to include time.
+- **Returns:**  
+  `String | Null` - Formatted date or null if invalid.
+- **Usage:**
+  ```javascript
+  dateFormat('2201-01-01 16:15PM', true);  // "01/01/2201 @ 4:15 PM"
+  ```
+
+---
+
+#### 5. `decimalToCurrency(amount)`
+
+Converts a decimal number to a formatted currency string.
+
+- **Params:**  
+  `amount: String | Number`
+- **Returns:**  
+  `String` - Formatted currency.
+- **Usage:**
+  ```javascript
+  decimalToCurrency(1234.56);  // "1,234.56"
+  ```
+
+---
+
+#### 6. `emptyOrValue(value, _default)`
+
+Returns default if value is empty.
+
+- **Params:**  
+  `value: String | Number | Object` - Input value.  
+  `_default: Any` - Default value.
+- **Returns:**  
+  `Mixed` - Original value or default.
+- **Usage:**
+  ```javascript
+  emptyOrValue('', 'default');  // 'default'
+  emptyOrValue('hello');        // 'hello'
+  ```
+
+---
+
+#### 7. `formatPhoneNumber(phoneNumber, template)`
+
+Formats a phone number.
+
+- **Params:**  
+  `phoneNumber: String` - Unformatted phone number.  
+  `template: String` - Template format.
+- **Returns:**  
+  `String` - Formatted phone number.
+- **Usage:**
+  ```javascript
+  formatPhoneNumber('1234567890', '(000) 000-0000');  // "(123) 456-7890"
+  ```
+
+---
+
+#### 8. `isEmpty(value)`
+
+Checks if a value is empty.
+
+- **Params:**  
+  `value: Any` - Value to check.
+- **Returns:**  
+  `Boolean` - `true` if empty, otherwise `false`.
+- **Usage:**
+  ```javascript
+  isEmpty([]);  // true
+  isEmpty({});  // true
+  ```
+
+---
+
+### **Identifiers and Randomization**
+
+#### 9. `uuid(max)`
+
+Generates a unique string.
+
+- **Params:**  
+  `max: Number` - Maximum length (default: 20).
+- **Returns:**  
+  `String` - Unique string.
+- **Usage:**
+  ```javascript
+  uuid(16);  // "ab12cd34ef56gh78"
+  ```
+
+---
+
+#### 10. `getDynamicId()`
+
+Generates a unique ID in format `id__XXXX__timestamp`.
+
+- **Usage:**
+  ```javascript
+  getDynamicId();  // "id__abc123__1672531200000"
+  ```
+
+---
+
+### **Validation**
+
+#### 11. `validateEmail(email)`
+
+Validates email format.
+
+- **Params:**  
+  `email: String`
+- **Returns:**  
+  `Boolean`
+- **Usage:**
+  ```javascript
+  validateEmail('test@example.com');  // true
+  validateEmail('test@com');          // false
+  ```
+
+---
+
+#### 12. `validatePhone(phone)`
+
+Validates phone number format.
+
+- **Params:**  
+  `phone: String`
+- **Returns:**  
+  `Boolean`
+- **Usage:**
+  ```javascript
+  validatePhone('(123) 456-7890');  // true
+  ```
+
+---
+
+### **Object Utilities**
+
+#### 13. `extend(target, ...sources)`
+
+Deep merges objects.
+
+- **Params:**  
+  `target: Object` - Base object.  
+  `...sources: Object[]` - Objects to merge.
+- **Returns:**  
+  `Object` - Merged object.
+- **Usage:**
+  ```javascript
+  const a = { x: 1 };
+  const b = { y: 2 };
+  extend(a, b);  // { x: 1, y: 2 }
+  ```
+
+---
+
+#### 14. `makeArray(item)`
+
+Converts an input to an array.
+
+- **Params:**  
+  `item: Any`
+- **Returns:**  
+  `Array`
+- **Usage:**
+  ```javascript
+  makeArray('test');  // ['test']
+  ```
+
+---
+
+### **Address Helpers**
+
+#### 15. `getGoogleMapsAddress(address)`
+
+Generates a Google Maps URL from an address.
+
+- **Params:**  
+  `address: String | Object`
+- **Returns:**  
+  `String`
+- **Usage:**
+  ```javascript
+  getGoogleMapsAddress('New York');  // "https://maps.google.it/maps?q=New+York"
+  ```
+
+#### 16. `openGoogleMapsAddress(object)`
+
+Opens Google Maps in a new tab.
+
+- **Params:**  
+  `object: String | Object` - Address.
+- **Usage:**
+  ```javascript
+  openGoogleMapsAddress('New York');
+  ```
+
+---
+
+### **Additional Methods**
+
+- **Type Check:**  
+  `typeOf(input, test)` - Returns type of input.  
+  `instanceOf(input, test)` - Returns class instance of input.
+- **Recursive Check:**  
+  `includes(collection, value, fromIndex)` - Recursively checks if a collection includes a value.
+- **String Utilities:**  
+  `toDollarString(amount)` - Converts a number to a short dollar string (`2K`, `2.5M`).
+
+---
+
+## Examples
+
+```javascript
+import { currencyToDecimal, validateEmail } from '@knighttower/utility';
+
+console.log(currencyToDecimal('$1,234.56'));  // 1234.56
+console.log(validateEmail('test@example.com'));  // true
+```
+
+## License
+
+MIT License.
+
+---
+
+For detailed usage and testing, visit the [GitHub repository](https://github.com/knighttower/JsUtility).
+
+
 <br/>
-## Installation
+--- 
+# Othe Libraries Available in this package
 
 The library is standalone (via browser script tag, loads the whole library) or modular, either the entire object or only a few functions since it is completely modular.
 
@@ -26,6 +351,7 @@ export {
     selectElement,
     ElementHelper,
     EventBus,
+    extend,
     addQuotes,
     cleanStr,
     convertKeysToSymbols,
@@ -94,6 +420,7 @@ export {
 <br/> 
 
 ## In the browser
+
 Each library can be loaded individually or all at once. The library is also available via CDN.
 
 see browser examples here: https://github.com/knighttower/JsUtility/blob/development/packages/utility/tests/index.html

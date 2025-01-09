@@ -2,6 +2,79 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
+// // -----------------------------------------
+// /**
+//  * @knighttower
+//  * @url knighttower.io
+//  * @git https://github.com/knighttower/
+//  */
+// // -----------------------------------------
+
+
+// -----------------------------------------
+/**
+ * Checks if the value is a plain object.
+ *
+ * @param {any} value The value to check.
+ * @returns {boolean} True if the value is a plain object, false otherwise.
+ */
+const isPlainObject = (value) =>
+    value && typeof value === 'object' && value.constructor === Object;
+
+/**
+ * Merges two or more objects into a single new object. Arrays and other types are overwritten.
+ *
+ * @param {object} target The target object.
+ * @param {...object} sources The source objects.
+ * @returns {object} A new merged object.
+ */
+const extend = (target, ...sources) => {
+    return sources.reduce(
+        (acc, source) => {
+            if (isPlainObject(source)) {
+                Object.entries(source).forEach(([key, value]) => {
+                    acc[key] =
+                        isPlainObject(value) && isPlainObject(acc[key])
+                            ? extend(acc[key], value)
+                            : value; // If it's not an object, directly assign it
+                });
+            } else {
+                // If the source is not an object (like a number), just merge directly
+                Object.assign(acc, source);
+            }
+            return acc;
+        },
+        { ...target }
+    );
+};
+
+// //   utility; {
+//     convertToBool,
+//     currencyToDecimal,
+//     convertToNumber,
+//     dateFormat,
+//     decimalToCurrency,
+//     emptyOrValue,
+//    extend,
+//     formatPhoneNumber,
+//     getDynamicId,
+//     getGoogleMapsAddress,
+//     getRandomId,
+//     includes,
+//     isEmpty, // from https://moderndash.io/
+//     isNumber,
+//     instanceOf,
+//     openGoogleMapsAddress,
+//     toCurrency,
+//     toDollarString,
+//     typeOf,
+//     validateEmail,
+//     validatePhone,
+//     makeArray,
+//     uuid,
+//     uniqueId,
+// };
+
 /**
  * x-toast.js
  * A dead simple toast notification library for JavaScript.
@@ -107,49 +180,6 @@ var toast = (function ($win, $doc) {
     };
 
     /**
-     * A native JS extend() function
-     *
-     * Returns a new object instead, preserving all of the original objects
-     * and their properties. Supported back to IE6.
-     *
-     * All credits to author.
-     * https://gomakethings.com/vanilla-javascript-version-of-jquery-extend/
-     *
-     * @return object
-     */
-    function extend() {
-        const extended = {};
-        let deep = false;
-        let i = 0;
-        const length = arguments.length;
-
-        // check if a deep merge
-        if (Object.prototype.toString.call(arguments[0]) === '[object Boolean]') {
-            deep = arguments[0];
-            i++;
-        }
-
-        // merge the object into the extended object
-        const merge = function (obj) {
-            for (const prop in obj)
-                if (Object.prototype.hasOwnProperty.call(obj, prop) === true) {
-                    // if deep merge and property is an object, merge properties
-                    if (deep && Object.prototype.toString.call(obj[prop]) === '[object Object]')
-                        extended[prop] = extend(true, extended[prop], obj[prop]);
-                    else extended[prop] = obj[prop];
-                }
-        };
-
-        // loop through each object and conduct a merge
-        for (i; i < length; i++) {
-            const obj = arguments[i];
-            merge(obj);
-        }
-
-        return extended;
-    }
-
-    /**
      * Simple creation of an Element Node with the specified 'name'.
      *
      * @return HTML Element
@@ -220,20 +250,6 @@ var toast = (function ($win, $doc) {
         }
 
         return cachedTransitionEvent;
-    }
-
-    /**
-     * Calculates the auto close duration to be set in
-     * each toast message:
-     *
-     * @return number
-     */
-    function getAutoCloseDuration(message, duration, settings) {
-        duration = duration || settings.duration;
-        if (duration === 0) {
-            duration = message.length * 100;
-        }
-        return Math.floor(duration);
     }
 
     /**
@@ -403,12 +419,12 @@ var toast = (function ($win, $doc) {
         constructor(options) {
             this.settings = {};
             this.classmap = {};
-            this.config(typeof options === 'object' ? options : {});
+            this.config(options || _defaults);
             this.transition(this.settings.transition);
         }
 
         config(options) {
-            this.settings = extend(true, _defaults, this.settings, options);
+            this.settings = extend(_defaults, this.settings, options || {});
             return this;
         }
 
@@ -417,9 +433,15 @@ var toast = (function ($win, $doc) {
             return this;
         }
 
-        toast(type, message, duration) {
+        toast(type, message, durationOroptions) {
             const classes = this.classmap;
-            const options = this.settings;
+            let options = this.settings;
+
+            if (typeof durationOroptions === 'number') {
+                options.duration = durationOroptions;
+            } else {
+                options = extend(this.settings, durationOroptions || {});
+            }
 
             // check if the transition name provided in options
             // exists in classes, if not register it:
@@ -472,7 +494,7 @@ var toast = (function ($win, $doc) {
                 newToast,
                 container,
                 transition.animate,
-                duration,
+                options.duration,
                 options.insertBefore,
                 options.onShow
             );
@@ -484,7 +506,7 @@ var toast = (function ($win, $doc) {
             // --------------------------------------------------------------------
             if (options.autoClose) {
                 // hide the toast message automatically:
-                hideToast(type, newToast, duration, transition.animate, options.onHide);
+                hideToast(type, newToast, options.duration, transition.animate, options.onHide);
             } else {
                 // hide the toast message on click it with an CSS3 transition:
                 hideToastOnClick(
@@ -502,7 +524,7 @@ var toast = (function ($win, $doc) {
             // INI: Enable or disable the progress.
             // --------------------------------------------------------------------
             if (options.progressBar && options.autoClose) {
-                showProgressBar(type, newToast, duration, transition);
+                showProgressBar(type, newToast, options.duration, transition);
             }
             // --------------------------------------------------------------------
             // END: Enable or disable the progress.
@@ -510,24 +532,20 @@ var toast = (function ($win, $doc) {
             return this;
         }
 
-        info(message, duration) {
-            duration = getAutoCloseDuration(message, duration, this.settings);
-            this.toast('info', message, duration);
+        info(message, opts) {
+            this.toast('info', message, opts);
         }
 
-        success(message, duration) {
-            duration = getAutoCloseDuration(message, duration, this.settings);
-            this.toast('success', message, duration);
+        success(message, opts) {
+            this.toast('success', message, opts);
         }
 
-        warning(message, duration) {
-            duration = getAutoCloseDuration(message, duration, this.settings);
-            this.toast('warning', message, duration);
+        warning(message, opts) {
+            this.toast('warning', message, opts);
         }
 
-        error(message, duration) {
-            duration = getAutoCloseDuration(message, duration, this.settings);
-            this.toast('error', message, duration);
+        error(message, opts) {
+            this.toast('error', message, opts);
         }
     }
 

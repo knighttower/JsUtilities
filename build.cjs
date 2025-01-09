@@ -16,38 +16,45 @@ const pkgOnly = getFlagValue('pkg');
 
 // utility
 const utility = () => {
-    runCommand(
-        `cd ./packages/utility \
-    && npm run test \    
-    && eslint -c "${eslint}" --fix ./src \
-    && npx webpack --mode production --config "${webpackConfig}" \
-    && npx rollup -c "${rollupConfig}" \
-    && node "${buildExports}" --dir ./dist/cjs --type=cjs \
-    && node "${buildExports}" --dir ./src --type=esm \
-    && prettier --config "${pretty}" --write ./index.js \
-    && prettier --config "${pretty}" --write ./index.cjs \
-    && node "${bumpVersion}" --exe --minor \
-    ` + (local ? '' : '&& npm publish --access public')
-    );
+    const commands = [
+        'cd ./packages/utility',
+        `eslint -c "${eslint}" --fix ./src`,
+        `npx webpack --mode production --config "${webpackConfig}"`,
+        `npx rollup -c "${rollupConfig}"`,
+        `node "${buildExports}" --dir ./dist/cjs --type=cjs`,
+        `node "${buildExports}" --dir ./src --type=esm`,
+        `prettier --config "${pretty}" --write ./index.js`,
+        `prettier --config "${pretty}" --write ./index.cjs`,
+        'npm run test',
+        `node "${bumpVersion}" --exe --minor`,
+        local ? '' : 'npm publish --access public',
+    ]
+        .filter(Boolean)
+        .join(' && ');
+
+    runCommand(commands);
 };
 
 // build TypeCheck
 const typeCheck = () => {
-    runCommand(
-        `\
-    cd ./packages/type-check \
-    && npm run test \
-    && eslint -c "${eslint}" --fix ./src \
-    && npx webpack --mode production --config "${webpackConfig}" \
-    && npx rollup -c "${rollupConfig}" \
-    && node "${buildExports}" --file ./dist/cjs/typeCheck.cjs --type=cjs \
-    && node "${buildExports}" --file ./src/typeCheck.js --type=esm \
-    && prettier --config "${pretty}" --write ./index.js \
-    && prettier --config "${pretty}" --write ./index.cjs \
-    
-    && node "${bumpVersion}" --exe --minor \
-    ` + (local ? '' : '&& npm publish --access public')
-    );
+    const commands = [
+        'cd ./packages/type-check',
+
+        `eslint -c "${eslint}" --fix ./src`,
+        `npx webpack --mode production --config "${webpackConfig}"`,
+        `npx rollup -c "${rollupConfig}"`,
+        `node "${buildExports}" --file ./dist/cjs/typeCheck.cjs --type=cjs`,
+        `node "${buildExports}" --file ./src/typeCheck.js --type=esm`,
+        `prettier --config "${pretty}" --write ./index.js`,
+        `prettier --config "${pretty}" --write ./index.cjs`,
+        'npm run test',
+        `node "${bumpVersion}" --exe --minor`,
+        local ? '' : 'npm publish --access public',
+    ]
+        .filter(Boolean)
+        .join(' && ');
+
+    runCommand(commands);
 };
 
 const bootstrapMini = () => {

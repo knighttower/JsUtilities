@@ -261,6 +261,7 @@ function typeOf(input, test) {
 //     dateFormat,
 //     decimalToCurrency,
 //     emptyOrValue,
+//    extend,
 //     formatPhoneNumber,
 //     getDynamicId,
 //     getGoogleMapsAddress,

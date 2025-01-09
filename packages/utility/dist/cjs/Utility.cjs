@@ -160,6 +160,43 @@ function emptyOrValue(value, _default = null) {
     return _default;
 }
 
+// -----------------------------------------
+/**
+ * Checks if the value is a plain object.
+ *
+ * @param {any} value The value to check.
+ * @returns {boolean} True if the value is a plain object, false otherwise.
+ */
+const isPlainObject = (value) =>
+    value && typeof value === 'object' && value.constructor === Object;
+
+/**
+ * Merges two or more objects into a single new object. Arrays and other types are overwritten.
+ *
+ * @param {object} target The target object.
+ * @param {...object} sources The source objects.
+ * @returns {object} A new merged object.
+ */
+const extend = (target, ...sources) => {
+    return sources.reduce(
+        (acc, source) => {
+            if (isPlainObject(source)) {
+                Object.entries(source).forEach(([key, value]) => {
+                    acc[key] =
+                        isPlainObject(value) && isPlainObject(acc[key])
+                            ? extend(acc[key], value)
+                            : value; // If it's not an object, directly assign it
+                });
+            } else {
+                // If the source is not an object (like a number), just merge directly
+                Object.assign(acc, source);
+            }
+            return acc;
+        },
+        { ...target }
+    );
+};
+
 /**
  * Format a phone number based on a given template.
  * @param {string} phoneNumber - The phone number to format.
@@ -583,6 +620,7 @@ function validatePhone(phone) {
 //     dateFormat,
 //     decimalToCurrency,
 //     emptyOrValue,
+//    extend,
 //     formatPhoneNumber,
 //     getDynamicId,
 //     getGoogleMapsAddress,
@@ -609,6 +647,7 @@ exports.dateFormat = dateFormat;
 exports.decimalToCurrency = decimalToCurrency;
 exports.dynamicId = dynamicId;
 exports.emptyOrValue = emptyOrValue;
+exports.extend = extend;
 exports.formatPhoneNumber = formatPhoneNumber;
 exports.getDynamicId = getDynamicId;
 exports.getGoogleMapsAddress = getGoogleMapsAddress;
@@ -617,6 +656,7 @@ exports.includes = includes;
 exports.instanceOf = instanceOf;
 exports.isEmpty = isEmpty;
 exports.isNumber = isNumber;
+exports.isPlainObject = isPlainObject;
 exports.makeArray = makeArray;
 exports.openGoogleMapsAddress = openGoogleMapsAddress;
 exports.randomId = randomId;
