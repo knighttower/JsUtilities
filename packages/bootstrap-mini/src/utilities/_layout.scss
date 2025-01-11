@@ -1,4 +1,122 @@
 @use "sass:list";
+// Import the grid only after this override
+// Override the default grid settings and remove gutters.
+@mixin row-cols($count) {
+    > * {
+        flex: 0 0 auto;
+        width: percentage(divide(1, $count));
+    }
+}
+@mixin make-col($size: false, $columns: $grid-columns) {
+    @if $size {
+        // flex: 0 0 auto;
+        width: percentage(divide($size, $columns));
+    } @else {
+        flex: 1 1 0;
+        max-width: 100%;
+    }
+}
+
+[class^="col-xs-"],
+[class^="col-sm-"],
+[class^="col-md-"],
+[class^="col-lg-"],
+[class^="col-xl-"] {
+    flex: 0 0 auto;
+}
+
+@mixin make-grid-columns(
+    $columns: $grid-columns,
+    $gutter: $grid-gutter-width,
+    $breakpoints: $grid-breakpoints
+) {
+    @each $breakpoint in map-keys($breakpoints) {
+        $infix: breakpoint-infix($breakpoint, $breakpoints);
+
+        @include media-breakpoint-up($breakpoint, $breakpoints) {
+            // Provide basic `.col-{bp}` classes for equal-width flexbox columns
+            .col#{$infix} {
+                flex: 1 0 0;
+            }
+
+            .row-cols#{$infix}-auto > * {
+                @include make-col-auto();
+            }
+
+            // @if $grid-row-columns > 0 {
+            //     @for $i from 1 through $grid-row-columns {
+            //         .row-cols#{$infix}-#{$i} {
+            //             @include row-cols($i);
+            //         }
+            //     }
+            // }
+
+            .col#{$infix}-auto {
+                @include make-col-auto();
+            }
+
+            @if $columns > 0 {
+                @for $i from 1 through $columns {
+                    .col#{$infix}-#{$i} {
+                        @include make-col($i, $columns);
+                    }
+                }
+
+                // `$columns - 1` because offsetting by the width of an entire row isn't possible
+                @for $i from 0 through ($columns - 1) {
+                    @if not($infix == "" and $i == 0) {
+                        // Avoid emitting useless .offset-0
+                        .offset#{$infix}-#{$i} {
+                            @include make-col-offset($i, $columns);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@mixin make-cssgrid($columns: $grid-columns, $breakpoints: $grid-breakpoints) {
+    @each $breakpoint in map-keys($breakpoints) {
+        $infix: breakpoint-infix($breakpoint, $breakpoints);
+
+        @include media-breakpoint-up($breakpoint, $breakpoints) {
+            @if $columns > 0 {
+                @for $i from 1 through $columns {
+                    .g-col#{$infix}-#{$i} {
+                        grid-column: auto / span $i;
+                    }
+                }
+
+                // Start with `1` because `0` is an invalid value.
+                // Ends with `$columns - 1` because offsetting by the width of an entire row isn't possible.
+                @for $i from 1 through ($columns - 1) {
+                    .g-start#{$infix}-#{$i} {
+                        grid-column-start: $i;
+                    }
+                }
+            }
+        }
+    }
+}
+@import "~bootstrap/scss/grid";
+
+// -----------------------------------------
+// Extend the grid with additional columns
+@mixin add-on-columns($columns, $gutter, $breakpoints) {
+    @each $breakpoint in $breakpoints {
+        @include breakpoint($breakpoint) {
+            @if $columns > 0 {
+                @for $i from 1 through $columns {
+                    .col-#{$breakpoint}-#{$i} {
+                        @include make-col($i, $columns);
+                    }
+                }
+            }
+        }
+    }
+}
+@include add-on-columns(12, 1.5rem, ("mob", "tab", "desk"));
 
 // =========================================
 // --> Bring only the require for a layout
@@ -87,23 +205,14 @@ $sparkOptionalUtils: (
                 ),
         ),
     ),
-    z-index: (
-        "z-index": (
-            property: z-index,
-            class: z,
-            values: $zIndex,
-        ),
-    ),
     flex: map-get-multiple(
             $utilities,
             (
                 "align-content",
                 "align-items",
-                "align-self",
                 "flex",
                 "flex-direction",
                 "flex-grow",
-                "flex-shrink",
                 "flex-wrap",
                 "justify-content",
                 "order"
@@ -121,7 +230,6 @@ $sparkOptionalUtils: (
         ),
     ),
     display: map-get-multiple($utilities, ("display")),
-    visibility: map-get-multiple($utilities, ("visibility")),
 );
 
 // -----------------------------------------

@@ -47,13 +47,11 @@ $miniEnableMargins: true !default;
 $miniEnablePadding: true !default;
 $miniEnableWidth: true !default;
 $miniEnableHeight: true !default;
-$miniEnableZIndex: true !default;
 $miniEnableFlex: true !default;
 $miniEnableFloat: true !default;
 $miniEnableDisplay: true !default;
-$miniEnableVisibility: true !default;
 $miniEnableGridClasses: true !default;
-$miniEnableCssGrid: true !default;
+$miniEnableCssGrid: false !default;
 
 // -----------------------------------------
 // Custom bootstrap load
@@ -76,9 +74,7 @@ $miniUtilsMapping: (
     padding: $miniEnablePadding,
     width: $miniEnableWidth,
     height: $miniEnableHeight,
-    z-index: $miniEnableZIndex,
     flex: $miniEnableFlex,
     float: $miniEnableFloat,
     display: $miniEnableDisplay,
-    visibility: $miniEnableVisibility,
 );

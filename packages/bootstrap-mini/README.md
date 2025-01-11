@@ -5,9 +5,9 @@ Built on top of Bootstrap but modified to have only the basic utilities classes 
 It is not meant to replace the full functionality of Bootstrap, only to abstract the basic utilities to use in quick prototypes, small projects or to compliment other frameworks since it does not add any root styles, resets or normalize, colors or other theme styles that would override or conflict. It can also be customized with a few variables before importing the file to load only a few utilities or the full set.  
 Out the box it can be used from the cdn but to further reduce the size, it can be installed as a node module and imported as a sass file to be compiled with postcss.
 <br>
-Compressed: 70 KiB  
-Uncompressed: 104 KiB  
-GZip: 8 KiB  
+Compressed: 60 KiB  
+Uncompressed: 90 KiB  
+GZip: 7 KiB  
 Brotli: 5 KiB
 <br>
 
@@ -253,7 +253,7 @@ Ex: $container (for the container module), $grid-gutter-width (for the grid modu
 -   A set of utility classes that can be used to build websites and web applications. Only the most used classes are included. The rest can be added by the user.  
 
     -- Common Bootstrap classes:  
-    --- Flex, Flexbox, Grid, Spacing, Text, Display, Position, Visibility, Sizing, Margin, Padding, Css grid, Columns  
+    --- Flex, Flexbox, Spacing, Text, Display, Position, Sizing, Margin, Padding, Columns  
 
 -   Modified classes:  
     -- ml (margin-left), mr (margin-right), pr (padding-right), pl (padding-left), float-left, float-right  
@@ -263,6 +263,7 @@ Ex: $container (for the container module), $grid-gutter-width (for the grid modu
     --- Widht special: w-25, w-33, w-50, w-66, w-75, w-100 (25%, 33%, 50%, 66%, 75%, 100%)  
     -- Height (h-) increments in 10, ex: h-10, h-20, h-30, etc... up to 100% and 'vh' for viewport height  
     -- Zindex (z-) increments in 10, ex: z-10, z-20, z-30, etc... up to 50
+    -- Colums: col-mob-{number}, col-tab-{number}, col-desk-{number} (ex: col-mob-6, col-tab-4, col-desk-3) (note that this columns only apply to the respective screen size and do not cascade)
 
 
 -   Screen Sizes:  
@@ -305,7 +306,7 @@ Automatic rules added rules:
 -   `img`: responsive images
 -   `hr`: horizontal ruler 1px dashed #ccc  
 -   `svg`: responsive svg images and maintain aspect ratio  
--   `hr`: horizontal ruler 1px dashed #ccc (alias .ruler, .divider)
+-   `hr`: horizontal ruler 1px dashed #ccc (alias .ruler, .divider) (flags: --semi, --half, --third)
 
 <br>  
 
