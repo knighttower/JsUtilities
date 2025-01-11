@@ -266,9 +266,9 @@ Ex: $container (for the container module), $grid-gutter-width (for the grid modu
 
 
 -   Screen Sizes:  
-    -- mobile: 0-599px (targets only this braket)  
-    -- tablet: 600-1023px (targets only this braket)  
-    -- desktop: 1024 (targets from here up)  
+    -- mob (mobile): 0-599px (targets only this braket)  
+    -- tab (tablet): 600-1023px (targets only this braket)  
+    -- desk (desktop): 1024 (targets from here up)  
     -- sm: 576 (targets from here up (bootstrap default behavior))  
     -- md: 768 (targets from here up (bootstrap default behavior))  
     -- lg: 992 (targets from here up (bootstrap default behavior))  
@@ -297,12 +297,15 @@ Ex: $container (for the container module), $grid-gutter-width (for the grid modu
     - `.hr`: horizontal ruler.
     - `.img`: responsive images.
     - `..max-div-width`: max width for a div. min 320px, max 1200px.
+    - `--show-on-{screenSize}`: show Only on that screen size. (ex: --show-on-mob)
+    - `--hide-on-{screenSize}`: hide Only on that screen size. (ex: --hide-on-mob)
+    - `.spacer`: with flag to add a spacer. (ex: .spacer --10 (10px height))
 
 Automatic rules added rules:
 -   `img`: responsive images
 -   `hr`: horizontal ruler 1px dashed #ccc  
 -   `svg`: responsive svg images and maintain aspect ratio  
--   `hr`: horizontal ruler 1px dashed #ccc
+-   `hr`: horizontal ruler 1px dashed #ccc (alias .ruler, .divider)
 
 <br>  
 

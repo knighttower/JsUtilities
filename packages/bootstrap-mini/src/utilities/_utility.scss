@@ -50,54 +50,73 @@
 // * // @include breakpoint(<breakdown name>,'max-width:800px'){rules...};, etc...
 // */
 @mixin breakpoint($screen, $param: null, $exclude: null) {
+    $isAlias: map-get($xBreakpointsAlias, $screen);
+    @if $isAlias != null {
+        $screen: $isAlias;
+    }
     $values: map-get($xBreakpoints, $screen);
     $min: 0;
-    $max: 0;
+    $max: null;
 
     @if $values != null {
         $min: ensure-px(nth($values, 1));
 
-        @if $max != 0 or $max != null {
-            $max: ensure-px(nth($values, 2));
-        } @else {
-            $max: 0;
+        @if type-of(nth($values, 2)) == "number" {
+            $maxTmp: nth($values, 2);
+            @if $maxTmp != 0 {
+                $max: ensure-px($maxTmp);
+            }
         }
     }
+    // -----------------------------------------
+    // when exclude is set to true
+    // this will negate the query
     @if $exclude == true {
         @if $values != null {
-            @media (not (min-width: $min)) and (not (max-width: $max)) {
-                @content;
-            }
-        }
-    } @else {
-        @if $values != null and type-of($param) != "number" {
-            // when min-width and max-width are set
-            // landscape queries only
-            @if $param == landscape and $max != 0 {
-                @media (min-width: $min) and (max-width: $max) and (orientation: landscape) {
-                    @content;
-                }
-            }
-            // when min-width and max-width are set
-            // --custom 3rd parameter [ex: max-width:800px ]
-            @else if $param != null and $max != 0 {
-                @media (min-width: $min) and (max-width: $max) and ($param) {
-                    @content;
-                }
-            }
-            // when min-width and max-width are set
-            @else if $max != 0 {
-                @media (min-width: $min) and (max-width: $max) {
+            @if $max != null {
+                @media (not (min-width: $min)) and (not (max-width: $max)) {
                     @content;
                 }
             }
             // when a only min-width is needed or set
-            @else if $max == 0 {
-                @media (min-width: $min) {
+            @else {
+                @media (not (min-width: $min)) {
                     @content;
                 }
             }
-        } @else if $screen != null and $param != null {
+        }
+    } @else {
+        // -----------------------------------------
+        // Matchet a predefined breakpoint
+        @if $values != null {
+            @if $param != null and $param == landscape {
+                // landscape queries only
+                @if $max != null {
+                    @media (min-width: $min) and (max-width: ensure-px($max)) and (orientation: landscape) {
+                        @content;
+                    }
+                } @else {
+                    @media (min-width: $min) and ($param) {
+                        @content;
+                    }
+                }
+            } @else {
+                @if $max != null {
+                    @media (min-width: $min) and (max-width: $max) {
+                        @content;
+                    }
+                }
+                // when a only min-width is needed or set
+                @else {
+                    @media (min-width: $min) {
+                        @content;
+                    }
+                }
+            }
+        }
+        // -----------------------------------------
+        // CUSTOM USER DEFINED BREAKPOINT
+        @else if $screen != null and $param != null {
             @if type-of($param) == "number" {
                 @media (min-width: ensure-px($screen)) and (max-width: ensure-px($param)) {
                     @content;

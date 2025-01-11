@@ -93,3 +93,9 @@ $xBreakpoints: (
         0,
     ),
 ) !default;
+
+$xBreakpointsAlias: (
+    mobile: mob,
+    desktop: desk,
+    tablet: tab,
+) !default;
