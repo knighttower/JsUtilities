@@ -74,13 +74,13 @@
     @if $exclude == true {
         @if $values != null {
             @if $max != null {
-                @media (not (min-width: $min)) and (not (max-width: $max)) {
+                @media not ((min-width: $min) and (max-width: $max)) {
                     @content;
                 }
             }
             // when a only min-width is needed or set
             @else {
-                @media (not (min-width: $min)) {
+                @media not (min-width: $min) {
                     @content;
                 }
             }
