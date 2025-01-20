@@ -337,7 +337,8 @@ $responsiveClasses: ();
 
 .container {
     max-width: var(--x-container-max-width);
-    padding: 0 var(--x-container-pad);
+    padding-left: var(--x-container-pad);
+    padding-right: var(--x-container-pad);
 }
 // =========================================
 // --> Font Sizes
