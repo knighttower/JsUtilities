@@ -19,10 +19,15 @@ Include the library in your project by linking the JavaScript file:
 
 ```html
 <script src="path/to/x-loader.js"></script>
+
+```html
+//from the mono-repo
+<script src="https://cdn.jsdelivr.net/npm/knighttower@latest/packages/x-loader/dist/browser/x-loader.js"></script>
 ```
 ```html
-<script src="https://cdn.jsdelivr.net/npm/knighttower@latest/packages/x-loader/dist/browser/x-loader.js"></script>
-
+//directly from the package
+<script src="https://cdn.jsdelivr.net/npm/@knighttower/x-loader@1.2/dist/browser/x-loader.js"></script>
+```
 ---
 
 ## Features
