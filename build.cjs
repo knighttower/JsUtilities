@@ -128,6 +128,7 @@ const workspaces = {
     mono,
     'block-ui': () => generic('block-ui'),
     toast: () => generic('toast'),
+    xloader: () => generic('x-loader'),
     all: () => {
         bootstrapMini();
         typeCheck();
@@ -137,6 +138,7 @@ const workspaces = {
         mono();
         generic('block-ui');
         generic('toast');
+        generic('x-loader');
     },
 };
 

@@ -64,6 +64,15 @@ const toast = () => {
     );
 };
 
+const xloader = () => {
+    runCommand(
+        `\
+    cd ./packages/x-loader \
+    && npx webpack --config "${webpackConfig}" --mode=development ${once} --stats=minimal 
+    `
+    );
+};
+
 // runCommand('ncu -u && npm i');
 
 const workspaces = {
@@ -73,6 +82,7 @@ const workspaces = {
     adaptive,
     blockui,
     toast,
+    xloader,
 };
 
 const choice = select({

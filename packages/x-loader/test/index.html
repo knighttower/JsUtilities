@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        />
+        <title>x-loader</title>
+
+        <script src="../dist/browser/x-loader.js"></script>
+    </head>
+    <body style="background-color: #000">
+        <x-loader
+            x-js="https://code.jquery.com/jquery-3.7.1.min.js"
+            x-id="js_jquery"
+        ></x-loader>
+        <script>
+            xloader.loader.ready('js_jquery').then(() => {
+                console.log('jQuery loaded ready');
+                xloader.scripts.load([
+                    'https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js',
+                ]);
+            });
+            // check by window id
+            xloader.loader.when('jQuery').then(() => {
+                console.log('jQuery loaded by id');
+            });
+        </script>
+        <p style="color: white">Review in Dev console</p>
+        <p style="color: white">Loads images, scripts and css</p>
+        <x-loader
+            x-img="https://placehold.co/600x400"
+            x-id="the_img"
+        ></x-loader>
+    </body>
+</html>

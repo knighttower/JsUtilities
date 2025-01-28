@@ -1,0 +1,47 @@
+{
+  "name": "@knighttower/x-loader",
+  "version": "1.2.0",
+  "type": "module",
+  "description": "tiny js/css/img loading library",
+  "main": "dist/cjs/x-loader.cjs",
+  "module": "dist/esm/x-loader.js",
+  "unpkg": "dist/browser/x-loader.js",
+  "jsdelivr": "dist/browser/x-loader.js",
+  "browser": "dist/browser/x-loader.js",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/esm/x-loader.js",
+      "require": "./dist/cjs/x-loader.cjs"
+    },
+    "./dist/*": "./dist/*"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "utility",
+    "library",
+    "plugin",
+    "javascript",
+    "DOM",
+    "functions",
+    "helper",
+    "knighttower",
+    "x-loader"
+  ],
+  "scripts": {
+    "dev": "webpack --mode development",
+    "watch": "webpack --mode development --watch",
+    "test": "vitest"
+  },
+  "homepage": "https://github.com/knighttower/JsUtility",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/knighttower/JsUtility.git",
+    "directory": "packages/toast"
+  }
+}

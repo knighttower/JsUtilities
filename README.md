@@ -10,6 +10,7 @@ It holds the following packages:
 - [**Vue Utils**](https://github.com/knighttower/JsUtility/tree/development/packages/vue-utils): Vue utilities for Vue.js applications. 
 - [**BlockUi**](https://github.com/knighttower/JsUtility/tree/development/packages/block-ui): tiny UI blocking utility.  
 - [**Toast**](https://github.com/knighttower/JsUtility/tree/development/packages/toast): A dead simple toast notification library for JavaScript.
+ - [**x-loader**](https://github.com/knighttower/JsUtility/tree/development/packages/x-loader): A lightweight JavaScript library for dynamically loading scripts, CSS, and images.
  
 ### All pacckages are ESM and CJS compatible.
 
