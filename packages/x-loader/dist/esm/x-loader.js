@@ -149,7 +149,7 @@ const xloader = ((w) => {
          * @example xloader.loader.ready('some_custom_id').then(() => {});
          */
         ready(ids, timeout = 3000) {
-            if (!ids) return Promise.reject(new Error('loader ID is required!'));
+            if (!ids) return Promise.reject(new Error('loader ID required!'));
             if (Array.isArray(ids)) {
                 return Promise.all(ids.map((id) => this.ready(id, timeout)));
             }
@@ -177,7 +177,7 @@ const xloader = ((w) => {
 
                         const loadTimeout = setTimeout(() => {
                             cancelTimeout();
-                            reject(console.log(`Timeout waiting for ID "${ids}".`));
+                            reject(console.log(`Timeout ID "${ids}".`));
                         }, 3000);
 
                         loadingSet.get(ids).finally(() => {
@@ -193,7 +193,7 @@ const xloader = ((w) => {
                 // set to 1m for slow connections
                 maxTimeout = setTimeout(() => {
                     clearInterval(interval);
-                    reject(console.log(`Timeout waiting for ID "${ids}".`));
+                    reject(console.log(`Timeout ID "${ids}".`));
                 }, 1000 * 60);
             });
         }
@@ -231,7 +231,7 @@ const xloader = ((w) => {
          * @example xloader.loader.when(['jQuery', 'Vue']).then(() => {});
          */
         when(ids, timeout = 3000) {
-            if (!ids) return Promise.reject(new Error('loader ID is required!'));
+            if (!ids) return Promise.reject(new Error('loader ID required!'));
             if (Array.isArray(ids)) {
                 return Promise.all(ids.map((id) => this.when(id, timeout)));
             }
@@ -252,9 +252,7 @@ const xloader = ((w) => {
 
                 maxTimeout = setTimeout(() => {
                     clearInterval(interval);
-                    reject(
-                        console.warn(`Timeout waiting for script "${ids}" to be present in window.`)
-                    );
+                    reject(console.warn(`Timeout "${ids}": not in window.`));
                 }, timeout);
             });
         }
@@ -272,16 +270,24 @@ const xloader = ((w) => {
          * Load assets
          * @param {String|Array} assets
          * @param {String} id
-         * @param {String} loadType - 'eager' | 'lazy'
+         * @param {String} loadType - 'eager' | 'lazy' default null
+         * @param {Object} attributes - Additional attributes to add to the element
+         * @param {HTMLElement} $element - The element to append the asset to
          * @return {Promise}
          * @throws {Error}
          * @example
          * xloader.scripts.load('https://cdn.example.com/script.js', 'script-group-id').then(() => {});
          */
-        load(assets, id = null, loadType = null, attributes = {}) {
+        load(assets, ...args) {
+            let id, loadType, attributes, $element;
+            if (typeof args[0] === 'object' && args[0] !== null) {
+                ({ id, loadType, attributes, $element } = args[0]);
+            } else {
+                [id, loadType, attributes, $element] = args;
+            }
             assets = Array.isArray(assets) ? assets : [assets];
             if (assets.length === 0) {
-                return Promise.reject(new Error('URL is required!'));
+                return Promise.reject(new Error('URL required!'));
             }
 
             id = id || `__${Math.random().toString(36).substring(2, 15)}`;
@@ -327,7 +333,7 @@ const xloader = ((w) => {
                                     height: 'auto',
                                     class: '',
                                 };
-                                attributes = { ...defaultAttrs, ...attributes };
+                                attributes = { ...defaultAttrs, ...(attributes || {}) };
 
                                 Object.keys(attributes).forEach((key) => {
                                     if (!['src', 'loading'].includes(key)) {
@@ -344,9 +350,9 @@ const xloader = ((w) => {
 
                             if (this.type === 'img') {
                                 const loadImg = () => {
-                                    document
-                                        .querySelector(`[x-id="${id}"]`)
-                                        .insertAdjacentElement('afterend', element);
+                                    $element = $element || document.querySelector(`[x-id="${id}"]`);
+                                    $element.innerHTML = '';
+                                    $element.appendChild(element);
                                 };
 
                                 if (loadType === 'lazy') {
@@ -389,7 +395,7 @@ const xloader = ((w) => {
                     return loaded;
                 })
                 .catch((error) => {
-                    console.error(`Error loading asset ID "${id}":`, error);
+                    console.error(`Asset ID "${id}":`, error);
                     throw error;
                 });
 
@@ -457,7 +463,7 @@ const xloader = ((w) => {
                         }
                     });
 
-                    return { attributes, dep, loadType, type, src };
+                    return { attributes, dep, loadType, type, src, $element: element };
                 })();
 
                 if (data.src) {
@@ -467,7 +473,12 @@ const xloader = ((w) => {
                     element.setAttribute('x-id', id);
 
                     const loadAsset = () =>
-                        this[data.type].load(data.src, id, data.loadType, data.attributes);
+                        this[data.type].load(data.src, {
+                            id,
+                            loadType: data.loadType,
+                            attributes: data.attributes,
+                            $element: data.$element,
+                        });
 
                     if (data.dep) {
                         this.loader.ready(data.dep).then(loadAsset);
@@ -504,7 +515,48 @@ const xloader = ((w) => {
             super();
         }
         connectedCallback() {
-            // console.log('Custom element added to page.');
+            if (this.hasAttribute('x-img')) {
+                let loader;
+                const innerHTML = this.getAttribute('x-loader-html');
+                if (innerHTML) {
+                    loader = document.createElement('div');
+                    loader.innerHTML = innerHTML;
+                } else {
+                    loader = document.createElement('img');
+                    const setWidth = this.getAttribute('width');
+                    const setHeight = this.getAttribute('height');
+
+                    const height = (() => {
+                        if (setHeight) {
+                            return {
+                                maxHeight: `${setHeight}px`,
+                                height: '100%',
+                                aspectRatio: `${setWidth || 16} / ${setHeight}`,
+                            };
+                        }
+
+                        return {
+                            maxHeight: '100%',
+                            height: 'auto',
+                            aspectRatio: '16 / 9',
+                        };
+                    })();
+                    Object.assign(loader.style, {
+                        maxWidth: '100%',
+                        width: setWidth ? `${setWidth}px` : '100%',
+                        ...height,
+                    });
+                    const img = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
+
+                    loader.src = img;
+                }
+
+                loader.classList.add('x-loader');
+                this.appendChild(loader);
+            }
+
+            // -----------------------------------------
+            // Trigger the autoLoadScripts method
             loader.autoLoadScripts([this]);
         }
     }

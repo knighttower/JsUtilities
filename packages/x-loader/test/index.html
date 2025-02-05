@@ -7,15 +7,23 @@
             content="width=device-width, initial-scale=1.0"
         />
         <title>x-loader</title>
-
-        <script src="../dist/browser/x-loader.js"></script>
     </head>
     <body style="background-color: #000">
         <x-loader
             x-js="https://code.jquery.com/jquery-3.7.1.min.js"
             x-id="js_jquery"
         ></x-loader>
-        <script>
+        <script type="module">
+            import { xloader } from '../src/x-loader.js';
+
+            xloader.scripts.load(
+                [
+                    'https://cdn.jsdelivr.net/npm/knighttower@10.25.0/packages/utility/dist/browser/utility.js',
+                ],
+                {
+                    id: 'js_utility',
+                }
+            );
             xloader.loader.ready('js_jquery').then(() => {
                 console.log('jQuery loaded ready');
                 xloader.scripts.load([
@@ -29,9 +37,21 @@
         </script>
         <p style="color: white">Review in Dev console</p>
         <p style="color: white">Loads images, scripts and css</p>
-        <x-loader
-            x-img="https://placehold.co/600x400"
-            x-id="the_img"
-        ></x-loader>
+        <div style="display: flex; border: 1px solid red">
+            <div>
+                <x-loader
+                    x-img="https://placehold.co/600x400"
+                    x-id="the_img"
+                    width="600"
+                    height="400"
+                ></x-loader>
+            </div>
+            <div style="width: 50%">
+                <x-loader
+                    x-img="https://placehold.co/600x400"
+                    x-id="the_img2"
+                ></x-loader>
+            </div>
+        </div>
     </body>
 </html>
