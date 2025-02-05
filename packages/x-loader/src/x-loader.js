@@ -354,6 +354,8 @@ const xloader = ((w) => {
                                 const loadImg = () => {
                                     $element = $element || document.querySelector(`[x-id="${id}"]`);
                                     $element.innerHTML = '';
+                                    $element.innerText = '';
+                                    $element.replaceChildren();
                                     $element.appendChild(element);
                                 };
 
