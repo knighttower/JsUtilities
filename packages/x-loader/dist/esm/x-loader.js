@@ -351,10 +351,14 @@ const xloader = ((w) => {
                             if (this.type === 'img') {
                                 const loadImg = () => {
                                     $element = $element || document.querySelector(`[x-id="${id}"]`);
+                                    $element.replaceChildren();
                                     $element.innerHTML = '';
                                     $element.innerText = '';
-                                    $element.replaceChildren();
-                                    $element.appendChild(element);
+
+                                    $element.insertAdjacentElement('afterend', element);
+
+                                    // Had to resort to this since the inner image was not being removed
+                                    $element.remove();
                                 };
 
                                 if (loadType === 'lazy') {
@@ -518,13 +522,13 @@ const xloader = ((w) => {
         }
         connectedCallback() {
             if (this.hasAttribute('x-img')) {
-                let loader;
+                let tmp; // placeholder
                 const innerHTML = this.getAttribute('x-loader-html');
                 if (innerHTML) {
-                    loader = document.createElement('div');
-                    loader.innerHTML = innerHTML;
+                    tmp = document.createElement('div');
+                    tmp.innerHTML = innerHTML;
                 } else {
-                    loader = document.createElement('img');
+                    tmp = document.createElement('img');
                     const setWidth = this.getAttribute('width');
                     const setHeight = this.getAttribute('height');
 
@@ -543,20 +547,19 @@ const xloader = ((w) => {
                             aspectRatio: '16 / 9',
                         };
                     })();
-                    Object.assign(loader.style, {
+                    Object.assign(tmp.style, {
                         maxWidth: '100%',
                         width: setWidth ? `${setWidth}px` : '100%',
                         ...height,
                     });
                     const img = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
 
-                    loader.src = img;
+                    tmp.src = img;
                 }
 
-                loader.classList.add('x-loader');
-                this.appendChild(loader);
+                tmp.classList.add('x-loader');
+                this.appendChild(tmp);
             }
-
             // -----------------------------------------
             // Trigger the autoLoadScripts method
             loader.autoLoadScripts([this]);
