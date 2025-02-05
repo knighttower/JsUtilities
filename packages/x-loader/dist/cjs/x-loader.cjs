@@ -50,7 +50,7 @@ const domTracking = (($win) => {
      * });
      */
     $this.afterLoad = (callback) => {
-        $this.isReady(() => {
+        return $this.isReady(() => {
             let loaded = false;
 
             const observer = new PerformanceObserver((entryList) => {
@@ -73,10 +73,18 @@ const domTracking = (($win) => {
 
             // Fallback using requestAnimationFrame
             setTimeout(() => {
+                // Fallback for browsers that do not support PerformanceObserver
+                const fallback = setTimeout(() => {
+                    callback();
+                    observer.disconnect();
+                    loaded = true;
+                }, 4000);
                 if (!loaded) {
                     requestAnimationFrame(() => {
                         if (!loaded) {
+                            clearTimeout(fallback);
                             callback();
+                            loaded = true;
                         }
                         observer.disconnect();
                     });
