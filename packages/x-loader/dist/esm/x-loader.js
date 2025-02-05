@@ -46,7 +46,7 @@ const domTracking = (($win) => {
      * });
      */
     $this.afterLoad = (callback) => {
-        return $this.isReady(() => {
+        return domTracking.isReady(() => {
             let loaded = false;
 
             const observer = new PerformanceObserver((entryList) => {
@@ -529,7 +529,7 @@ const xloader = ((w) => {
             super();
         }
         connectedCallback() {
-            if (this.hasAttribute('x-img')) {
+            if (this.hasAttribute('x-img') && !this.hasAttribute('x-reg')) {
                 let tmp; // placeholder
                 const innerHTML = this.getAttribute('x-loader-html');
                 if (innerHTML) {
