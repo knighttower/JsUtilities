@@ -360,9 +360,7 @@ const xloader = ((w) => {
                                 const loadImg = () => {
                                     $element = $element || document.querySelector(`[x-id="${id}"]`);
                                     $element.replaceChildren();
-                                    $element.innerHTML = '';
-                                    $element.innerText = '';
-
+                                    $element.style.display = 'none';
                                     $element.insertAdjacentElement('afterend', element);
 
                                     // Had to resort to this since the inner image was not being removed
