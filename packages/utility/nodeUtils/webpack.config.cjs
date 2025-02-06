@@ -127,6 +127,7 @@ const getWebpackConfig = (config) => ({
         ],
     },
     stats: isProduction ? 'normal' : 'minimal',
+
     module: {
         rules: [
             {
@@ -138,6 +139,9 @@ const getWebpackConfig = (config) => ({
                             [
                                 '@babel/preset-env',
                                 {
+                                    targets: '> 0.5%, not dead, not ie 11', // Exclude IE11 & dead browsers
+                                    useBuiltIns: 'usage',
+                                    corejs: 3,
                                     modules: false,
                                 },
                             ],
