@@ -9,6 +9,8 @@
         <title>x-loader</title>
     </head>
     <body style="background-color: #000">
+        <!-- This is on purpuse to demostrate that the tag will be triggered 
+         even when the script has ot yet been loaded -->
         <x-loader
             x-js="https://code.jquery.com/jquery-3.7.1.min.js"
             x-id="js_jquery"
@@ -44,7 +46,6 @@
                     x-id="the_img"
                     width="600"
                     height="400"
-                    fetchpriority="low"
                 ></x-loader>
             </div>
             <div style="width: 50%">
@@ -52,6 +53,7 @@
                     x-img="https://upload.wikimedia.org/wikipedia/commons/3/3d/LARGE_elevation.jpg"
                     x-loading="lazy"
                     width="600"
+                    fetchpriority="low"
                 ></x-loader>
             </div>
         </div>

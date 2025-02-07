@@ -30,12 +30,6 @@ const domTracking = (($win) => {
     };
     $this.ready = $this.isReady;
 
-    const appIsReady = new Event('appIsReady', {
-        bubbles: true,
-        cancelable: false,
-        composed: true,
-    });
-
     /**
      * Method to trigger when the DOM has loaded
      * @param {Function} callback
@@ -47,55 +41,51 @@ const domTracking = (($win) => {
      */
     $this.afterLoad = (callback) => {
         return domTracking.isReady(() => {
-            let loaded = false;
+            let triggered = false;
+            let observer;
+            let fallbackTimer, retryTimer;
 
-            const observer = new PerformanceObserver((entryList) => {
-                const entries = entryList.getEntries();
-                for (const entry of entries) {
-                    if (entry.name === 'first-contentful-paint' || entry.name === 'first-paint') {
-                        callback();
-                        loaded = true;
-                        observer.disconnect(); // Disconnect observer after callback
-                        break;
-                    }
+            const triggerCallback = () => {
+                if (triggered) return;
+                triggered = true;
+                callback();
+                if (observer && typeof observer.disconnect === 'function') {
+                    observer.disconnect();
                 }
-            });
+                clearTimeout(fallbackTimer);
+                clearTimeout(retryTimer);
+            };
 
             try {
+                observer = new PerformanceObserver((entryList) => {
+                    const entries = entryList.getEntries();
+                    for (const entry of entries) {
+                        if (
+                            entry.name === 'first-contentful-paint' ||
+                            entry.name === 'first-paint'
+                        ) {
+                            triggerCallback();
+                            break;
+                        }
+                    }
+                });
                 observer.observe({ type: 'paint', buffered: true });
             } catch (err) {
                 console.error('PerformanceObserver error:', err);
             }
 
             // Fallback using requestAnimationFrame
-            setTimeout(() => {
-                // Fallback for browsers that do not support PerformanceObserver
-                const fallback = setTimeout(() => {
-                    callback();
-                    observer.disconnect();
-                    loaded = true;
-                }, 5000);
-
-                if (!loaded) {
-                    fallback();
-                    requestAnimationFrame(() => {
-                        if (!loaded) {
-                            clearTimeout(fallback);
-                            callback();
-                            loaded = true;
-                        }
-                        observer.disconnect();
-                    });
-                }
+            retryTimer = setTimeout(() => {
+                requestAnimationFrame(triggerCallback);
             }, 750);
+            fallbackTimer = setTimeout(triggerCallback, 5000);
         });
     };
 
-    // This will be called externally by the vue app to signal that it has loaded
-    $this.appHasLoaded = () => {
+    // This can be called externally by other scripts to signal that it has loaded
+    $this.domHasLoaded = () => {
         if (!$this.isLoaded) {
             $this.isLoaded = true;
-            $win.dispatchEvent(appIsReady);
             $this.onLoadedCallbacks.forEach((callback) => {
                 callback();
             });
@@ -108,15 +98,15 @@ const domTracking = (($win) => {
      */
     const onDOMReady = () => {
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', $this.appHasLoaded);
+            document.addEventListener('DOMContentLoaded', $this.domHasLoaded);
         } else {
-            $this.appHasLoaded();
+            $this.domHasLoaded();
         }
     };
 
     onDOMReady();
 
-    return ($win.xdom = $win.xdom || $this);
+    return ($win.xdom = $win.xdom || Object.seal($this));
 })(window);
 /*
  * xloader.js v1.0.0
@@ -188,7 +178,7 @@ const xloader = ((w) => {
                         const loadTimeout = setTimeout(() => {
                             cancelTimeout();
                             reject(console.log(`Timeout ID "${ids}".`));
-                        }, 3000);
+                        }, timeout);
 
                         loadingSet.get(ids).finally(() => {
                             cancelTimeout();
@@ -361,7 +351,6 @@ const xloader = ((w) => {
                             if (this.type === 'img') {
                                 const loadImg = () => {
                                     $element = $element || document.querySelector(`[x-id="${id}"]`);
-                                    $element.replaceChildren();
                                     $element.style.display = 'none';
                                     $element.insertAdjacentElement('afterend', element);
 
@@ -505,8 +494,11 @@ const xloader = ((w) => {
         }
     }
 
+    // -----------------------------------------
+    // Initialize the loader
     const loader = (w.xloader = w?.xloader || new XLoader());
 
+    // -----------------------------------------
     // Create a class for the element
     /**
      * @attribute x-reg
@@ -530,7 +522,7 @@ const xloader = ((w) => {
             super();
         }
         connectedCallback() {
-            if (this.hasAttribute('x-img') && !this.hasAttribute('x-reg')) {
+            if (this.hasAttribute('x-img')) {
                 let tmp; // placeholder
                 const innerHTML = this.getAttribute('x-loader-html');
                 if (innerHTML) {
