@@ -1,6 +1,6 @@
 {
   "name": "knighttower",
-  "version": "10.36.0",
+  "version": "10.37.0",
   "type": "module",
   "engines": {
     "node": ">=20.10.0"
@@ -152,11 +152,11 @@
     "prettier": "^3.4.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "rollup": "^4.34.3",
-    "sass": "^1.83.4",
+    "rollup": "^4.34.5",
+    "sass": "^1.84.0",
     "sass-loader": "^16.0.4",
     "style-loader": "^4.0.0",
-    "terser": "^5.38.0",
+    "terser": "^5.38.1",
     "terser-webpack-plugin": "^5.3.11",
     "vitest": "^3.0.5",
     "vue": "^3.5.13",

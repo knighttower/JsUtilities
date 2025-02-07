@@ -74,8 +74,10 @@ const domTracking = (($win) => {
                     callback();
                     observer.disconnect();
                     loaded = true;
-                }, 4000);
+                }, 5000);
+
                 if (!loaded) {
+                    fallback();
                     requestAnimationFrame(() => {
                         if (!loaded) {
                             clearTimeout(fallback);
@@ -368,6 +370,7 @@ const xloader = ((w) => {
                                 };
 
                                 if (loadType === 'lazy') {
+                                    element.setAttribute('fetchpriority', 'low');
                                     domTracking.afterLoad(loadImg);
                                 } else {
                                     domTracking.isReady(loadImg);

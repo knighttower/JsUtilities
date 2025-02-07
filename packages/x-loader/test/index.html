@@ -44,10 +44,15 @@
                     x-id="the_img"
                     width="600"
                     height="400"
+                    fetchpriority="low"
                 ></x-loader>
             </div>
             <div style="width: 50%">
-                <x-loader x-img="https://placehold.co/600x400"></x-loader>
+                <x-loader
+                    x-img="https://upload.wikimedia.org/wikipedia/commons/3/3d/LARGE_elevation.jpg"
+                    x-loading="lazy"
+                    width="600"
+                ></x-loader>
             </div>
         </div>
     </body>
